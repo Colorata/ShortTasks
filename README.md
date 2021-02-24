@@ -1,7 +1,7 @@
 Welcome to Colorata Family!
 Introducing ShortTasks - one-handed app for you.
 
-#Requirements
+# Requirements
 
 1. ***Android 11*** on your device
 2. For best experience your android phone must has  ***AOSP-like*** firmware(Pixel Experience, Lineage OS, Oxygen OS, etc...)
