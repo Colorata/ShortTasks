@@ -1,0 +1,65 @@
+<resources>
+    <string name="app_name">ShortTasks</string>
+    <string name="screen">Screen</string>
+    <string name="welcome_to_shorttasks_let_s_start">Welcome to ShortTasks! Lets start!</string>
+    <string name="action_settings">Settings</string>
+    <string name="help">Help!</string>
+    <string name="donate">donate</string>
+    <string name="how_i_can_use_shorttasks_example_in_video_after">How I can use ShortTasks? Example in video after</string>
+    <string name="about_us">About us</string>
+    <string name="source_code">Source Code</string>
+    <string name="support_us">Support Us</string>
+    <string name="app_settings">App Settings</string>
+    <string name="version_azure">Version: Sunray</string>
+    <string name="about">About</string>
+    <string name="settings">Settings</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="shorttasks">ShortTasks</string>
+    <string name="logo">Logo</string>
+    <string name="soon">Soon…</string>
+    <string name="control_method">Control Method</string>
+    <string name="enable_bubbles">Enable Bubbles</string>
+    <string name="bubble_item">bubble_item</string>
+    <string name="bubble">Bubble</string>
+    <string name="add_buttons">Add Buttons</string>
+    <string name="app_package_name">App Package Name</string>
+    <string name="app_activity_name">App Activity Name</string>
+    <string name="add_button">Add Button</string>
+    <string name="error">Error</string>
+    <string name="title">Title</string>
+    <string name="buttons_nmanager">Buttons<br />Manager</string>
+    <string name="city_for_weather">City for weather</string>
+    <string name="city_name">City Name</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="power_assistant">1. Using ShortTasks with PowerAssistant</string>
+    <string name="_1_1_long_press_to_power_button">1.1 Long press to Power Button and tap to Device controls</string>
+    <string name="step_1">step_1</string>
+    <string name="_1_2_tap_to_shorttasks">1.2 Tap to ShortTasks</string>
+    <string name="step_2">step 2</string>
+    <string name="step_3">step 3</string>
+    <string name="_1_3_select_tiles_what_you_need_and_tap_save">1.3 Select tiles what you need and tap Save</string>
+    <string name="_1_4_next_go_to_accessibility_service_in_settings">1.4 Next, go to accessibility service in settings</string>
+    <string name="_1_5_tap_to_shorttasks_and_enable_first_option">1.5 Tap to ShortTasks and enable first option</string>
+    <string name="_1_6_all_done">1.6 All done!</string>
+    <string name="_2_1_tap_to_settings_in_shorttasks">2.1 Tap to settings in ShortTasks</string>
+    <string name="_2_2_tap_to_small_arrow_in_shorttasks_notification">2.2 Tap to small arrow in ShortTasks notification</string>
+    <string name="_2_using_shorttasks_with_bubblemanager">2. Using ShortTasks with BubbleManager</string>
+    <string name="_2_3_all_done">2.3 All done!</string>
+    <string name="change_position">Change position</string>
+</resources>
