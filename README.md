@@ -8,41 +8,41 @@ Introducing ShortTasks - one-handed app for you.
 
 # What is it?
 
-![1](https://user-images.githubusercontent.com/79582543/109019574-2cadef80-76ca-11eb-9d23-923246511aba.png)
+![1](https://user-images.githubusercontent.com/79582543/109321483-3ec29600-7862-11eb-95d0-64cebe1d794a.png)
 
 Introducing 2 main and 1 additional features:
 
-![2](https://user-images.githubusercontent.com/79582543/109019580-2ddf1c80-76ca-11eb-8ada-f611dd38655e.png)
+![2](https://user-images.githubusercontent.com/79582543/109321487-3ff3c300-7862-11eb-93c1-f8080ee58db1.png)
 
 # Power Assistant
 
-![3](https://user-images.githubusercontent.com/79582543/109019592-2fa8e000-76ca-11eb-99f4-e052d451abe9.png)
+![3](https://user-images.githubusercontent.com/79582543/109321492-41bd8680-7862-11eb-9146-fc31617b3b4b.png)
 
 First of all, it's a one-handed feature that helps you control your device and makes it easier.
 It's a very important because most of phones has very big screens and it's a very hard to use one-handed.
 
-![4](https://user-images.githubusercontent.com/79582543/109022120-93340d00-76cc-11eb-99d8-b706c2ae5e30.png)
+![4](https://user-images.githubusercontent.com/79582543/109321495-41bd8680-7862-11eb-9e7c-d58e1733e601.png)
 
 # Bubble Manager
 
-![6](https://user-images.githubusercontent.com/79582543/109019598-30da0d00-76ca-11eb-863b-e7acb04dc413.png)
+![5](https://user-images.githubusercontent.com/79582543/109321497-42eeb380-7862-11eb-8a63-7fb4e77abd2f.png)
 
 You have choice between Power Assistant and Bubble Manager.
 Bubble Manager created for another user experience and has additional features.
 If Bubble manager is more comfortable for you, choose it.
 
-![7](https://user-images.githubusercontent.com/79582543/109019602-3172a380-76ca-11eb-8a10-b01473daca69.png)
+![6](https://user-images.githubusercontent.com/79582543/109321502-43874a00-7862-11eb-8b92-fe234c59bda3.png)
 
 # Weather Director
 
-![8](https://user-images.githubusercontent.com/79582543/109019610-32a3d080-76ca-11eb-886c-d4edb0432a9d.png)
+![7](https://user-images.githubusercontent.com/79582543/109321506-441fe080-7862-11eb-8215-ab38a83a6cc1.png)
 
 Weather Director is additional feature for Bubble Manager. You can choose city that will show on the top.
 
-![9](https://user-images.githubusercontent.com/79582543/109019615-333c6700-76ca-11eb-9706-0002221c6d13.png)
+![8](https://user-images.githubusercontent.com/79582543/109321510-44b87700-7862-11eb-8016-9c606a84a1bb.png)
 
 # Conclution
 
 It's a very important app if you have a big phone screen
 
-![10](https://user-images.githubusercontent.com/79582543/109020548-1ce2db00-76cb-11eb-96d0-ba39dc154ad5.png)
+![9](https://user-images.githubusercontent.com/79582543/109321515-45510d80-7862-11eb-990f-aeb423a61d43.png)
