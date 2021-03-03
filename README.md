@@ -10,6 +10,8 @@ Introducing ShortTasks - one-handed app for you.
 
 ![1](https://user-images.githubusercontent.com/79582543/109321483-3ec29600-7862-11eb-95d0-64cebe1d794a.png)
 
+ShortTasks is app created to control your device with one hand. Nowaday most of phones has big screens. So if you have big screen is important for you.
+
 Introducing 2 main and 1 additional features:
 
 ![2](https://user-images.githubusercontent.com/79582543/109321487-3ff3c300-7862-11eb-93c1-f8080ee58db1.png)
@@ -35,7 +37,7 @@ If Bubble manager is more comfortable for you, choose it.
 
 # Weather Director
 
-![7](https://user-images.githubusercontent.com/79582543/109321506-441fe080-7862-11eb-8215-ab38a83a6cc1.png)
+![7](https://user-images.githubusercontent.com/79582543/109800583-6a60ca00-7c2e-11eb-8467-11079dc492c6.png)
 
 Weather Director is additional feature for Bubble Manager. You can choose city that will show on the top.
 

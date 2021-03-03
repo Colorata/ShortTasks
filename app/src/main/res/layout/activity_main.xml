@@ -52,8 +52,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/guideline_one_handed_main"
-        android:text="@string/change_position"
-        android:textColor="#ffffff"/>
+        android:text="@string/change_position"/>
 
     <Button
         android:id="@+id/add_button"
@@ -63,8 +62,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/change_position"
-        android:text="@string/add_buttons"
-        android:textColor="#ffffff"/>
+        android:text="@string/add_buttons"/>
 
     <Button
         android:id="@+id/settings"
@@ -74,8 +72,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/add_button"
-        android:text="@string/settings"
-        android:textColor="#ffffff"/>
+        android:text="@string/settings"/>
 
     <Button
         android:id="@+id/help"
@@ -85,8 +82,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/settings"
-        android:text="@string/help"
-        android:textColor="#ffffff"/>
+        android:text="@string/help"/>
 
     <Button
         android:id="@+id/about"
@@ -96,7 +92,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/help"
-        android:text="@string/about"
-        android:textColor="#ffffff"/>
+        android:text="@string/about"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

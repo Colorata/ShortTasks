@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/change_city_layout">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/city_field"
@@ -30,7 +31,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:text="@string/ok"
-        android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="@+id/cancel_change_city"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/cancel_change_city"
@@ -42,7 +42,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:text="@string/cancel"
-        android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/ok_change_city"
         app:layout_constraintStart_toStartOf="parent"

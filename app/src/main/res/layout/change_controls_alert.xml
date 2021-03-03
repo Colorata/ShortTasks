@@ -2,6 +2,7 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/change_controls_layout"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -33,7 +34,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:text="@string/ok"
-        android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="@+id/cancel_change_position"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/cancel_change_position"
@@ -45,7 +45,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:text="@string/cancel"
-        android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/ok_change_position"
         app:layout_constraintStart_toStartOf="parent"

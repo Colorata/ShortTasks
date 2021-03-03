@@ -5,9 +5,12 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -24,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.Person
+import androidx.core.content.ContextCompat
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
@@ -40,6 +44,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    private var nightMode = false
     private var channelCreated = false
     private val notifId = 1337
     private val notifChannel = "whatever"
@@ -58,6 +63,37 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        packageManager.setComponentEnabledSetting(ComponentName(this@MainActivity, DarkApp::class.java),
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP)
+        packageManager.setComponentEnabledSetting(ComponentName(this@MainActivity, LightApp::class.java),
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP)
+
+        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK){
+            Configuration.UI_MODE_NIGHT_NO -> {
+                nightMode = false
+                logo_main.setImageResource(R.drawable.ic_logo_main_light)
+                packageManager.setComponentEnabledSetting(ComponentName(this@MainActivity, DarkApp::class.java),
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP)
+                packageManager.setComponentEnabledSetting(ComponentName(this@MainActivity, LightApp::class.java),
+                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                        PackageManager.DONT_KILL_APP)
+            }
+            Configuration.UI_MODE_NIGHT_YES -> {
+                nightMode = true
+                logo_main.setImageResource(R.drawable.ic_logo_main_dark)
+                packageManager.setComponentEnabledSetting(ComponentName(this@MainActivity, LightApp::class.java),
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP)
+                packageManager.setComponentEnabledSetting(ComponentName(this@MainActivity, DarkApp::class.java),
+                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                        PackageManager.DONT_KILL_APP)
+            }
+        }
+
         sharedPreference =  getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
         var access = 0
         if (access < 2) {
@@ -81,6 +117,15 @@ class MainActivity : AppCompatActivity() {
 
             val cancel = dialogLayout.findViewById<Button>(R.id.cancel_help)
 
+            when(nightMode){
+                false -> {
+                    dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.light_background))
+                }
+                true -> {
+                    dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.dark_background))
+                }
+            }
+
             materialBuilder.setContentView(dialogLayout)
             materialBuilder.show()
 
@@ -101,6 +146,14 @@ class MainActivity : AppCompatActivity() {
             val support = dialogLayout.findViewById<Button>(R.id.support)
             val version = dialogLayout.findViewById<Button>(R.id.version)
 
+            when(nightMode){
+                false -> {
+                    dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.light_background))
+                }
+                true -> {
+                    dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.dark_background))
+                }
+            }
             materialBuilder.setContentView(dialogLayout)
             materialBuilder.show()
 
@@ -155,6 +208,15 @@ class MainActivity : AppCompatActivity() {
             val enable = dialogLayout.findViewById<Button>(R.id.enable_bubbles)
             val city = dialogLayout.findViewById<Button>(R.id.city_change)
 
+            when(nightMode){
+                false -> {
+                    dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.light_background))
+                }
+                true -> {
+                    dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.dark_background))
+                }
+            }
+
             materialBuilder.setContentView(dialogLayout)
             materialBuilder.show()
 
@@ -185,6 +247,15 @@ class MainActivity : AppCompatActivity() {
                     val okCity = dialogLayoutCity.findViewById<Button>(R.id.ok_change_city)
                     val cancelCity = dialogLayoutCity.findViewById<Button>(R.id.cancel_change_city)
                     val changeCityField = dialogLayoutCity.findViewById<TextInputEditText>(R.id.city_field_in)
+
+                    when(nightMode){
+                        false -> {
+                            dialogLayoutCity.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.light_background))
+                        }
+                        true -> {
+                            dialogLayoutCity.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.dark_background))
+                        }
+                    }
 
                     materialBuilderCity.setContentView(dialogLayoutCity)
                     materialBuilderCity.show()
@@ -224,6 +295,15 @@ class MainActivity : AppCompatActivity() {
             val titleField = dialogLayout.findViewById<TextInputEditText>(R.id.title_field_in)
             val packageField = dialogLayout.findViewById<TextInputEditText>(R.id.package_field_in)
             val activityField = dialogLayout.findViewById<TextInputEditText>(R.id.activity_field_in)
+
+            when(nightMode){
+                false -> {
+                    dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.light_background))
+                }
+                true -> {
+                    dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.dark_background))
+                }
+            }
 
             materialBuilder.setContentView(dialogLayout)
             materialBuilder.show()
@@ -274,8 +354,19 @@ class MainActivity : AppCompatActivity() {
             changeRecycler.layoutManager = GridLayoutManager(applicationContext, 3)
             var bubbleAdapter = BubbleAdapter(mutableNames, mutableIcons)
             changeRecycler.adapter = bubbleAdapter
+
+            when(nightMode){
+                false -> {
+                    dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.light_background))
+                }
+                true -> {
+                    dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.dark_background))
+                }
+            }
+
             materialBuilder.setContentView(dialogLayout)
             materialBuilder.show()
+
             changeRecycler.addOnItemTouchListener(
                 RecyclerItemClickListener(changeRecycler,
                     object : RecyclerItemClickListener.OnItemClickListener {

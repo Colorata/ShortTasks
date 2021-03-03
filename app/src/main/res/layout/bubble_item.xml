@@ -9,7 +9,7 @@
         android:id="@+id/bubble_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:theme="@style/Theme.AppCompat"
+        app:backgroundTint="#575644"
         android:src="@drawable/ic_baseline_flash_on_24"
         app:tint="#ffffff"
         android:contentDescription="@string/bubble_item"
