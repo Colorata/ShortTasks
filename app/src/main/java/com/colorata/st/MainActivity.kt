@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.content.res.Configuration
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -32,12 +33,16 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.colorata.st.bubble.BubbleActivity
 import com.colorata.st.bubble.BubbleAdapter
+import com.colorata.st.bubble.RecyclerItemClickListener
 import com.colorata.st.extentions.GenerItems
+import com.colorata.st.userbutton.UserButtonAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.android.synthetic.main.activity_bubble.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.first_change_alert.*
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -64,6 +69,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         //TODO: fix bug with crashing
         packageManager.setComponentEnabledSetting(ComponentName(this@MainActivity, DarkApp::class.java),
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
@@ -360,53 +366,36 @@ class MainActivity : AppCompatActivity() {
 
         //Founding BUTTONS AND EDITTEXTS
         val appRecycler = dialogLayout.findViewById<RecyclerView>(R.id.app_recycler)
-        val ok = dialogLayout.findViewById<Button>(R.id.ok_add_button)
         val cancel = dialogLayout.findViewById<Button>(R.id.cancel_add_button)
-        /*val titleField = dialogLayout.findViewById<TextInputEditText>(R.id.title_field_in)
-        val packageField = dialogLayout.findViewById<TextInputEditText>(R.id.package_field_in)
-        val activityField = dialogLayout.findViewById<TextInputEditText>(R.id.activity_field_in)*/
 
-        val mutableNames = mutableListOf<String>()
-        val mutableIcons = mutableListOf<Drawable?>()
+        //Configuring FOR ALL APPS
+        val mutableLabels = getAppsLabel()
+        val mutablePackages = getAppsPackage()
+        val mutableIcons = getAppsIcon()
 
-        //Getting LAST INFO about CONTROLS
-        /*for (i in 0..getApps().lastIndex){
-            mutableNames.add(getApps()[i])
-            mutableIcons.add(packageManager.getApplicationIcon(getApps()[i]))
-        }*/
-
+        //Configuring RECYCLERVIEW
         appRecycler.layoutManager = GridLayoutManager(applicationContext, 3)
-        val bubbleAdapter = BubbleAdapter(values = mutableNames,/* drawable = mutableIcons,*/ icon = mutableListOf())
+        val bubbleAdapter = UserButtonAdapter(mutableLabels, mutableIcons)
         appRecycler.adapter = bubbleAdapter
+        appRecycler.addOnItemTouchListener(
+                RecyclerItemClickListener(appRecycler,
+                        object : RecyclerItemClickListener.OnItemClickListener {
+                            @SuppressLint("WrongConstant")
+                            override fun onItemClick(view: View, position: Int) {
+                                val editor = sharedPreference.edit()
+                                editor.putString("userPackage", mutablePackages[position])
+                                editor.putString("userLabel", mutableLabels[position])
+                                editor.apply()
+                                Snackbar.make(view.rootView, "Your control changed to ${mutableLabels[position]}", 1500).apply { view.elevation = 1000F }.show()
+                            }
+                        }))
+
         //Configuring BACKGROUND
         configBack(dialogLayout)
 
         //Showing BOTTOM SHEET
         materialBuilder.setContentView(dialogLayout)
         materialBuilder.show()
-
-        //Click listener for OK BUTTON
-        ok.setOnClickListener {
-            if(materialBuilder.isShowing) {
-
-                //Checking if EDITTEXTS empty
-                /*if(titleField.text.toString()!="" && packageField.text.toString()!="" && activityField.text.toString()!="") {
-
-                    //Putting APP INFO to SHAREDPREFS
-                    val editor = sharedPreference.edit()
-                    editor.putString("title", titleField.text.toString())
-                    editor.putString("package", packageField.text.toString())
-                    editor.putString("activity", activityField.text.toString())
-                    editor.apply()
-                    materialBuilder.dismiss()
-                }
-                else{
-
-                    //Showing SNACKBAR
-                    Snackbar.make(it, "Something isn't entered", 1500).apply { view.elevation = 1000F }.show()
-                }*/
-            }
-        }
 
         //Click listener for CANCEL BUTTON
         cancel.setOnClickListener {
@@ -559,6 +548,8 @@ class MainActivity : AppCompatActivity() {
                     editor.putInt("firstChange", sharedPreference.getInt("firstChange", 0) + 1)
                     editor.apply()
                     firstChange()
+                } else {
+                    changePosition()
                 }
             }
         }
@@ -601,7 +592,14 @@ class MainActivity : AppCompatActivity() {
         changeCity.setOnClickListener {
             if(materialBuilder.isShowing){
                 materialBuilder.dismiss()
-                changeCity()
+                if (sharedPreference.getInt("firstChangeCity", 0) < 1) {
+                    val editor = sharedPreference.edit()
+                    editor.putInt("firstChangeCity", sharedPreference.getInt("firstChangeCity", 0) + 1)
+                    editor.apply()
+                    firstChangeCity()
+                } else{
+                    changeCity()
+                }
             }
         }
 
@@ -673,24 +671,6 @@ class MainActivity : AppCompatActivity() {
         dialogLayout.rootView.fitsSystemWindows = true
     }
 
-    //Fun for make NAVIGATION BAR transparent in BOTTOM SHEET
-    /*private fun setWhiteNavigationBar(@NonNull dialog: Dialog) {
-        val window: Window? = dialog.window
-        if (window != null) {
-            val metrics = DisplayMetrics()
-            window.windowManager.defaultDisplay.getMetrics(metrics)
-            val dimDrawable = GradientDrawable()
-            // ...customize your dim effect here
-            val navigationBarDrawable = GradientDrawable()
-            navigationBarDrawable.shape = GradientDrawable.RECTANGLE
-            navigationBarDrawable.setColor(Color.WHITE)
-            val layers = arrayOf<Drawable>(dimDrawable, navigationBarDrawable)
-            val windowBackground = LayerDrawable(layers)
-            windowBackground.setLayerInsetTop(1, metrics.heightPixels)
-            window.setBackgroundDrawable(windowBackground)
-        }
-    }*/
-
     //Fun for the FIRST CHANGE in BUBBLE MANAGER
     @SuppressLint("InflateParams")
     private fun firstChange(){
@@ -717,27 +697,71 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    //Fun for get ALL APPS
-    //Not working TODO: fix problem
-    /*@SuppressLint("QueryPermissionsNeeded", "WrongConstant")
-    private fun getApps(): MutableList<String>{
-        val pm = packageManager
-        val packages = pm.getInstalledApplications(PackageManager.GET_GIDS)
-        val userPackages = mutableListOf<String>()
+    //Fun for the FIRST CHANGE CITY ALERT in WEATHER DIRECTOR
+    @SuppressLint("InflateParams")
+    private fun firstChangeCity(){
+        val materialBuilder = BottomSheetDialog(this)
+        val inflater = layoutInflater
+        val dialogLayout: View = inflater.inflate(R.layout.first_change_city_alert, null)
 
-        val intent = Intent(Intent.ACTION_MAIN, null)
-        val activities = packageManager.queryIntentActivities(intent, 0)
+        //Founding BUTTONS
+        val understand = dialogLayout.findViewById<Button>(R.id.understand_first_change_city_alert)
 
-        for (ri in activities){
-            userPackages.add(ri.activityInfo.packageName)
+        //Configuring BACKGROUND
+        configBack(dialogLayout)
+
+        //Showing BOTTOM SHEET
+        materialBuilder.setContentView(dialogLayout)
+        materialBuilder.show()
+
+        //Click listener for CANCEL BUTTON
+        understand.setOnClickListener {
+            if(materialBuilder.isShowing){
+                materialBuilder.dismiss()
+                changeCity()
+            }
         }
-
-        return userPackages
-
-
     }
 
-    private fun isSystemPackage(ri: ApplicationInfo): Boolean {
-        return ri.flags and ApplicationInfo.FLAG_SYSTEM != 0
-    }*/
+    //Fun for get LABELS
+    private fun getAppsLabel(): MutableList<String> {
+        val manager = packageManager
+        val userLabel = mutableListOf<String>()
+        val i = Intent(Intent.ACTION_MAIN, null)
+        i.addCategory(Intent.CATEGORY_LAUNCHER)
+        val availableActivities: List<ResolveInfo> = manager.queryIntentActivities(i, 0)
+        for (ri in availableActivities) {
+            userLabel.add(ri.loadLabel(manager).toString())
+        }
+
+        return userLabel
+    }
+
+    //Fun for get PACKAGES
+    private fun getAppsPackage(): MutableList<String> {
+        val manager = packageManager
+        val userPackage = mutableListOf<String>()
+        val i = Intent(Intent.ACTION_MAIN, null)
+        i.addCategory(Intent.CATEGORY_LAUNCHER)
+        val availableActivities: List<ResolveInfo> = manager.queryIntentActivities(i, 0)
+        for (ri in availableActivities) {
+            userPackage.add(ri.activityInfo.packageName)
+        }
+
+        return userPackage
+    }
+
+    //Fun for get ICONS
+    private fun getAppsIcon(): MutableList<Drawable?> {
+        val manager = packageManager
+        val userIcon = mutableListOf<Drawable?>()
+        val i = Intent(Intent.ACTION_MAIN, null)
+        i.addCategory(Intent.CATEGORY_LAUNCHER)
+        val availableActivities: List<ResolveInfo> = manager.queryIntentActivities(i, 0)
+        for (ri in availableActivities) {
+            userIcon.add(ri.activityInfo.loadIcon(manager))
+        }
+
+        return userIcon
+    }
 }

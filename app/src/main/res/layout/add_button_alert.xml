@@ -32,17 +32,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginHorizontal="20dp"/>
-    <!-- Button OK -->
-    <Button
-        android:id="@+id/ok_add_button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="@string/ok"
-        app:layout_constraintBottom_toBottomOf="@+id/cancel_add_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/cancel_add_button"
-        app:layout_constraintTop_toTopOf="@+id/cancel_add_button" />
 
     <!-- Button CANCEL -->
     <Button
@@ -52,7 +41,7 @@
         android:layout_margin="10dp"
         android:text="@string/cancel"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/ok_add_button"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/app_recycler" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -41,7 +41,7 @@ class BubbleActivity : AppCompatActivity() {
         setContentView(R.layout.activity_bubble)
 
         //Init SHAREDPREFS
-        sharedPreference =  getSharedPreferences("PREFERENCE_NAME",Context.MODE_PRIVATE)
+        sharedPreference =  getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
 
         //Creating animations
         createVideos()
@@ -73,10 +73,10 @@ class BubbleActivity : AppCompatActivity() {
         for (i in 0..GenerItems().names().lastIndex){
 
             mutableNames.add(
-                sharedPreference.getString(
-                    "name $i",
-                    GenerItems().names()[i]
-                ).toString()
+                    sharedPreference.getString(
+                            "name $i",
+                            GenerItems().names()[i]
+                    ).toString()
             )
             mutableIcons.add(sharedPreference.getInt("icon $i", GenerItems().icons()[i]))
         }
@@ -89,134 +89,133 @@ class BubbleActivity : AppCompatActivity() {
 
         //Click listener for CONTROLS in RECYCLERVIEW
         bubble_recycler.addOnItemTouchListener(
-            RecyclerItemClickListener(bubble_recycler,
-                object : RecyclerItemClickListener.OnItemClickListener {
-                    @SuppressLint("WrongConstant")
-                    override fun onItemClick(view: View, position: Int) {
-                        when (mutableNames[position]) {
-                            "Search" -> {
+                RecyclerItemClickListener(bubble_recycler,
+                        object : RecyclerItemClickListener.OnItemClickListener {
+                            @SuppressLint("WrongConstant")
+                            override fun onItemClick(view: View, position: Int) {
+                                when (mutableNames[position]) {
+                                    "Search" -> {
 
-                                //Going to GOOGLE SEARCH
-                                val i = Intent()
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                i.setClassName(
-                                    "com.google.android.googlequicksearchbox",
-                                    "com.google.android.apps.gsa.search_gesture.GestureActivity"
-                                )
-                                startActivity(i)
-                            }
-                            "Tethering" -> {
+                                        //Going to GOOGLE SEARCH
+                                        val i = Intent()
+                                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        i.setClassName(
+                                                "com.google.android.googlequicksearchbox",
+                                                "com.google.android.apps.gsa.search_gesture.GestureActivity"
+                                        )
+                                        startActivity(i)
+                                    }
+                                    "Tethering" -> {
 
-                                //Going to TETHERING SETTINGS
-                                val i = Intent()
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                i.setClassName(
-                                    "com.android.settings",
-                                    "com.android.settings.TetherSettings"
-                                )
-                                startActivity(i)
-                            }
-                            "WiFi" -> {
+                                        //Going to TETHERING SETTINGS
+                                        val i = Intent()
+                                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        i.setClassName(
+                                                "com.android.settings",
+                                                "com.android.settings.TetherSettings"
+                                        )
+                                        startActivity(i)
+                                    }
+                                    "WiFi" -> {
 
-                                //Going to WIFI SETTINGS
-                                val i = Intent(Settings.ACTION_WIFI_SETTINGS)
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                startActivity(i)
-                            }
-                            "Flashlight" -> {
+                                        //Going to WIFI SETTINGS
+                                        val i = Intent(Settings.ACTION_WIFI_SETTINGS)
+                                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        startActivity(i)
+                                    }
+                                    "Flashlight" -> {
 
-                                //Changing STATE of FLASHLIGHT
-                                val cameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
-                                if (!flashlightOn) {
-                                    flashlightOn = !flashlightOn
-                                    val cameraId = cameraManager.cameraIdList[0]
-                                    cameraManager.setTorchMode(cameraId, flashlightOn)
-                                } else if (flashlightOn) {
-                                    flashlightOn = !flashlightOn
-                                    val cameraId = cameraManager.cameraIdList[0]
-                                    cameraManager.setTorchMode(cameraId, flashlightOn)
+                                        //Changing STATE of FLASHLIGHT
+                                        val cameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
+                                        if (!flashlightOn) {
+                                            flashlightOn = !flashlightOn
+                                            val cameraId = cameraManager.cameraIdList[0]
+                                            cameraManager.setTorchMode(cameraId, flashlightOn)
+                                        } else if (flashlightOn) {
+                                            flashlightOn = !flashlightOn
+                                            val cameraId = cameraManager.cameraIdList[0]
+                                            cameraManager.setTorchMode(cameraId, flashlightOn)
+                                        }
+                                    }
+                                    "Bluetooth" -> {
+
+                                        //Going to BLUETOOTH SETTINGS
+                                        val i = Intent(Settings.ACTION_BLUETOOTH_SETTINGS)
+                                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        startActivity(i)
+                                    }
+                                    "MobData" -> {
+
+                                        //Going to DATA USAGE SETTINGS
+                                        val i = Intent(Settings.ACTION_DATA_USAGE_SETTINGS)
+                                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        startActivity(i)
+                                    }
+                                    "Nearby Sharing" -> {
+
+                                        //Going to NEARBY SHARING PAGE
+                                        val i = Intent()
+                                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        i.setClassName(
+                                                "com.google.android.gms",
+                                                "com.google.android.gms.nearby.sharing.ReceiveSurfaceActivity"
+                                        )
+                                        startActivity(i)
+                                    }
+                                    "Location" -> {
+
+                                        //Going to LOCATION SETTINGS
+                                        val i = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        startActivity(i)
+                                    }
+                                    "Calculator" -> {
+
+                                        //Going to GOOGLE CALCULATOR
+                                        val i = Intent()
+                                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        i.setClassName(
+                                                "com.google.android.calculator",
+                                                "com.android.calculator2.Calculator"
+                                        )
+                                        startActivity(i)
+                                    }
+                                    "Battery Saver" -> {
+
+                                        //Going TO BATTERY SAVER SETTINGS
+                                        val i = Intent(Settings.ACTION_BATTERY_SAVER_SETTINGS)
+                                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        startActivity(i)
+                                    }
+                                    "Google Tasks" -> {
+
+                                        //Going to GOOGLE TASKS
+                                        val i = Intent()
+                                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        i.setClassName(
+                                                "com.google.android.apps.tasks",
+                                                "com.google.android.apps.tasks.ui.TaskListsActivity"
+                                        )
+                                        startActivity(i)
+                                    }
+                                    "Notifications" -> {
+
+                                        //Showing Notifications
+                                        val sbservice = getSystemService("statusbar")
+                                        val statusbarManager = Class.forName("android.app.StatusBarManager")
+                                        val showsb: Method = statusbarManager.getMethod("expandNotificationsPanel")
+                                        showsb.invoke(sbservice)
+                                    }
+                                    else -> {
+
+                                        //Going to USER APP
+                                        val i: Intent? = packageManager.getLaunchIntentForPackage(getUserPackage())
+                                        i?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        startActivity(i)
+                                    }
                                 }
                             }
-                            "Bluetooth" -> {
-
-                                //Going to BLUETOOTH SETTINGS
-                                val i = Intent(Settings.ACTION_BLUETOOTH_SETTINGS)
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                startActivity(i)
-                            }
-                            "MobData" -> {
-
-                                //Going to DATA USAGE SETTINGS
-                                val i = Intent(Settings.ACTION_DATA_USAGE_SETTINGS)
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                startActivity(i)
-                            }
-                            "Nearby Sharing" -> {
-
-                                //Going to NEARBY SHARING PAGE
-                                val i = Intent()
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                i.setClassName(
-                                    "com.google.android.gms",
-                                    "com.google.android.gms.nearby.sharing.ReceiveSurfaceActivity"
-                                )
-                                startActivity(i)
-                            }
-                            "Location" -> {
-
-                                //Going to LOCATION SETTINGS
-                                val i = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                startActivity(i)
-                            }
-                            "Calculator" -> {
-
-                                //Going to GOOGLE CALCULATOR
-                                val i = Intent()
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                i.setClassName(
-                                    "com.google.android.calculator",
-                                    "com.android.calculator2.Calculator"
-                                )
-                                startActivity(i)
-                            }
-                            "Battery Saver" -> {
-
-                                //Going TO BATTERY SAVER SETTINGS
-                                val i = Intent(Settings.ACTION_BATTERY_SAVER_SETTINGS)
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                startActivity(i)
-                            }
-                            "Google Tasks" -> {
-
-                                //Going to GOOGLE TASKS
-                                val i = Intent()
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                i.setClassName(
-                                    "com.google.android.apps.tasks",
-                                    "com.google.android.apps.tasks.ui.TaskListsActivity"
-                                )
-                                startActivity(i)
-                            }
-                            "Notifications" -> {
-
-                                //Showing Notifications
-                                val sbservice = getSystemService("statusbar")
-                                val statusbarManager = Class.forName("android.app.StatusBarManager")
-                                val showsb: Method = statusbarManager.getMethod("expandNotificationsPanel")
-                                showsb.invoke(sbservice)
-                            }
-                            else -> {
-
-                                //Going to USER APP
-                                val i = Intent()
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                i.setClassName(getUserPackage(), getUserActivity())
-                                startActivity(i)
-                            }
-                        }
-                    }
-                })
+                        })
         )
 
         //Getting WEATHER INFO
@@ -272,9 +271,9 @@ class BubbleActivity : AppCompatActivity() {
 
                     //Configuring TEXT
                     val stringBuilder =
-                        weatherResponse.name?.replace("’", "") + ", " +
-                        weatherResponse.main!!.temp + " \u2103" + "\n" +
-                                "Feels like: " + weatherResponse.main!!.feels + " \u2103"
+                            weatherResponse.name?.replace("’", "") + ", " +
+                                    weatherResponse.main!!.temp + " \u2103" + "\n" +
+                                    "Feels like: " + weatherResponse.main!!.feels + " \u2103"
                     text_weather!!.text = stringBuilder
 
                 }
@@ -290,17 +289,12 @@ class BubbleActivity : AppCompatActivity() {
 
     //Getting USER TITLE
     private fun getUserTitle(): String{
-        return sharedPreference.getString("title", "User's").toString()
+        return sharedPreference.getString("userLabel", "User's").toString()
     }
 
     //Getting USER PACKAGE
     private fun getUserPackage(): String{
-        return sharedPreference.getString("package", "com.android.settings").toString()
-    }
-
-    //GETTING USER ACTIVITY
-    private fun getUserActivity(): String{
-        return sharedPreference.getString("activity", "com.android.settings.TetherSettings").toString()
+        return sharedPreference.getString("userPackage", "com.android.settings").toString()
     }
 
 }

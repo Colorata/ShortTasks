@@ -53,4 +53,6 @@
     <string name="how_to_change_controls">How to change controls?</string>
     <string name="understand">Understand</string>
     <string name="tap_controls_which_you_want_to_swap">Tap controls which you want to swap</string>
+    <string name="how_to_change_city">How to change city?</string>
+    <string name="enter_city_name_to_text_field">Enter city name to text field.</string>
 </resources>

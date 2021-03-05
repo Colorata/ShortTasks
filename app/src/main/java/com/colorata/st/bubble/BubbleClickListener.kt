@@ -1,4 +1,4 @@
-package com.colorata.st
+package com.colorata.st.bubble
 
 import android.view.GestureDetector
 import android.view.MotionEvent
