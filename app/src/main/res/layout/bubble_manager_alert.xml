@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Text BUBBLE MANAGER -->
+    <TextView
+        android:id="@+id/text_bubble_manager"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/change_position"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="40sp"
+        android:text="@string/bubble_manager"
+        android:layout_margin="10dp"/>
+
+    <!-- Button ENABLE -->
+    <Button
+        android:id="@+id/enable"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/cancel_bubble_manager"
+        app:layout_constraintEnd_toStartOf="@id/change_position"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_bubble_manager"
+        android:text="@string/enable"
+        android:layout_margin="10dp"
+        android:padding="5dp"/>
+
+    <!-- Button CHANGE POSITION -->
+    <Button
+        android:id="@+id/change_position"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/enable"
+        app:layout_constraintEnd_toStartOf="@id/add_button"
+        app:layout_constraintStart_toEndOf="@id/enable"
+        app:layout_constraintTop_toTopOf="@id/enable"
+        android:text="@string/change_position"
+        android:layout_margin="10dp"
+        android:padding="5dp"/>
+
+    <!-- Button ADD BUTTON -->
+    <Button
+        android:id="@+id/add_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/change_position"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/change_position"
+        app:layout_constraintTop_toTopOf="@id/change_position"
+        android:text="@string/add_button"
+        android:layout_margin="10dp"
+        android:padding="5dp"/>
+
+    <!-- Button CANCEL -->
+    <Button
+        android:id="@+id/cancel_bubble_manager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/change_position"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@string/cancel"
+        android:layout_margin="10dp"
+        android:padding="5dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

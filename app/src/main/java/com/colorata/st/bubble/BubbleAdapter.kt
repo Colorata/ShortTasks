@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.colorata.st.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class BubbleAdapter(private val values: MutableList<String>, private val icon: MutableList<Int>): RecyclerView.Adapter<BubbleAdapter.ViewHolder>() {
+class BubbleAdapter(private val values: MutableList<String>, private val icon: MutableList<Int>/*, private val drawable: MutableList<Drawable?> = mutableListOf(null)*/): RecyclerView.Adapter<BubbleAdapter.ViewHolder>() {
 
     //Fun for getting COUNT OF CONTROLS
     override fun getItemCount() = values.size
@@ -33,6 +33,12 @@ class BubbleAdapter(private val values: MutableList<String>, private val icon: M
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         holder.textView?.text = values[position]
+        /*if (drawable[0] == null){
+            holder.fab?.setImageResource(icon[position])
+        } else {
+            holder.fab?.setImageDrawable(drawable[position])
+        }*/
+
         holder.fab?.setImageResource(icon[position])
 
     }

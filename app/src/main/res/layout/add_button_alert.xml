@@ -1,81 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/change_controls_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/add_button_layout">
 
-    <!-- EditText for TITLE -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/title_field"
-        android:layout_width="match_parent"
+    <!-- Text ADD BUTTON -->
+    <TextView
+        android:id="@+id/text_add_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/title"
+        android:text="@string/add_button"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/package_field"
-        android:layout_margin="10dp"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        >
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/app_recycler"
+        android:textSize="40sp"
+        android:layout_margin="10dp"/>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/title_field_in"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:nextFocusDown="@id/package_field_in"
-            android:singleLine="true"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <!-- EditText for PACKAGE -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/package_field"
+    <!-- EditText for TITLE -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/app_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/app_package_name"
-        app:layout_constraintTop_toBottomOf="@id/title_field"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/activity_field"
-        android:layout_margin="10dp"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/package_field_in"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:nextFocusForward="@id/activity_field_in"
-            android:singleLine="true"
-            />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <!-- EditText for ACTIVITY -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/activity_field"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/app_activity_name"
-        app:layout_constraintTop_toBottomOf="@id/package_field"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/ok_add_button"
-        android:layout_margin="10dp"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/activity_field_in"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginHorizontal="20dp"/>
     <!-- Button OK -->
     <Button
         android:id="@+id/ok_add_button"
@@ -98,5 +54,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/ok_add_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_field" />
+        app:layout_constraintTop_toBottomOf="@id/app_recycler" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

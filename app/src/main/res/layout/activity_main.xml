@@ -50,24 +50,24 @@
 
     <!-- Button to CHANGE POSITION -->
     <Button
-        android:id="@+id/change_position"
+        android:id="@+id/weather_director"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/add_button"
+        app:layout_constraintBottom_toTopOf="@id/bubble_manager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/guideline_one_handed_main"
-        android:text="@string/change_position"/>
+        android:text="@string/weather_director"/>
 
     <!-- Button to ADD BUTTON -->
     <Button
-        android:id="@+id/add_button"
+        android:id="@+id/bubble_manager"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/settings"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/change_position"
+        app:layout_constraintTop_toBottomOf="@id/weather_director"
         android:text="@string/add_buttons"/>
 
     <!-- Button SETTINGS -->
@@ -78,7 +78,7 @@
         app:layout_constraintBottom_toBottomOf="@id/help"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/add_button"
+        app:layout_constraintTop_toTopOf="@id/bubble_manager"
         android:text="@string/settings"/>
 
     <!-- Button HELP -->

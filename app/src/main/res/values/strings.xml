@@ -21,7 +21,7 @@
     <string name="enable_bubbles">Enable Bubbles</string>
     <string name="bubble_item">bubble_item</string>
     <string name="bubble">Bubble</string>
-    <string name="add_buttons">Add Buttons</string>
+    <string name="add_buttons">Bubble Manager</string>
     <string name="app_package_name">App Package Name</string>
     <string name="app_activity_name">App Activity Name</string>
     <string name="add_button">Add Button</string>
@@ -47,4 +47,10 @@
     <string name="_2_using_shorttasks_with_bubblemanager">2. Using ShortTasks with BubbleManager</string>
     <string name="_2_3_all_done">2.3 All done!</string>
     <string name="change_position">Change position</string>
+    <string name="bubble_manager">Bubble Manager</string>
+    <string name="enable">Enable</string>
+    <string name="weather_director">Weather Director</string>
+    <string name="how_to_change_controls">How to change controls?</string>
+    <string name="understand">Understand</string>
+    <string name="tap_controls_which_you_want_to_swap">Tap controls which you want to swap</string>
 </resources>
