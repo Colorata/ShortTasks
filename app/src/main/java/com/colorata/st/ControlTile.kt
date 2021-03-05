@@ -10,11 +10,9 @@ import android.provider.Settings
 import android.service.controls.Control
 import android.service.controls.ControlsProviderService
 import android.service.controls.DeviceTypes
-import android.service.controls.actions.BooleanAction
 import android.service.controls.actions.ControlAction
 import android.service.controls.templates.ControlButton
 import android.service.controls.templates.ToggleTemplate
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -26,6 +24,7 @@ import java.util.function.Consumer
 @RequiresApi(30)
 class ControlTile : ControlsProviderService() {
 
+    //Fun for adding CONTROLS IN POWER ASSISTANT
     @SuppressLint("WrongConstant")
     fun addControls(name: String, title: String = name, @DrawableRes icon: Int, enabled: Boolean = true) =
         Control.StatefulBuilder(
@@ -49,8 +48,10 @@ class ControlTile : ControlsProviderService() {
             .setStatus(1)
             .setControlTemplate(ToggleTemplate("button", ControlButton(enabled, "button"))).build()
 
+    //Init FLASHLIGHT STATE
     private var flashlightOn = false
 
+    //Creating LIST of CONTROLS
     private val controlList: List<Control>
         @SuppressLint("WrongConstant")
         get() {
@@ -72,6 +73,7 @@ class ControlTile : ControlsProviderService() {
 
         }
 
+    //Fun for SHOWING CONTROLS
     override fun createPublisherForAllAvailable(): Flow.Publisher<Control> {
         return Flow.Publisher {
             for (control in controlList) {
@@ -81,12 +83,14 @@ class ControlTile : ControlsProviderService() {
         }
     }
 
+    //Fun for CLICK LISTENER for CONTROLS
     @SuppressLint("WrongConstant")
     override fun performControlAction(
         controlId: String,
         action: ControlAction,
         consumer: Consumer<Int>
     ) {
+        //Component for DON'T KILLING SERVICE
         /*val component = ComponentName(applicationContext, AccessibilityService::class.java)
         applicationContext.packageManager.setComponentEnabledSetting(
             component, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
@@ -95,6 +99,8 @@ class ControlTile : ControlsProviderService() {
 
         when (controlId) {
             "Search" -> {
+
+                //Going to GOOGLE SEARCH
                 val i = Intent()
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 i.setClassName(
@@ -103,37 +109,42 @@ class ControlTile : ControlsProviderService() {
                 )
                 startActivity(i)
 
+                //Power Assistant HIDING
                 val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
                 intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                 consumer.accept(ControlAction.RESPONSE_OK)
             }
             "Tethering" -> {
+
+                //Going to TETHERING SETTINGS
                 val i = Intent()
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 i.setClassName("com.android.settings", "com.android.settings.TetherSettings")
                 startActivity(i)
 
+                //Power Assistant HIDING
                 val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
                 intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                 consumer.accept(ControlAction.RESPONSE_OK)
             }
             "WiFi" -> {
+
+                //Going to WIFI SETTINGS
                 val i = Intent(Settings.ACTION_WIFI_SETTINGS)
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(i)
 
+                //Power Assistant HIDING
                 val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
                 intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                 consumer.accept(ControlAction.RESPONSE_OK)
             }
             "Flashlight" -> {
-                if (action is BooleanAction) {
-                    consumer.accept(ControlAction.RESPONSE_OK)
-                    action.newState
-                }
+
+                //Changing FLASHLIGHT STATE
                 val cameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
                 if (!flashlightOn) {
                     flashlightOn = !flashlightOn
@@ -144,32 +155,38 @@ class ControlTile : ControlsProviderService() {
                     val cameraId = cameraManager.cameraIdList[0]
                     cameraManager.setTorchMode(cameraId, flashlightOn)
                 }
-                Log.d(
-                    "ControlTest",
-                    "performControlAction $controlId $action $consumer"
-                )
+
+                consumer.accept(ControlAction.RESPONSE_OK)
             }
             "Bluetooth" -> {
+
+                //Going to BLUETOOTH SETTINGS
                 val i = Intent(Settings.ACTION_BLUETOOTH_SETTINGS)
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(i)
 
+                //Power Assistant HIDING
                 val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
                 intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                 consumer.accept(ControlAction.RESPONSE_OK)
             }
             "MobData" -> {
+
+                //Going to DATA USAGE SETTINGS
                 val i = Intent(Settings.ACTION_DATA_USAGE_SETTINGS)
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(i)
 
+                //Power Assistant HIDING
                 val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
                 intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                 consumer.accept(ControlAction.RESPONSE_OK)
             }
             "NearShare" -> {
+
+                //Going to NEARBY SHARING PAGE
                 val i = Intent()
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 i.setClassName(
@@ -178,22 +195,28 @@ class ControlTile : ControlsProviderService() {
                 )
                 startActivity(i)
 
+                //Power Assistant HIDING
                 val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
                 intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                 consumer.accept(ControlAction.RESPONSE_OK)
             }
             "Location" -> {
+
+                //Going to LOCATION SETTINGS
                 val i = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(i)
 
+                //Power Assistant HIDING
                 val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
                 intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                 consumer.accept(ControlAction.RESPONSE_OK)
             }
             "Calc" -> {
+
+                //Going to GOOGLE CALCULATOR
                 val i = Intent()
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 i.setClassName(
@@ -202,22 +225,28 @@ class ControlTile : ControlsProviderService() {
                 )
                 startActivity(i)
 
+                //Power Assistant HIDING
                 val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
                 intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                 consumer.accept(ControlAction.RESPONSE_OK)
             }
             "BatSave" -> {
+
+                //Going to BATTERY SAVER
                 val i = Intent(Settings.ACTION_BATTERY_SAVER_SETTINGS)
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(i)
 
+                //Power Assistant HIDING
                 val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
                 intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                 consumer.accept(ControlAction.RESPONSE_OK)
             }
             "Tasks" -> {
+
+                //Going to GOOGLE TASKS
                 val i = Intent()
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 i.setClassName(
@@ -226,17 +255,21 @@ class ControlTile : ControlsProviderService() {
                 )
                 startActivity(i)
 
+                //Power Assistant HIDING
                 val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
                 intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                 consumer.accept(ControlAction.RESPONSE_OK)
             }
             "Notify" -> {
+
+                //Showing NOTIFICATIONS
                 val sbservice = getSystemService("statusbar")
                 val statusbarManager = Class.forName("android.app.StatusBarManager")
                 val showsb: Method = statusbarManager.getMethod("expandNotificationsPanel")
                 showsb.invoke(sbservice)
 
+                //Power Assistant HIDING
                 val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
                 intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
@@ -248,18 +281,14 @@ class ControlTile : ControlsProviderService() {
     }
 
     override fun createPublisherFor(controlIds: MutableList<String>): Flow.Publisher<Control> {
-        Log.d("ControlTest", "publisherFor $controlIds")
         return Flow.Publisher {
             for (control in controlList) {
                 if (controlIds.contains(control.controlId)) {
-                    Log.d("ControlTest", "Found ${control.controlId}")
                     it.onSubscribe(object : Flow.Subscription {
                         override fun cancel() {
-                            Log.d("ControlTest", "cancel")
                         }
 
                         override fun request(p0: Long) {
-                            Log.d("ControlTest", "request $p0")
                         }
 
                     })

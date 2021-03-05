@@ -1,29 +1,31 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
     <style name="Theme.ShortTasks" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#e8ab7e</item>
         <item name="colorPrimaryVariant">#ffddae</item>
         <item name="colorOnPrimary">@color/black</item>
-        <item name="android:windowBackground">#cdcdc5</item>
-        <item name="android:textColor">#000000</item>
+
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#cdcdc5</item>
         <item name="colorSecondaryVariant">#ffddae</item>
         <item name="colorOnSecondary">@color/black</item>
+
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">#cdcdc5</item>
+
         <!-- Customize your theme here. -->
         <item name="android:fontFamily">@font/font</item>
+        <item name="materialButtonStyle">@style/ButtonStyle</item>
+        <item name="android:windowBackground">#cdcdc5</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:colorEdgeEffect">#cdcdc5</item>
     </style>
 
-    <style name="Theme.ShortTasks.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <!-- Outlined Button Style -->
+    <style name="ButtonStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="materialButtonStyle">?attr/materialButtonOutlinedStyle</item>
+        <item name="android:textColor">@color/dark_background</item>
     </style>
-
-    <style name="Theme.ShortTasks.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="Theme.ShortTasks.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

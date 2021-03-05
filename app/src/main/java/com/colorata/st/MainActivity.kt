@@ -44,7 +44,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private var nightMode = false
+    //Init values
+    private var nightMode = true
     private var channelCreated = false
     private val notifId = 1337
     private val notifChannel = "whatever"
@@ -64,6 +65,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+        //TODO: fix bug with crashing
         packageManager.setComponentEnabledSetting(ComponentName(this@MainActivity, DarkApp::class.java),
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP)
@@ -71,6 +74,7 @@ class MainActivity : AppCompatActivity() {
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP)
 
+        //Setting up NIGHT MODE
         when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK){
             Configuration.UI_MODE_NIGHT_NO -> {
                 nightMode = false
@@ -94,6 +98,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        //Showing Accessibility SNACKBAR
         sharedPreference =  getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
         var access = 0
         if (access < 2) {
@@ -107,317 +112,20 @@ class MainActivity : AppCompatActivity() {
             snackBar.show()
             access += 1
         }
+
+        //Creating ANIMATIONS and configuring GUIDELINES
         createVideos()
         guidelineConfig()
 
-        help.setOnClickListener{
-            val materialBuilder = BottomSheetDialog(this)
-            val inflater = layoutInflater
-            val dialogLayout: View = inflater.inflate(R.layout.help_alert, null)
-
-            val cancel = dialogLayout.findViewById<Button>(R.id.cancel_help)
-
-            when(nightMode){
-                false -> {
-                    dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.light_background))
-                }
-                true -> {
-                    dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.dark_background))
-                }
-            }
-
-            materialBuilder.setContentView(dialogLayout)
-            materialBuilder.show()
-
-            cancel.setOnClickListener {
-                if(materialBuilder.isShowing){
-                    materialBuilder.dismiss()
-                }
-            }
-        }
-
-        about.setOnClickListener {
-            val materialBuilder = BottomSheetDialog(this)
-            val inflater = layoutInflater
-            val dialogLayout: View = inflater.inflate(R.layout.about_alert, null)
-
-            val cancel = dialogLayout.findViewById<Button>(R.id.cancel_version)
-            val source = dialogLayout.findViewById<Button>(R.id.sourcecode)
-            val support = dialogLayout.findViewById<Button>(R.id.support)
-            val version = dialogLayout.findViewById<Button>(R.id.version)
-
-            when(nightMode){
-                false -> {
-                    dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.light_background))
-                }
-                true -> {
-                    dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.dark_background))
-                }
-            }
-            materialBuilder.setContentView(dialogLayout)
-            materialBuilder.show()
-
-            source.setOnClickListener {
-                if (materialBuilder.isShowing) {
-                    materialBuilder.dismiss()
-                    val intent = Intent()
-                    intent.action = Intent.ACTION_VIEW
-                    intent.addCategory(Intent.CATEGORY_BROWSABLE)
-                    intent.data = Uri.parse("https://github.com/renattele/Colorata")
-                    startActivity(intent)
-                }
-            }
-            support.setOnClickListener {
-                if(materialBuilder.isShowing){
-                    materialBuilder.dismiss()
-                    val intent1 = Intent()
-                    intent1.action = Intent.ACTION_VIEW
-                    intent1.addCategory(Intent.CATEGORY_BROWSABLE)
-                    intent1.data = Uri.parse("https://qiwi.ru")
-                    startActivity(intent1)
-                }
-            }
-            version.setOnClickListener {
-                if(materialBuilder.isShowing){
-                    versionCounter += 1
-                    if (versionCounter == 10) {
-                        Snackbar.make(it, "You're pretty", 1500).apply { view.elevation = 1000F }.show()
-                    }
-
-                    else if (versionCounter == 100) {
-                        Snackbar.make(it, "Have nothing to do?", 1500).apply { view.elevation = 1000F }.show()
-                        versionCounter = 0
-                    }
-                }
-            }
-            cancel.setOnClickListener {
-                if(materialBuilder.isShowing){
-                    materialBuilder.dismiss()
-                }
-            }
-        }
-
-
-        settings.setOnClickListener {
-            val materialBuilder = BottomSheetDialog(this)
-            val inflater = layoutInflater
-            val dialogLayout: View = inflater.inflate(R.layout.settings_alert, null)
-
-            val cancel = dialogLayout.findViewById<Button>(R.id.cancel_settings)
-            val settings = dialogLayout.findViewById<Button>(R.id.settings_app)
-            val enable = dialogLayout.findViewById<Button>(R.id.enable_bubbles)
-            val city = dialogLayout.findViewById<Button>(R.id.city_change)
-
-            when(nightMode){
-                false -> {
-                    dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.light_background))
-                }
-                true -> {
-                    dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.dark_background))
-                }
-            }
-
-            materialBuilder.setContentView(dialogLayout)
-            materialBuilder.show()
-
-            settings.setOnClickListener {
-                if (materialBuilder.isShowing) {
-                    materialBuilder.dismiss()
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    val uri = Uri.fromParts("package", packageName, null)
-                    intent.data = uri
-                    startActivity(intent)
-                }
-            }
-            enable.setOnClickListener {
-                if(materialBuilder.isShowing){
-                    materialBuilder.dismiss()
-                    showBubble(this)
-                }
-            }
-            city.setOnClickListener {
-                if(materialBuilder.isShowing){
-                    materialBuilder.dismiss()
-                    val materialBuilderCity = BottomSheetDialog(this)
-                    val inflaterCity = layoutInflater
-                    val dialogLayoutCity: View = inflaterCity.inflate(
-                        R.layout.change_city_alert,
-                        null
-                    )
-                    val okCity = dialogLayoutCity.findViewById<Button>(R.id.ok_change_city)
-                    val cancelCity = dialogLayoutCity.findViewById<Button>(R.id.cancel_change_city)
-                    val changeCityField = dialogLayoutCity.findViewById<TextInputEditText>(R.id.city_field_in)
-
-                    when(nightMode){
-                        false -> {
-                            dialogLayoutCity.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.light_background))
-                        }
-                        true -> {
-                            dialogLayoutCity.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.dark_background))
-                        }
-                    }
-
-                    materialBuilderCity.setContentView(dialogLayoutCity)
-                    materialBuilderCity.show()
-
-                    okCity.setOnClickListener {
-                        if(materialBuilderCity.isShowing) {
-                            if (changeCityField.text.toString()!="") {
-                                val editor = sharedPreference.edit()
-                                editor.putString("city", changeCityField.text.toString())
-                                editor.apply()
-                                materialBuilderCity.dismiss()
-                            } else {
-                                Snackbar.make(it, "Something isn't entered", 1500).apply { view.elevation = 1000F }.show()
-                            }
-                        }
-                    }
-                    cancelCity.setOnClickListener {
-                        if(materialBuilderCity.isShowing){
-                            materialBuilderCity.dismiss()
-                        }
-                    }
-                }
-            }
-            cancel.setOnClickListener {
-                if(materialBuilder.isShowing){
-                    materialBuilder.dismiss()
-                }
-            }
-        }
-        add_button.setOnClickListener {
-            val materialBuilder = BottomSheetDialog(this)
-            val inflater = layoutInflater
-            val dialogLayout: View = inflater.inflate(R.layout.add_button_alert, null)
-
-            val ok = dialogLayout.findViewById<Button>(R.id.ok_add_button)
-            val cancel = dialogLayout.findViewById<Button>(R.id.cancel_add_button)
-            val titleField = dialogLayout.findViewById<TextInputEditText>(R.id.title_field_in)
-            val packageField = dialogLayout.findViewById<TextInputEditText>(R.id.package_field_in)
-            val activityField = dialogLayout.findViewById<TextInputEditText>(R.id.activity_field_in)
-
-            when(nightMode){
-                false -> {
-                    dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.light_background))
-                }
-                true -> {
-                    dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.dark_background))
-                }
-            }
-
-            materialBuilder.setContentView(dialogLayout)
-            materialBuilder.show()
-
-            ok.setOnClickListener {
-                if(materialBuilder.isShowing) {
-                    if(titleField.text.toString()!="" && packageField.text.toString()!="" && activityField.text.toString()!="") {
-                        val editor = sharedPreference.edit()
-                        editor.putString("title", titleField.text.toString())
-                        editor.putString("package", packageField.text.toString())
-                        editor.putString("activity", activityField.text.toString())
-                        editor.apply()
-                        materialBuilder.dismiss()
-                    }
-                    else{
-                        Snackbar.make(it, "Something isn't entered", 1500).apply { view.elevation = 1000F }.show()
-                    }
-                }
-            }
-            cancel.setOnClickListener {
-                if(materialBuilder.isShowing){
-                    materialBuilder.dismiss()
-                }
-            }
-
-        }
-        change_position.setOnClickListener {
-            val materialBuilder = BottomSheetDialog(this)
-            val inflater = layoutInflater
-            val dialogLayout: View = inflater.inflate(R.layout.change_controls_alert, null)
-            val changeRecycler = dialogLayout.findViewById<RecyclerView>(R.id.change_recycler)
-            val ok = dialogLayout.findViewById<Button>(R.id.ok_change_position)
-            val cancel = dialogLayout.findViewById<Button>(R.id.cancel_change_position)
-            val mutableNames = mutableListOf<String>()
-            val mutableIcons = mutableListOf<Int>()
-            for (i in 0..GenerItems().names().lastIndex){
-                    mutableNames.add(
-                        sharedPreference.getString(
-                            "name $i",
-                            GenerItems().names()[i]
-                        ).toString()
-                    )
-                    mutableIcons.add(sharedPreference.getInt("icon $i", GenerItems().icons()[i]))
-            }
-
-            Log.d("aaa", mutableNames.toString())
-            Log.d("ii", sharedPreference.getString("name 12", null).toString())
-            changeRecycler.layoutManager = GridLayoutManager(applicationContext, 3)
-            var bubbleAdapter = BubbleAdapter(mutableNames, mutableIcons)
-            changeRecycler.adapter = bubbleAdapter
-
-            when(nightMode){
-                false -> {
-                    dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.light_background))
-                }
-                true -> {
-                    dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.dark_background))
-                }
-            }
-
-            materialBuilder.setContentView(dialogLayout)
-            materialBuilder.show()
-
-            changeRecycler.addOnItemTouchListener(
-                RecyclerItemClickListener(changeRecycler,
-                    object : RecyclerItemClickListener.OnItemClickListener {
-                        @SuppressLint("WrongConstant")
-                        override fun onItemClick(view: View, position: Int) {
-                            if (!posIs){
-                                bufferName = mutableNames[position]
-                                bufferIcon = mutableIcons[position]
-                                pos1 = position
-                                posIs = !posIs
-                            } else{
-                                bufferName2 = mutableNames[position]
-                                bufferIcon2 = mutableIcons[position]
-                                pos2 = position
-                                mutableNames[pos1] = bufferName2
-                                mutableIcons[pos1] = bufferIcon2
-                                mutableNames[pos2] = bufferName
-                                mutableIcons[pos2] = bufferIcon
-                                bubbleAdapter = BubbleAdapter(mutableNames, mutableIcons)
-                                changeRecycler.adapter?.notifyItemChanged(pos1)
-                                changeRecycler.adapter?.notifyItemChanged(pos2)
-                                GenerItems().icons = mutableIcons
-                                GenerItems().names = mutableNames
-                                posIs = !posIs
-                            }
-                        }
-                    }))
-
-            ok.setOnClickListener {
-                if(materialBuilder.isShowing) {
-                    sharedPreference.edit().clear().apply()
-                    val editor = sharedPreference.edit()
-                    for (i in 0..mutableNames.lastIndex){
-                        editor.putString("name $i", mutableNames[i])
-                        editor.putInt("icon $i", mutableIcons[i])
-                    }
-                    editor.apply()
-                    Log.d("i", sharedPreference.getString("name 2", null).toString())
-                    materialBuilder.dismiss()
-                }
-            }
-            cancel.setOnClickListener {
-                if(materialBuilder.isShowing){
-                    Log.d("aa", sharedPreference.getString("name 2", null).toString())
-                    materialBuilder.dismiss()
-                }
-            }
-        }
+        //Setting up ONCLICKLISTENER
+        help.setOnClickListener{ help() }
+        about.setOnClickListener { about() }
+        settings.setOnClickListener { settings() }
+        add_button.setOnClickListener { addButton()}
+        change_position.setOnClickListener { changePosition()}
     }
 
-
+    //Fun for creating ANIMATIONS
     private fun createVideos(){
         val fadeIn = AlphaAnimation(0f, 1f)
         fadeIn.interpolator = DecelerateInterpolator()
@@ -429,6 +137,7 @@ class MainActivity : AppCompatActivity() {
         text_main.startAnimation(animation)
     }
 
+    //Fun for configuring GUIDELINES
     private fun guidelineConfig(){
         val displayMetrics: DisplayMetrics = baseContext.resources.displayMetrics
         val dpHeight = displayMetrics.heightPixels / displayMetrics.density
@@ -438,6 +147,7 @@ class MainActivity : AppCompatActivity() {
         guideline_logo_main.setGuidelineBegin((dpWidth * 0.37).toInt())
     }
 
+    //Configuring BUBBLES
     @RequiresApi(Build.VERSION_CODES.R)
     private fun buildBubbleNotification(appContext: Context): Notification {
         val pi = PendingIntent.getActivity(
@@ -448,7 +158,7 @@ class MainActivity : AppCompatActivity() {
         )
         val bubble = NotificationCompat.BubbleMetadata.Builder()
             .setDesiredHeight(4000)
-            .setIcon(IconCompat.createWithResource(appContext, R.drawable.ic_logo_settings))
+            .setIcon(IconCompat.createWithResource(appContext, R.drawable.ic_logo_bubble))
             .setIntent(pi)
             .apply { setAutoExpandBubble(true); setSuppressNotification(true) }
             .build()
@@ -459,7 +169,7 @@ class MainActivity : AppCompatActivity() {
                     .setLongLived(true)
                     .setShortLabel("Settings")
                     .setIntent(Intent(Settings.ACTION_SETTINGS))
-                    .setIcon(IconCompat.createWithResource(this, R.drawable.ic_logo_settings))
+                    .setIcon(IconCompat.createWithResource(this, R.drawable.ic_logo_bubble))
                     .build()
             )
         )
@@ -469,7 +179,7 @@ class MainActivity : AppCompatActivity() {
             appContext,
             notifChannel
         )
-            .setSmallIcon(R.drawable.ic_logo_settings)
+            .setSmallIcon(R.drawable.ic_logo_bubble)
             .setContentTitle("ShortTasks")
             .setShortcutId("Settings")
             .setShortcutId(shortcutId)
@@ -506,9 +216,395 @@ class MainActivity : AppCompatActivity() {
             mgr.notify(notifId, buildBubbleNotification(appContext))
         }
     }
+    //End of configuring BUBBLES
 
-    private fun getUserTitle(): String{
-        return sharedPreference.getString("title", "User's").toString()
+    //Fun for BOTTOM SHEET for HELP
+    @SuppressLint("InflateParams")
+    fun help(){
+        val materialBuilder = BottomSheetDialog(this)
+        val inflater = layoutInflater
+        val dialogLayout: View = inflater.inflate(R.layout.help_alert, null)
+
+        //Founding BUTTONS
+        val cancel = dialogLayout.findViewById<Button>(R.id.cancel_help)
+
+        //Configuring BACKGROUND
+        when(nightMode){
+            false -> {
+                dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.light_background))
+            }
+            true -> {
+                dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.dark_background))
+            }
+        }
+
+        //Showing BOTTOM SHEET
+        materialBuilder.setContentView(dialogLayout)
+        materialBuilder.show()
+
+        //Click listener for CANCEL BUTTON
+        cancel.setOnClickListener {
+            if(materialBuilder.isShowing){
+                materialBuilder.dismiss()
+            }
+        }
     }
 
+    //Fun for BOTTOM SHEET for ABOUT
+    @SuppressLint("InflateParams")
+    private fun about(){
+        val materialBuilder = BottomSheetDialog(this)
+        val inflater = layoutInflater
+        val dialogLayout: View = inflater.inflate(R.layout.about_alert, null)
+
+        //Founding BUTTONS
+        val cancel = dialogLayout.findViewById<Button>(R.id.cancel_version)
+        val source = dialogLayout.findViewById<Button>(R.id.sourcecode)
+        val support = dialogLayout.findViewById<Button>(R.id.support)
+        val version = dialogLayout.findViewById<Button>(R.id.version)
+
+        //Configuring BACKGROUND
+        when(nightMode){
+            false -> {
+                dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.light_background))
+            }
+            true -> {
+                dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.dark_background))
+            }
+        }
+
+        //Showing BOTTOM SHEET
+        materialBuilder.setContentView(dialogLayout)
+        materialBuilder.show()
+
+        //Click listener for SOURCE CODE BUTTON
+        source.setOnClickListener {
+            if (materialBuilder.isShowing) {
+                materialBuilder.dismiss()
+                val intent = Intent()
+                intent.action = Intent.ACTION_VIEW
+                intent.addCategory(Intent.CATEGORY_BROWSABLE)
+                intent.data = Uri.parse("https://github.com/Colorata/ShortTasks")
+                startActivity(intent)
+            }
+        }
+
+        //Click listener for SUPPORT US BUTTON
+        support.setOnClickListener {
+            if(materialBuilder.isShowing){
+                materialBuilder.dismiss()
+                val intent1 = Intent()
+                intent1.action = Intent.ACTION_VIEW
+                intent1.addCategory(Intent.CATEGORY_BROWSABLE)
+                intent1.data = Uri.parse("https://qiwi.com/n/COLORATA")
+                startActivity(intent1)
+            }
+        }
+
+        //Click listener for VERSION BUTTON
+        version.setOnClickListener {
+            if(materialBuilder.isShowing){
+                //Showing EASTER EGG
+                versionCounter += 1
+                if (versionCounter == 10) {
+                    Snackbar.make(it, "You're pretty", 1500).apply { view.elevation = 1000F }.show()
+                }
+
+                else if (versionCounter == 100) {
+                    Snackbar.make(it, "Have nothing to do?", 1500).apply { view.elevation = 1000F }.show()
+                    versionCounter = 0
+                }
+            }
+        }
+
+        //Click listener for CANCEL BUTTON
+        cancel.setOnClickListener {
+            if(materialBuilder.isShowing){
+                materialBuilder.dismiss()
+            }
+        }
+    }
+
+    //Fun for BOTTOM SHEET SETTINGS
+    @SuppressLint("InflateParams")
+    private fun settings(){
+        val materialBuilder = BottomSheetDialog(this)
+        val inflater = layoutInflater
+        val dialogLayout: View = inflater.inflate(R.layout.settings_alert, null)
+
+        //Founding BUTTONS
+        val cancel = dialogLayout.findViewById<Button>(R.id.cancel_settings)
+        val settings = dialogLayout.findViewById<Button>(R.id.settings_app)
+        val enable = dialogLayout.findViewById<Button>(R.id.enable_bubbles)
+        val city = dialogLayout.findViewById<Button>(R.id.city_change)
+
+        //Configuring BACKGROUND
+        when(nightMode){
+            false -> {
+                dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.light_background))
+            }
+            true -> {
+                dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.dark_background))
+            }
+        }
+
+        //Showing BOTTOM SHEET
+        materialBuilder.setContentView(dialogLayout)
+        materialBuilder.show()
+
+        //Click listener for APP SETTINGS BUTTON
+        settings.setOnClickListener {
+            if (materialBuilder.isShowing) {
+                materialBuilder.dismiss()
+
+                //Going to SYSTEM SETTINGS
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri = Uri.fromParts("package", packageName, null)
+                intent.data = uri
+                startActivity(intent)
+            }
+        }
+
+        //Click listener for ENABLE BUBBLE BUTTOn
+        enable.setOnClickListener {
+            if(materialBuilder.isShowing){
+                materialBuilder.dismiss()
+                //Showing BUBBLE
+                showBubble(this)
+            }
+        }
+
+        //Click listener for CITY
+        city.setOnClickListener {
+            if(materialBuilder.isShowing){
+                materialBuilder.dismiss()
+                val materialBuilderCity = BottomSheetDialog(this)
+                val inflaterCity = layoutInflater
+                val dialogLayoutCity: View = inflaterCity.inflate(R.layout.change_city_alert, null)
+
+                //Founding BUTTON AND EDITTEXTS for CITY
+                val okCity = dialogLayoutCity.findViewById<Button>(R.id.ok_change_city)
+                val cancelCity = dialogLayoutCity.findViewById<Button>(R.id.cancel_change_city)
+                val changeCityField = dialogLayoutCity.findViewById<TextInputEditText>(R.id.city_field_in)
+
+                //Configuring BACKGROUND for CITY
+                when(nightMode){
+                    false -> {
+                        dialogLayoutCity.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.light_background))
+                    }
+                    true -> {
+                        dialogLayoutCity.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.dark_background))
+                    }
+                }
+
+                //Showing BOTTOM SHEET for CITY
+                materialBuilderCity.setContentView(dialogLayoutCity)
+                materialBuilderCity.show()
+
+                //Click listener for OK BUTTON for CITY
+                okCity.setOnClickListener {
+                    if(materialBuilderCity.isShowing) {
+
+                        //Checking if EDITTEXT empty
+                        if (changeCityField.text.toString()!="") {
+
+                            //Putting CITY NAME to SHAREDPREFS
+                            val editor = sharedPreference.edit()
+                            editor.putString("city", changeCityField.text.toString())
+                            editor.apply()
+                            materialBuilderCity.dismiss()
+                        } else {
+
+                            //Showing SNACKBAR
+                            Snackbar.make(it, "City name isn't entered", 1500).apply { view.elevation = 1000F }.show()
+                        }
+                    }
+                }
+
+                //Click listener for CANCEL BUTTON for CITY
+                cancelCity.setOnClickListener {
+                    if(materialBuilderCity.isShowing){
+                        materialBuilderCity.dismiss()
+                    }
+                }
+            }
+        }
+
+        //Click listener for CANCEL BUTTON
+        cancel.setOnClickListener {
+            if(materialBuilder.isShowing){
+                materialBuilder.dismiss()
+            }
+        }
+    }
+
+    //Fun for BOTTOM SHEET ADD BUTTONS
+    @SuppressLint("InflateParams")
+    private fun addButton(){
+        val materialBuilder = BottomSheetDialog(this)
+        val inflater = layoutInflater
+        val dialogLayout: View = inflater.inflate(R.layout.add_button_alert, null)
+
+        //Founding BUTTONS AND EDITTEXTS
+        val ok = dialogLayout.findViewById<Button>(R.id.ok_add_button)
+        val cancel = dialogLayout.findViewById<Button>(R.id.cancel_add_button)
+        val titleField = dialogLayout.findViewById<TextInputEditText>(R.id.title_field_in)
+        val packageField = dialogLayout.findViewById<TextInputEditText>(R.id.package_field_in)
+        val activityField = dialogLayout.findViewById<TextInputEditText>(R.id.activity_field_in)
+
+        //Configuring BACKGROUND
+        when(nightMode){
+            false -> {
+                dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.light_background))
+            }
+            true -> {
+                dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.dark_background))
+            }
+        }
+
+        //Showing BOTTOM SHEET
+        materialBuilder.setContentView(dialogLayout)
+        materialBuilder.show()
+
+        //Click listener for OK BUTTON
+        ok.setOnClickListener {
+            if(materialBuilder.isShowing) {
+
+                //Checking if EDITTEXTS empty
+                if(titleField.text.toString()!="" && packageField.text.toString()!="" && activityField.text.toString()!="") {
+
+                    //Putting APP INFO to SHAREDPREFS
+                    val editor = sharedPreference.edit()
+                    editor.putString("title", titleField.text.toString())
+                    editor.putString("package", packageField.text.toString())
+                    editor.putString("activity", activityField.text.toString())
+                    editor.apply()
+                    materialBuilder.dismiss()
+                }
+                else{
+
+                    //Showing SNACKBAR
+                    Snackbar.make(it, "Something isn't entered", 1500).apply { view.elevation = 1000F }.show()
+                }
+            }
+        }
+
+        //Click listener for CANCEL BUTTON
+        cancel.setOnClickListener {
+            if(materialBuilder.isShowing){
+                materialBuilder.dismiss()
+            }
+        }
+    }
+
+
+    //Fun for BOTTOM SHEET for CHANGE POSITION
+    @SuppressLint("InflateParams")
+    private fun changePosition(){
+        val materialBuilder = BottomSheetDialog(this)
+        val inflater = layoutInflater
+        val dialogLayout: View = inflater.inflate(R.layout.change_controls_alert, null)
+
+        //Founding BUTTONS and RECYCLERVIEW
+        val changeRecycler = dialogLayout.findViewById<RecyclerView>(R.id.change_recycler)
+        val ok = dialogLayout.findViewById<Button>(R.id.ok_change_position)
+        val cancel = dialogLayout.findViewById<Button>(R.id.cancel_change_position)
+
+        //Init values for CONTROLS
+        val mutableNames = mutableListOf<String>()
+        val mutableIcons = mutableListOf<Int>()
+
+        //Getting LAST INFO about CONTROLS
+        for (i in 0..GenerItems().names().lastIndex){
+            mutableNames.add(
+                    sharedPreference.getString(
+                            "name $i",
+                            GenerItems().names()[i]
+                    ).toString()
+            )
+            mutableIcons.add(sharedPreference.getInt("icon $i", GenerItems().icons()[i]))
+        }
+
+        //Configuring RECYCLERVIEW
+        changeRecycler.layoutManager = GridLayoutManager(applicationContext, 3)
+        var bubbleAdapter = BubbleAdapter(mutableNames, mutableIcons)
+        changeRecycler.adapter = bubbleAdapter
+
+        //Configuring BACKGROUND
+        when(nightMode){
+            false -> {
+                dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.light_background))
+            }
+            true -> {
+                dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.dark_background))
+            }
+        }
+
+        //Showing BOTTOM SHEET
+        materialBuilder.setContentView(dialogLayout)
+        materialBuilder.show()
+
+        //Click listener for CHANGING CONTROLS IN RECYCLERVIEW
+        changeRecycler.addOnItemTouchListener(
+                RecyclerItemClickListener(changeRecycler,
+                        object : RecyclerItemClickListener.OnItemClickListener {
+                            @SuppressLint("WrongConstant")
+                            override fun onItemClick(view: View, position: Int) {
+                                //Checking if FIRST TIME CLICKED
+                                if (!posIs){
+
+                                    //Clicked FIRST TIME
+                                    //Remembering WHERE CLICKED
+                                    bufferName = mutableNames[position]
+                                    bufferIcon = mutableIcons[position]
+                                    pos1 = position
+                                    posIs = !posIs
+                                } else{
+
+                                    //Clicked SECOND TIME
+                                    //Remembering WHERE CLICKED
+                                    bufferName2 = mutableNames[position]
+                                    bufferIcon2 = mutableIcons[position]
+                                    pos2 = position
+
+                                    //Changing POSITIONS
+                                    mutableNames[pos1] = bufferName2
+                                    mutableIcons[pos1] = bufferIcon2
+                                    mutableNames[pos2] = bufferName
+                                    mutableIcons[pos2] = bufferIcon
+
+                                    //Updating RECYCLERVIEW
+                                    bubbleAdapter = BubbleAdapter(mutableNames, mutableIcons)
+                                    changeRecycler.adapter?.notifyItemChanged(pos1)
+                                    changeRecycler.adapter?.notifyItemChanged(pos2)
+                                    GenerItems().icons = mutableIcons
+                                    GenerItems().names = mutableNames
+                                    posIs = !posIs
+                                }
+                            }
+                        }))
+
+        //Click listener for OK BUTTON
+        ok.setOnClickListener {
+            if(materialBuilder.isShowing) {
+
+                //Putting CONTROLS to SHAREDPREFS
+                sharedPreference.edit().clear().apply()
+                val editor = sharedPreference.edit()
+                for (i in 0..mutableNames.lastIndex){
+                    editor.putString("name $i", mutableNames[i])
+                    editor.putInt("icon $i", mutableIcons[i])
+                }
+                editor.apply()
+                materialBuilder.dismiss()
+            }
+        }
+
+        //Click listener for CANCEL BUTTON
+        cancel.setOnClickListener {
+            if(materialBuilder.isShowing){
+                materialBuilder.dismiss()
+            }
+        }
+    }
 }

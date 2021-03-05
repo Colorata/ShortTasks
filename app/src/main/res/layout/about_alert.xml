@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/about_layout">
+
+    <!-- Text ABOUT -->
     <TextView
         android:id="@+id/text_about"
         android:layout_width="wrap_content"
@@ -15,6 +17,8 @@
         android:textSize="40sp"
         android:text="@string/about"
         android:layout_margin="10dp"/>
+
+    <!-- Button SOURCE CODE -->
     <Button
         android:id="@+id/sourcecode"
         android:layout_width="0dp"
@@ -27,6 +31,7 @@
         android:layout_margin="10dp"
         android:padding="5dp"/>
 
+    <!-- Button SUPPORT US -->
     <Button
         android:id="@+id/support"
         android:layout_width="0dp"
@@ -39,6 +44,7 @@
         android:layout_margin="10dp"
         android:padding="5dp"/>
 
+    <!-- Button VERSION -->
     <Button
         android:id="@+id/version"
         android:layout_width="0dp"
@@ -51,6 +57,7 @@
         android:layout_margin="10dp"
         android:padding="5dp"/>
 
+    <!-- Button CANCEL -->
     <Button
         android:id="@+id/cancel_version"
         android:layout_width="match_parent"

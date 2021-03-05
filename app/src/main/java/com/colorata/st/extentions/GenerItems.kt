@@ -3,6 +3,7 @@ package com.colorata.st.extentions
 import com.colorata.st.R
 
 class GenerItems {
+
     var icons: MutableList<Int> = mutableListOf()
     var names: MutableList<String> = mutableListOf()
 

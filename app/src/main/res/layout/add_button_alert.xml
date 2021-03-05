@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:id="@+id/add_button_layout">
 
+    <!-- EditText for TITLE -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/title_field"
         android:layout_width="match_parent"
@@ -23,11 +24,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:nextFocusDown="@id/package_field_in"
-            android:singleLine="true"
-            />
+            android:singleLine="true"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
+
+    <!-- EditText for PACKAGE -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/package_field"
         android:layout_width="match_parent"
@@ -51,6 +53,7 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- EditText for ACTIVITY -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/activity_field"
         android:layout_width="match_parent"
@@ -73,6 +76,7 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Button OK -->
     <Button
         android:id="@+id/ok_add_button"
         android:layout_width="0dp"
@@ -84,6 +88,7 @@
         app:layout_constraintStart_toEndOf="@id/cancel_add_button"
         app:layout_constraintTop_toTopOf="@+id/cancel_add_button" />
 
+    <!-- Button CANCEL -->
     <Button
         android:id="@+id/cancel_add_button"
         android:layout_width="0dp"

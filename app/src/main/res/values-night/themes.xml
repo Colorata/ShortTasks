@@ -1,20 +1,25 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
     <style name="Theme.ShortTasks" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#b47c51</item>
         <item name="colorPrimaryVariant">#e8ab7e</item>
         <item name="colorOnPrimary">@color/black</item>
-        <item name="android:windowBackground">#22221A</item>
-        <item name="android:textColor">#ffffff</item>
-        <!-- Secondary brand color. -->
 
+        <!-- Secondary brand color. -->
         <item name="colorSecondary">#b47c51</item>
         <item name="colorSecondaryVariant">#e8ab7e</item>
         <item name="colorOnSecondary">@color/black</item>
+
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">#22221A</item>
+
         <!-- Customize your theme here. -->
         <item name="android:fontFamily">@font/font</item>
+        <item name="materialButtonStyle">?attr/materialButtonOutlinedStyle</item>
+        <!-- working wrong with snackbar <item name="android:windowBackground">#22221A</item>-->
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:colorEdgeEffect">#22221A</item>
     </style>
+
 </resources>

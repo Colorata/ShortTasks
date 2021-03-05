@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:id="@+id/change_city_layout">
 
+    <!-- EditText for CITY -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/city_field"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -25,6 +26,7 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Button OK -->
     <Button
         android:id="@+id/ok_change_city"
         android:layout_width="0dp"
@@ -36,6 +38,7 @@
         app:layout_constraintStart_toEndOf="@id/cancel_change_city"
         app:layout_constraintTop_toTopOf="@+id/cancel_change_city" />
 
+    <!-- Button CANCEL -->
     <Button
         android:id="@+id/cancel_change_city"
         android:layout_width="0dp"
