@@ -20,6 +20,7 @@ import android.view.animation.AlphaAnimation
 import android.view.animation.AnimationSet
 import android.view.animation.DecelerateInterpolator
 import android.widget.Button
+import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
@@ -41,7 +42,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.activity_bubble.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.bubble_manager
 import kotlinx.android.synthetic.main.first_change_alert.*
+import kotlinx.android.synthetic.main.help_alert.*
 import java.util.*
 
 
@@ -51,8 +54,8 @@ class MainActivity : AppCompatActivity() {
     private var nightMode = true
     private var channelCreated = false
     private val notifId = 1337
-    private val notifChannel = "whatever"
-    private val shortcutId = "something.unique"
+    private val notifChannel = "Bubble Manager"
+    private val shortcutId = "Bubble Manager"
     private lateinit var sharedPreference: SharedPreferences
     private var versionCounter = 0
     private var bufferName: String = ""
@@ -174,7 +177,7 @@ class MainActivity : AppCompatActivity() {
                 this, mutableListOf(
                 ShortcutInfoCompat.Builder(this, shortcutId)
                         .setLongLived(true)
-                        .setShortLabel("Settings")
+                        .setShortLabel("Bubble Manager")
                         .setIntent(Intent(Settings.ACTION_SETTINGS))
                         .setIcon(IconCompat.createWithResource(this, R.drawable.ic_logo_bubble))
                         .build()
@@ -188,7 +191,7 @@ class MainActivity : AppCompatActivity() {
         )
             .setSmallIcon(R.drawable.ic_logo_bubble)
             .setContentTitle("ShortTasks")
-            .setShortcutId("Settings")
+            .setShortcutId("Bubble Manager")
             .setShortcutId(shortcutId)
             .setBubbleMetadata(bubble)
 
@@ -199,9 +202,9 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         val style = NotificationCompat.MessagingStyle(person)
-            .setConversationTitle("Bubble Notification")
+            .setConversationTitle("Bubble Manager")
 
-        style.addMessage("It's notification for bubble", System.currentTimeMillis(), person)
+        style.addMessage("It's Bubble Manager", System.currentTimeMillis(), person)
         builder.setStyle(style)
 
         return builder.build()
@@ -234,6 +237,20 @@ class MainActivity : AppCompatActivity() {
 
         //Founding BUTTONS
         val cancel = dialogLayout.findViewById<Button>(R.id.cancel_help)
+        val imageBubble1 = dialogLayout.findViewById<ImageView>(R.id.image_bubble_1)
+        val imageBubble2 = dialogLayout.findViewById<ImageView>(R.id.image_bubble_2)
+        val imageBubble3 = dialogLayout.findViewById<ImageView>(R.id.image_bubble_3)
+        val imagePower1 = dialogLayout.findViewById<ImageView>(R.id.image_power_1)
+        val imagePower2 = dialogLayout.findViewById<ImageView>(R.id.image_power_2)
+
+        //Configuring pictures
+        if(nightMode){
+            imagePower1.setImageResource(R.drawable.ic_power_assistant_1_dark)
+            imagePower2.setImageResource(R.drawable.ic_power_assistant_2_dark)
+            imageBubble1.setImageResource(R.drawable.ic_bubble_manager_1_dark)
+            imageBubble2.setImageResource(R.drawable.ic_bubble_manager_2_dark)
+            imageBubble3.setImageResource(R.drawable.ic_bubble_manager_3_dark)
+        }
 
         //Configuring BACKGROUND
         configBack(dialogLayout)
@@ -490,7 +507,6 @@ class MainActivity : AppCompatActivity() {
             if(materialBuilder.isShowing) {
 
                 //Putting CONTROLS to SHAREDPREFS
-                sharedPreference.edit().clear().apply()
                 val editor = sharedPreference.edit()
                 for (i in 0..mutableNames.lastIndex){
                     editor.putString("name $i", mutableNames[i])
@@ -558,7 +574,14 @@ class MainActivity : AppCompatActivity() {
         addButton.setOnClickListener {
             if(materialBuilder.isShowing){
                 materialBuilder.dismiss()
-                addButton()
+                if (sharedPreference.getInt("firstAddButton", 0) < 1) {
+                    val editor = sharedPreference.edit()
+                    editor.putInt("firstAddButton", sharedPreference.getInt("firstAddButton", 0) + 1)
+                    editor.apply()
+                    firstAddButton()
+                } else {
+                    addButton()
+                }
             }
         }
 
@@ -719,6 +742,32 @@ class MainActivity : AppCompatActivity() {
             if(materialBuilder.isShowing){
                 materialBuilder.dismiss()
                 changeCity()
+            }
+        }
+    }
+
+    //Fun for the FIRST ADD BUTTON ALERT in BUBBLE MANAGER
+    @SuppressLint("InflateParams")
+    private fun firstAddButton(){
+        val materialBuilder = BottomSheetDialog(this)
+        val inflater = layoutInflater
+        val dialogLayout: View = inflater.inflate(R.layout.first_add_button_alert, null)
+
+        //Founding BUTTONS
+        val understand = dialogLayout.findViewById<Button>(R.id.understand_first_add)
+
+        //Configuring BACKGROUND
+        configBack(dialogLayout)
+
+        //Showing BOTTOM SHEET
+        materialBuilder.setContentView(dialogLayout)
+        materialBuilder.show()
+
+        //Click listener for CANCEL BUTTON
+        understand.setOnClickListener {
+            if(materialBuilder.isShowing){
+                materialBuilder.dismiss()
+                addButton()
             }
         }
     }

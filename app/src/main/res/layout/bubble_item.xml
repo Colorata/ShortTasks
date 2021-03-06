@@ -17,14 +17,6 @@
         android:contentDescription="@string/bubble_item"
         android:layout_gravity="center"/>
 
-    <!-- not working <ImageView
-        android:id="@+id/bubble_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:backgroundTint="#575644"
-        android:contentDescription="@string/bubble_item"
-        android:layout_gravity="center"/>-->
-
     <!-- Description for CONTROL -->
     <TextView
         android:id="@+id/bubble_text"

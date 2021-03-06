@@ -7,6 +7,8 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.hardware.camera2.CameraManager
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.provider.Settings
 import android.view.View
 import android.view.animation.AlphaAnimation
@@ -14,7 +16,7 @@ import android.view.animation.AnimationSet
 import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.colorata.st.*
+import com.colorata.st.R
 import com.colorata.st.extentions.GenerItems
 import com.colorata.st.weather.WeatherResponse
 import com.colorata.st.weather.WeatherService
@@ -40,6 +42,7 @@ class BubbleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bubble)
 
+        val vibration = getSystemService(VIBRATOR_SERVICE) as Vibrator
         //Init SHAREDPREFS
         sharedPreference =  getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
 
@@ -93,6 +96,7 @@ class BubbleActivity : AppCompatActivity() {
                         object : RecyclerItemClickListener.OnItemClickListener {
                             @SuppressLint("WrongConstant")
                             override fun onItemClick(view: View, position: Int) {
+                                vibration.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK))
                                 when (mutableNames[position]) {
                                     "Search" -> {
 

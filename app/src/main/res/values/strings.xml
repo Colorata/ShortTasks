@@ -55,4 +55,11 @@
     <string name="tap_controls_which_you_want_to_swap">Tap controls which you want to swap</string>
     <string name="how_to_change_city">How to change city?</string>
     <string name="enter_city_name_to_text_field">Enter city name to text field.</string>
+    <string name="_1_1_go_to_the_accessibility_in_settings_and_tap_to_shorttasks">1.1 Go to the accessibility in settings and tap to ShortTasks</string>
+    <string name="_1_2_tap_use_shorttasks_and_allow_message_in_pop_up"><![CDATA[1.2 Tap <Use ShortTasks> and allow message in pop-up]]></string>
+    <string name="_1_3_press_power_button_and_tap_to_device_controls"><![CDATA[1.3 Press Power Button and tap to <Device Controls>]]></string>
+    <string name="_1_4_tap_to_shorttasks">1.4 Tap to ShortTasks</string>
+    <string name="_1_5_select_controls_which_you_want_and_tap_save_on_the_bottom"><![CDATA[1.5 Select Controls which you want and tap <Save> on the bottom]]></string>
+    <string name="how_to_add_your_button">How to add Your button?</string>
+    <string name="tap_to_app_which_you_want_n_note_you_can_add_only_one_app">Tap to app which you want. <b/> Note: you can add only one app.</string>
 </resources>
