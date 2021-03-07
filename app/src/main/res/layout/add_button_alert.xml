@@ -19,10 +19,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/app_recycler"
-        android:textSize="40sp"
-        android:layout_margin="10dp"/>
+        android:textSize="@dimen/size_title_text"
+        android:layout_margin="@dimen/margin_text"/>
 
-    <!-- EditText for TITLE -->
+    <!-- Recycler for TITLE -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/app_recycler"
         android:layout_width="match_parent"
@@ -31,14 +31,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginHorizontal="20dp"/>
+        android:layout_marginHorizontal="@dimen/margin_recycler"/>
 
     <!-- Button CANCEL -->
     <Button
         android:id="@+id/cancel_add_button"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/width"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/margin_button"
         android:text="@string/cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

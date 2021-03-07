@@ -108,6 +108,14 @@ class MainActivity : AppCompatActivity() {
         //Configuring SHAREDPREFS
         sharedPreference =  getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
 
+        if (sharedPreference.getInt("welcome", 0) < 100) {
+            val editor = sharedPreference.edit()
+            editor.putInt("welcome", sharedPreference.getInt("welcome", 0) + 1)
+            editor.apply()
+            welcome()
+        }
+
+
         //Showing Accessibility SNACKBAR
         if (sharedPreference.getInt("accessibilitySnack", 0) < 2) {
             val snackBar = Snackbar.make(
@@ -768,6 +776,46 @@ class MainActivity : AppCompatActivity() {
             if(materialBuilder.isShowing){
                 materialBuilder.dismiss()
                 addButton()
+            }
+        }
+    }
+
+    //Fun for the WELCOME
+    @SuppressLint("InflateParams")
+    private fun welcome(){
+        val materialBuilder = BottomSheetDialog(this)
+        val inflater = layoutInflater
+        val dialogLayout: View = inflater.inflate(R.layout.welcome_alert, null)
+
+        //Founding BUTTONS
+        val bubble = dialogLayout.findViewById<Button>(R.id.bubble)
+        val power = dialogLayout.findViewById<Button>(R.id.power)
+        val logo = dialogLayout.findViewById<ImageView>(R.id.image_logo_shorttasks)
+        val imageBubble = dialogLayout.findViewById<ImageView>(R.id.image_bubble)
+
+        //Configuring pictures
+        if(nightMode){
+            logo.setImageResource(R.drawable.ic_logo_main_dark)
+            imageBubble.setImageResource(R.drawable.ic_bubble_manager_3_dark)
+        }
+        //Configuring BACKGROUND
+        configBack(dialogLayout)
+
+        //Showing BOTTOM SHEET
+        materialBuilder.setContentView(dialogLayout)
+        materialBuilder.show()
+
+        //Click listener for BUBBLE BUTTON
+        bubble.setOnClickListener {
+            if(materialBuilder.isShowing){
+                materialBuilder.dismiss()
+            }
+        }
+
+        //Click listener for POWER BUTTON
+        power.setOnClickListener {
+            if(materialBuilder.isShowing){
+                materialBuilder.dismiss()
             }
         }
     }

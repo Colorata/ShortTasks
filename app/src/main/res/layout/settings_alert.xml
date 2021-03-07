@@ -14,22 +14,19 @@
         app:layout_constraintBottom_toTopOf="@id/settings_app"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="40sp"
-        android:text="@string/settings"
-        android:layout_margin="10dp"/>
+        android:textSize="@dimen/size_title_text"
+        android:text="@string/settings"/>
 
     <!-- Button APP SETTINGS -->
     <Button
         android:id="@+id/settings_app"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/width"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/cancel_settings"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_about"
-        android:text="@string/app_settings"
-        android:layout_margin="10dp"
-        android:padding="5dp"/>
+        android:text="@string/app_settings"/>
 
     <!-- Button CANCEL -->
     <Button
@@ -40,8 +37,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/settings_app"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:text="@string/cancel"
-        android:layout_margin="10dp"
-        android:padding="5dp"/>
+        android:text="@string/cancel"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,13 +16,23 @@
 
         <!-- Customize your theme here. -->
         <item name="android:fontFamily">@font/font</item>
-        <item name="materialButtonStyle">?attr/materialButtonOutlinedStyle</item>
+        <item name="materialButtonStyle">@style/ButtonStyle</item>
         <item name="android:windowBackground">@color/dark_background</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <!-- working wrong with snackbar <item name="android:windowBackground">#22221A</item>-->
         <item name="android:textColor">#ffffff</item>
         <item name="android:colorEdgeEffect">#22221A</item>
         <!--<item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>-->
+    </style>
+
+    <!-- Outlined Button Style -->
+    <style name="ButtonStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="materialButtonStyle">?attr/materialButtonOutlinedStyle</item>
+        <item name="android:insetTop">@dimen/margin_button</item>
+        <item name="android:insetBottom">@dimen/margin_button</item>
+        <item name="android:insetRight">@dimen/margin_button</item>
+        <item name="android:insetLeft">@dimen/margin_button</item>
+        <item name="android:padding">@dimen/padding_button</item>
     </style>
 
     <!--TODO: fix bad animation -->

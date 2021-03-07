@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="light_background">#cdcdc5</color>
     <color name="dark_background">#22221A</color>
+    <color name="bubble_item">#575644</color>
 </resources>

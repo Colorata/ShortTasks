@@ -3,16 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:layout_marginVertical="20dp"
+    android:layout_marginVertical="@dimen/margin_recycler"
     tools:ignore="UseCompoundDrawables">
 
     <!-- Icon for APP -->
     <ImageView
         android:id="@+id/app_button"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="@dimen/size_app"
+        android:layout_height="@dimen/size_app"
         android:contentDescription="@string/bubble_item"
         android:layout_gravity="center"/>
 

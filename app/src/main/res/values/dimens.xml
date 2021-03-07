@@ -1,10 +1,22 @@
 <resources>
-    <dimen name="app_bar_height">180dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
-    <dimen name="text_margin">16dp</dimen>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="appbar_padding">16dp</dimen>
-    <dimen name="appbar_padding_top">8dp</dimen>
+    <dimen name="padding_button">10dp</dimen>
+    <dimen name="margin_button">10dp</dimen>
+    <dimen name="margin_text">10dp</dimen>
+    <dimen name="margin_recycler">20dp</dimen>
+    <dimen name="margin_help_horizontal">20dp</dimen>
+    <dimen name="margin_help_bottom">40dp</dimen>
+    <dimen name="margin_image">10dp</dimen>
+    <dimen name="margin_paragraph_small_horizontal">20dp</dimen>
+    <dimen name="margin_paragraph_small_bottom">5dp</dimen>
+    <dimen name="margin_textfield">10dp</dimen>
+    <dimen name="width">0dp</dimen>
+    <dimen name="height">0dp</dimen>
+    <dimen name="size_title_text">40sp</dimen>
+    <dimen name="size_weather_text">25sp</dimen>
+    <dimen name="size_help_paragraph">25sp</dimen>
+    <dimen name="size_help_paragraph_small">20sp</dimen>
+    <dimen name="size_first">25sp</dimen>
+    <dimen name="guideline_percent">0.37</dimen>
+    <dimen name="size_app">64dp</dimen>
+    <dimen name="size_logo">100dp</dimen>
 </resources>

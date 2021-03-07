@@ -11,7 +11,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/margin_textfield"
         android:hint="@string/city_name"
         app:layout_constraintBottom_toTopOf="@id/ok_change_city"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,9 +29,8 @@
     <!-- Button OK -->
     <Button
         android:id="@+id/ok_change_city"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/width"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
         android:text="@string/ok"
         app:layout_constraintBottom_toBottomOf="@+id/cancel_change_city"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,9 +40,8 @@
     <!-- Button CANCEL -->
     <Button
         android:id="@+id/cancel_change_city"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/width"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
         android:text="@string/cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/ok_change_city"

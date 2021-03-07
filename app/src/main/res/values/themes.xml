@@ -27,5 +27,10 @@
     <style name="ButtonStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="materialButtonStyle">?attr/materialButtonOutlinedStyle</item>
         <item name="android:textColor">@color/dark_background</item>
+        <item name="android:insetTop">@dimen/margin_button</item>
+        <item name="android:insetBottom">@dimen/margin_button</item>
+        <item name="android:insetRight">@dimen/margin_button</item>
+        <item name="android:insetLeft">@dimen/margin_button</item>
+        <item name="android:padding">@dimen/padding_button</item>
     </style>
 </resources>

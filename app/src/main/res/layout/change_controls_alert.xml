@@ -18,8 +18,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/change_recycler"
-            android:textSize="40sp"
-            android:layout_margin="10dp"/>
+            android:textSize="@dimen/size_title_text"
+            android:layout_margin="@dimen/margin_text"/>
 
         <!-- RecyclerView for CONTROLS -->
         <androidx.recyclerview.widget.RecyclerView
@@ -30,14 +30,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_change_controls"
-            android:layout_margin="20dp"/>
+            android:layout_margin="@dimen/margin_recycler"/>
 
         <!-- Button OK -->
         <Button
             android:id="@+id/ok_change_position"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/width"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
             android:text="@string/ok"
             app:layout_constraintBottom_toBottomOf="@+id/cancel_change_position"
             app:layout_constraintEnd_toEndOf="parent"
@@ -47,9 +46,8 @@
         <!-- Button CANCEL -->
         <Button
             android:id="@+id/cancel_change_position"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/width"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
             android:text="@string/cancel"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/ok_change_position"

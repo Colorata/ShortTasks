@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/change_controls_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/add_button_layout">
+
+        <!-- Text WELCOME -->
+        <TextView
+            android:id="@+id/text_welcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/welcome_to_the_colorata_family"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="@dimen/size_title_text"
+            android:layout_margin="@dimen/margin_text"
+            android:textAlignment="center"/>
+
+        <!-- Image for SHORTTASKS -->
+        <ImageView
+            android:id="@+id/image_logo_shorttasks"
+            android:layout_width="@dimen/size_logo"
+            android:layout_height="@dimen/size_logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_welcome"
+            android:src="@drawable/ic_logo_main_light"
+            android:contentDescription="@string/logo"
+            android:layout_margin="@dimen/margin_help_horizontal"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"/>
+
+        <!-- Text for SUBWElCOME -->
+        <TextView
+            android:id="@+id/text_subwelcome"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/margin_text"
+            android:textSize="@dimen/size_first"
+            android:text="@string/shorttasks_is_app_which_created_for_the_big_phones_n_with_this_app_you_can_control_your_device_easier_with_this_app_n_colorata_gives_choice_between_2_methods_of_controlling_your_phone_n_so_select_the_one"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/image_logo_shorttasks"/>
+
+        <!-- Image for BUBBLE -->
+        <ImageView
+            android:id="@+id/image_bubble"
+            android:layout_width="@dimen/width"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/image_power"
+            app:layout_constraintTop_toTopOf="@id/image_power"
+            app:layout_constraintBottom_toBottomOf="@id/image_power"
+            android:src="@drawable/ic_bubble_manager_3_light"
+            android:contentDescription="@string/power_assistant_button"
+            android:layout_margin="@dimen/margin_help_horizontal"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"/>
+
+        <!-- Image for POWER -->
+        <ImageView
+            android:id="@+id/image_power"
+            android:layout_width="@dimen/width"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toStartOf="@id/image_bubble"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_subwelcome"
+            app:layout_constraintBottom_toTopOf="@id/power"
+            android:src="@drawable/ic_power_assistant_6"
+            android:contentDescription="@string/bubble_manager"
+            android:layout_margin="@dimen/margin_help_horizontal"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"/>
+
+        <!-- Button POWER -->
+        <Button
+            android:id="@+id/power"
+            android:layout_width="@dimen/width"
+            android:layout_height="wrap_content"
+            android:text="@string/bubble_manager"
+            app:layout_constraintBottom_toBottomOf="@+id/bubble"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/bubble"
+            app:layout_constraintTop_toTopOf="@+id/bubble" />
+
+        <!-- Button BUBBLE -->
+        <Button
+            android:id="@+id/bubble"
+            android:layout_width="@dimen/width"
+            android:layout_height="wrap_content"
+            android:text="@string/power_assistant_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/power"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/image_power" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

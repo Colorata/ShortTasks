@@ -10,14 +10,14 @@
     <!-- Image LOGO -->
     <ImageView
         android:id="@+id/logo_main"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="@dimen/width"
+        android:layout_height="@dimen/height"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="@id/guideline_logo_main"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/guideline_one_handed_main"
         android:src="@drawable/ic_logo_main_light"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/margin_image"
         android:contentDescription="@string/logo" />
 
     <!-- Guideline for ONE-HAND -->
@@ -25,7 +25,7 @@
         android:id="@+id/guideline_one_handed_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintGuide_percent="0.37"
+        app:layout_constraintGuide_percent="@dimen/guideline_percent"
         android:orientation="horizontal"/>
 
     <!-- Guideline for LOGO -->
@@ -33,7 +33,7 @@
         android:id="@+id/guideline_logo_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintGuide_percent="0.37"
+        app:layout_constraintGuide_percent="@dimen/guideline_percent"
         android:orientation="vertical"/>
 
     <!-- Text SHORTTASKS -->
@@ -45,8 +45,8 @@
         app:layout_constraintBottom_toBottomOf="@id/guideline_one_handed_main"
         app:layout_constraintStart_toStartOf="@id/guideline_logo_main"
         app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="40sp"
-        android:text="@string/shorttasks"/>
+        android:textSize="@dimen/size_title_text"
+        android:text="@string/app_name"/>
 
     <!-- Button to CHANGE POSITION -->
     <Button
