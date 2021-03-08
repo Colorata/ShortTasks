@@ -44,4 +44,15 @@
     <string name="welcome_to_the_colorata_family">Welcome to the Colorata Family!</string>
     <string name="power_assistant_button">Power Assistant</string>
     <string name="shorttasks_is_app_which_created_for_the_big_phones_n_with_this_app_you_can_control_your_device_easier_with_this_app_n_colorata_gives_choice_between_2_methods_of_controlling_your_phone_n_so_select_the_one">ShortTasks is app which created for the big phones. \nWith this app you can control your device easier with this app. \nColorata gives choice between 2 methods of controlling your phone. \nSo, select the one.</string>
+    <string name="using_shorttasks_with_bubblemanager">Using ShortTasks with BubbleManager</string>
+    <string name="tap_to_bubble_manager_in_shorttasks_or_tap_button_below">Tap to Bubble Manager in ShortTasks or tap button below</string>
+    <string name="tap_to_small_bottom_arrow_in_shorttasks_notification">Tap to small bottom arrow in ShortTasks notification</string>
+    <string name="all_done">All Done!</string>
+    <string name="using_shorttasks_with_powerassistant">Using ShortTasks with PowerAssistant</string>
+    <string name="go_to_the_accessibility_settings_or_tap_to_button_below_and_tap_to_shorttasks">Go to the accessibility settings or tap to button below and tap to ShortTasks</string>
+    <string name="go">Go!</string>
+    <string name="_1_1_go_to_the_accessibility_settings_or_tap_button_below_and_tap_to_shorttasks">1.1 Go to the accessibility settings or tap button below and tap to ShortTasks</string>
+    <string name="clear_ndata">Clear \nData</string>
+    <string name="allow_restore_defaults_in_shorttasks">Restore defaults?</string>
+    <string name="you_willn_t_able_to_recover_your_data_after_that">You willn\'t able to recover your data after that</string>
 </resources>

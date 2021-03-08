@@ -108,27 +108,11 @@ class MainActivity : AppCompatActivity() {
         //Configuring SHAREDPREFS
         sharedPreference =  getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
 
-        if (sharedPreference.getInt("welcome", 0) < 100) {
+        if (sharedPreference.getInt("welcome", 0) < 1) {
             val editor = sharedPreference.edit()
             editor.putInt("welcome", sharedPreference.getInt("welcome", 0) + 1)
             editor.apply()
             welcome()
-        }
-
-
-        //Showing Accessibility SNACKBAR
-        if (sharedPreference.getInt("accessibilitySnack", 0) < 2) {
-            val snackBar = Snackbar.make(
-                    main_layout, "Please, turn on Accessibility on this app",
-                    Snackbar.LENGTH_INDEFINITE
-            ).setAction("Go!"){
-                val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-                startActivity(intent)
-            }
-            snackBar.show()
-            val editor = sharedPreference.edit()
-            editor.putInt("accessibilitySnack", sharedPreference.getInt("accessibilitySnack", 0) + 1)
-            editor.apply()
         }
 
         //Creating ANIMATIONS and configuring GUIDELINES
@@ -245,6 +229,8 @@ class MainActivity : AppCompatActivity() {
 
         //Founding BUTTONS
         val cancel = dialogLayout.findViewById<Button>(R.id.cancel_help)
+        val enable = dialogLayout.findViewById<Button>(R.id.enable_help)
+        val goAccess = dialogLayout.findViewById<Button>(R.id.go_access)
         val imageBubble1 = dialogLayout.findViewById<ImageView>(R.id.image_bubble_1)
         val imageBubble2 = dialogLayout.findViewById<ImageView>(R.id.image_bubble_2)
         val imageBubble3 = dialogLayout.findViewById<ImageView>(R.id.image_bubble_3)
@@ -267,6 +253,20 @@ class MainActivity : AppCompatActivity() {
         materialBuilder.setContentView(dialogLayout)
         materialBuilder.show()
 
+        //Click listener for ENABLE BUTTON
+        enable.setOnClickListener {
+            if (materialBuilder.isShowing){
+                showBubble(this)
+            }
+        }
+
+        //Click listener for GO BUTTON
+        goAccess.setOnClickListener {
+            if (materialBuilder.isShowing) {
+                val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+                startActivity(intent)
+            }
+        }
         //Click listener for CANCEL BUTTON
         cancel.setOnClickListener {
             if(materialBuilder.isShowing){
@@ -353,6 +353,7 @@ class MainActivity : AppCompatActivity() {
         //Founding BUTTONS
         val cancel = dialogLayout.findViewById<Button>(R.id.cancel_settings)
         val settings = dialogLayout.findViewById<Button>(R.id.settings_app)
+        val clear = dialogLayout.findViewById<Button>(R.id.clear_data)
 
         //Configuring BACKGROUND
         configBack(dialogLayout)
@@ -371,6 +372,14 @@ class MainActivity : AppCompatActivity() {
                 val uri = Uri.fromParts("package", packageName, null)
                 intent.data = uri
                 startActivity(intent)
+            }
+        }
+
+        //Click listener for CLEAR BUTTON
+        clear.setOnClickListener {
+            if (materialBuilder.isShowing){
+                materialBuilder.dismiss()
+                clearData()
             }
         }
 
@@ -788,8 +797,8 @@ class MainActivity : AppCompatActivity() {
         val dialogLayout: View = inflater.inflate(R.layout.welcome_alert, null)
 
         //Founding BUTTONS
-        val bubble = dialogLayout.findViewById<Button>(R.id.bubble)
-        val power = dialogLayout.findViewById<Button>(R.id.power)
+        val power = dialogLayout.findViewById<Button>(R.id.bubble)
+        val bubble = dialogLayout.findViewById<Button>(R.id.power)
         val logo = dialogLayout.findViewById<ImageView>(R.id.image_logo_shorttasks)
         val imageBubble = dialogLayout.findViewById<ImageView>(R.id.image_bubble)
 
@@ -809,11 +818,132 @@ class MainActivity : AppCompatActivity() {
         bubble.setOnClickListener {
             if(materialBuilder.isShowing){
                 materialBuilder.dismiss()
+                bubbleManagerFirst()
             }
         }
 
         //Click listener for POWER BUTTON
         power.setOnClickListener {
+            if(materialBuilder.isShowing){
+                materialBuilder.dismiss()
+                powerAssistantFirst()
+            }
+        }
+    }
+
+    //Fun for the BUBBLE MANAGER FIRST
+    @SuppressLint("InflateParams")
+    private fun bubbleManagerFirst(){
+        val materialBuilder = BottomSheetDialog(this)
+        val inflater = layoutInflater
+        val dialogLayout: View = inflater.inflate(R.layout.bubble_manager_first_alert, null)
+
+        //Founding BUTTONS
+        val understand = dialogLayout.findViewById<Button>(R.id.cancel_bubble_manager_first)
+        val enable = dialogLayout.findViewById<Button>(R.id.enable_first)
+        val image1 = dialogLayout.findViewById<ImageView>(R.id.image_bubble_1_first)
+        val image2 = dialogLayout.findViewById<ImageView>(R.id.image_bubble_2_first)
+        val image3 = dialogLayout.findViewById<ImageView>(R.id.image_bubble_3_first)
+
+        //Configuring pictures
+        if(nightMode){
+            image1.setImageResource(R.drawable.ic_bubble_manager_1_dark)
+            image2.setImageResource(R.drawable.ic_bubble_manager_2_dark)
+            image3.setImageResource(R.drawable.ic_bubble_manager_3_dark)
+        }
+
+        //Configuring BACKGROUND
+        configBack(dialogLayout)
+
+        //Showing BOTTOM SHEET
+        materialBuilder.setContentView(dialogLayout)
+        materialBuilder.show()
+
+        //Click listener for UNDERSTAND BUTTON
+        understand.setOnClickListener {
+            if(materialBuilder.isShowing){
+                materialBuilder.dismiss()
+            }
+        }
+
+        //Click listener for ENABLE BUTTON
+        enable.setOnClickListener {
+            if(materialBuilder.isShowing){
+                showBubble(this)
+            }
+        }
+    }
+
+    //Fun for the POWER ASSISTANT FIRST
+    @SuppressLint("InflateParams")
+    private fun powerAssistantFirst(){
+        val materialBuilder = BottomSheetDialog(this)
+        val inflater = layoutInflater
+        val dialogLayout: View = inflater.inflate(R.layout.power_assistant_first_alert, null)
+
+        //Founding BUTTONS
+        val understand = dialogLayout.findViewById<Button>(R.id.cancel_power_assistant_first)
+        val go = dialogLayout.findViewById<Button>(R.id.go_access_first)
+        val image1 = dialogLayout.findViewById<ImageView>(R.id.image_power_1_first)
+        val image2 = dialogLayout.findViewById<ImageView>(R.id.image_power_2_first)
+
+        //Configuring pictures
+        if(nightMode){
+            image1.setImageResource(R.drawable.ic_power_assistant_1_dark)
+            image2.setImageResource(R.drawable.ic_power_assistant_2_dark)
+        }
+
+        //Configuring BACKGROUND
+        configBack(dialogLayout)
+
+        //Showing BOTTOM SHEET
+        materialBuilder.setContentView(dialogLayout)
+        materialBuilder.show()
+
+        //Click listener for UNDERSTAND BUTTON
+        understand.setOnClickListener {
+            if(materialBuilder.isShowing){
+                materialBuilder.dismiss()
+            }
+        }
+
+        //Click listener for GO BUTTON
+        go.setOnClickListener {
+            if(materialBuilder.isShowing){
+                val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+                startActivity(intent)
+            }
+        }
+    }
+
+    //Fun for the CLEAR DATA
+    @SuppressLint("InflateParams")
+    private fun clearData(){
+        val materialBuilder = BottomSheetDialog(this)
+        val inflater = layoutInflater
+        val dialogLayout: View = inflater.inflate(R.layout.clear_data_allowing_alert, null)
+
+        //Founding BUTTONS
+        val ok = dialogLayout.findViewById<Button>(R.id.ok_clear)
+        val cancel = dialogLayout.findViewById<Button>(R.id.cancel_clear)
+
+        //Configuring BACKGROUND
+        configBack(dialogLayout)
+
+        //Showing BOTTOM SHEET
+        materialBuilder.setContentView(dialogLayout)
+        materialBuilder.show()
+
+        //Click listener for UNDERSTAND BUTTON
+        ok.setOnClickListener {
+            if(materialBuilder.isShowing){
+                materialBuilder.dismiss()
+                sharedPreference.edit().clear().apply()
+            }
+        }
+
+        //Click listener for GO BUTTON
+        cancel.setOnClickListener {
             if(materialBuilder.isShowing){
                 materialBuilder.dismiss()
             }

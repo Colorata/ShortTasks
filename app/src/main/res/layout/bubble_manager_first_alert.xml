@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/change_controls_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/add_button_layout">
+
+        <!-- Text BUBBLE MANAGER -->
+        <TextView
+            android:id="@+id/bubble_manager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/using_shorttasks_with_bubblemanager"
+            android:textSize="@dimen/size_title_text"
+            android:layout_margin="@dimen/margin_text"
+            android:textAlignment="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Text PARAGRAPH 2_1 -->
+        <TextView
+            android:id="@+id/bubble_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/bubble_manager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/enable_first"
+            android:text="@string/tap_to_bubble_manager_in_shorttasks_or_tap_button_below"
+            android:textSize="@dimen/size_help_paragraph_small"
+            android:layout_margin="@dimen/margin_paragraph_small_horizontal"
+            android:layout_marginBottom="@dimen/margin_paragraph_small_bottom"/>
+
+        <Button
+            android:id="@+id/enable_first"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/bubble_1"
+            app:layout_constraintBottom_toTopOf="@id/image_bubble_1_first"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="@string/enable"/>
+
+        <!-- Image PARAGRAPH 2_1 -->
+        <ImageView
+            android:id="@+id/image_bubble_1_first"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/enable_first"
+            app:layout_constraintBottom_toBottomOf="@id/bubble_2"
+            android:src="@drawable/ic_bubble_manager_1_light"
+            android:contentDescription="@string/step_3"
+            android:layout_marginHorizontal="@dimen/margin_help_horizontal"
+            android:layout_marginBottom="@dimen/margin_help_bottom"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"/>
+
+        <!-- Text PARAGRAPH 2_2 -->
+        <TextView
+            android:id="@+id/bubble_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/image_bubble_1_first"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/image_bubble_2_first"
+            android:text="@string/tap_to_small_bottom_arrow_in_shorttasks_notification"
+            android:textSize="@dimen/size_help_paragraph_small"
+            android:layout_margin="@dimen/margin_paragraph_small_horizontal"
+            android:layout_marginBottom="@dimen/margin_paragraph_small_bottom"/>
+
+        <!-- Image PARAGRAPH 2_2 -->
+        <ImageView
+            android:id="@+id/image_bubble_2_first"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bubble_2"
+            app:layout_constraintBottom_toBottomOf="@id/bubble_3"
+            android:src="@drawable/ic_bubble_manager_2_light"
+            android:contentDescription="@string/step_3"
+            android:layout_marginHorizontal="@dimen/margin_help_horizontal"
+            android:layout_marginBottom="@dimen/margin_help_bottom"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"/>
+
+        <!-- Text PARAGRAPH 2_3 -->
+        <TextView
+            android:id="@+id/bubble_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/image_bubble_2_first"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/image_bubble_3_first"
+            android:text="@string/all_done"
+            android:textSize="@dimen/size_help_paragraph_small"
+            android:layout_margin="@dimen/margin_paragraph_small_horizontal"
+            android:layout_marginBottom="@dimen/margin_paragraph_small_bottom"/>
+
+        <!-- Image PARAGRAPH 2_3 -->
+        <ImageView
+            android:id="@+id/image_bubble_3_first"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bubble_3"
+            app:layout_constraintBottom_toTopOf="@id/cancel_bubble_manager_first"
+            android:src="@drawable/ic_bubble_manager_3_light"
+            android:contentDescription="@string/step_3"
+            android:layout_marginHorizontal="@dimen/margin_help_horizontal"
+            android:layout_marginBottom="@dimen/margin_help_bottom"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"/>
+
+        <!-- Button CANCEL -->
+        <Button
+            android:id="@+id/cancel_bubble_manager_first"
+            android:layout_width="@dimen/width"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/image_bubble_3_first"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/understand"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

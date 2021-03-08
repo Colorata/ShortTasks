@@ -42,11 +42,21 @@
         app:layout_constraintTop_toBottomOf="@id/power_assistant"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/image_power_1"
-        android:text="@string/_1_1_go_to_the_accessibility_in_settings_and_tap_to_shorttasks"
+        app:layout_constraintBottom_toTopOf="@id/go_access"
+        android:text="@string/_1_1_go_to_the_accessibility_settings_or_tap_button_below_and_tap_to_shorttasks"
         android:textSize="@dimen/size_help_paragraph_small"
         android:layout_margin="@dimen/margin_paragraph_small_horizontal"
         android:layout_marginBottom="@dimen/margin_paragraph_small_bottom"/>
+
+    <Button
+        android:id="@+id/go_access"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/power_1"
+        app:layout_constraintBottom_toTopOf="@id/image_power_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/go"/>
 
     <!-- Image PARAGRAPH 1_1 -->
     <ImageView
@@ -55,7 +65,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/power_1"
+        app:layout_constraintTop_toBottomOf="@id/go_access"
         app:layout_constraintBottom_toBottomOf="@id/power_2"
         android:src="@drawable/ic_power_assistant_1_light"
         android:contentDescription="@string/step_1"
@@ -234,11 +244,21 @@
         app:layout_constraintTop_toBottomOf="@id/bubble_manager"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/image_bubble_1"
+        app:layout_constraintBottom_toTopOf="@id/enable_help"
         android:text="@string/_2_1_tap_to_settings_in_shorttasks"
         android:textSize="@dimen/size_help_paragraph_small"
         android:layout_margin="@dimen/margin_paragraph_small_horizontal"
         android:layout_marginBottom="@dimen/margin_paragraph_small_bottom"/>
+
+    <Button
+        android:id="@+id/enable_help"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/bubble_1"
+        app:layout_constraintBottom_toTopOf="@id/image_bubble_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/enable"/>
 
     <!-- Image PARAGRAPH 2_1 -->
     <ImageView
@@ -247,7 +267,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bubble_1"
+        app:layout_constraintTop_toBottomOf="@id/enable_help"
         app:layout_constraintBottom_toBottomOf="@id/bubble_2"
         android:src="@drawable/ic_bubble_manager_1_light"
         android:contentDescription="@string/step_3"

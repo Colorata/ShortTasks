@@ -16,6 +16,7 @@ import android.service.controls.templates.ToggleTemplate
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.colorata.st.bubble.BubbleActivity
 import java.lang.reflect.Method
 import java.util.concurrent.Flow
 import java.util.function.Consumer
@@ -32,7 +33,7 @@ class ControlTile : ControlsProviderService() {
             PendingIntent.getActivity(
                 this,
                 0,
-                Intent(this, MainActivity::class.java),
+                Intent(this, BubbleActivity::class.java),
                 PendingIntent.FLAG_CANCEL_CURRENT
             )
         ).setTitle(title)

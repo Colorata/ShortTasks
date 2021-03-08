@@ -24,9 +24,20 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/cancel_settings"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/clear_data"
         app:layout_constraintTop_toBottomOf="@id/text_about"
         android:text="@string/app_settings"/>
+
+    <!-- Button CLEAR DATA -->
+    <Button
+        android:id="@+id/clear_data"
+        android:layout_width="@dimen/width"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/settings_app"
+        app:layout_constraintBottom_toBottomOf="@id/settings_app"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/settings_app"
+        android:text="@string/clear_ndata"/>
 
     <!-- Button CANCEL -->
     <Button

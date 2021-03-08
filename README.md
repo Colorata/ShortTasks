@@ -23,7 +23,7 @@ Introducing 2 main and 1 additional features:
 First of all, it's a one-handed feature that helps you control your device and makes it easier.
 It's a very important because most of phones has very big screens and it's a very hard to use one-handed.
 
-![4](https://user-images.githubusercontent.com/79582543/110311346-b2a82f80-8014-11eb-88f6-83367ad8678f.png)
+![4](https://user-images.githubusercontent.com/79582543/109321495-41bd8680-7862-11eb-9e7c-d58e1733e601.png)
 
 # Bubble Manager
 
@@ -33,7 +33,7 @@ You have choice between Power Assistant and Bubble Manager.
 Bubble Manager created for another user experience and has additional features.
 If Bubble manager is more comfortable for you, choose it.
 
-![6](https://user-images.githubusercontent.com/79582543/110311353-b3d95c80-8014-11eb-844c-5594bd22f6e8.png)
+![6](https://user-images.githubusercontent.com/79582543/109321502-43874a00-7862-11eb-8b92-fe234c59bda3.png)
 
 # Weather Director
 
@@ -41,7 +41,7 @@ If Bubble manager is more comfortable for you, choose it.
 
 Weather Director is additional feature for Bubble Manager. You can choose city that will show on the top.
 
-![8](https://user-images.githubusercontent.com/79582543/110311356-b50a8980-8014-11eb-85d2-1328b8124e75.png)
+![8](https://user-images.githubusercontent.com/79582543/109321510-44b87700-7862-11eb-8016-9c606a84a1bb.png)
 
 # Conclution
 
