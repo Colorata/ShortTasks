@@ -13,6 +13,7 @@
         app:layout_constraintBottom_toTopOf="@id/city_change"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="@dimen/margin_text"
         android:textSize="@dimen/size_title_text"
         android:text="@string/weather_director"/>
 

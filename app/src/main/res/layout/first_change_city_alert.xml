@@ -7,7 +7,7 @@
 
     <!-- Text HOW TO CHANGE -->
     <TextView
-        android:id="@+id/text_how_change"
+        android:id="@+id/text_how_change_city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
@@ -27,7 +27,7 @@
         android:text="@string/enter_city_name_to_text_field"
         android:textSize="@dimen/size_first"
         android:layout_margin="@dimen/margin_text"
-        app:layout_constraintTop_toBottomOf="@id/text_how_change"
+        app:layout_constraintTop_toBottomOf="@id/text_how_change_city"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/understand_first_change_city_alert"/>

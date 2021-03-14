@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.colorata.st.R
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class BubbleAdapter(private val values: MutableList<String>, private val icon: MutableList<Int>/*, private val drawable: MutableList<Drawable?> = mutableListOf(null)*/): RecyclerView.Adapter<BubbleAdapter.ViewHolder>() {

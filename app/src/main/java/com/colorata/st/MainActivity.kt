@@ -8,7 +8,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
-import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.Drawable
@@ -249,14 +248,46 @@ import java.util.*
         val dialogLayout: View = inflater.inflate(R.layout.help_alert, null)
 
         //Founding BUTTONS
+        val text = dialogLayout.findViewById<TextView>(R.id.text_help)
+        val power = dialogLayout.findViewById<TextView>(R.id.power_assistant)
+        val power1 = dialogLayout.findViewById<TextView>(R.id.power_1)
+        val power2 = dialogLayout.findViewById<TextView>(R.id.power_2)
+        val power3 = dialogLayout.findViewById<TextView>(R.id.power_3)
+        val power4 = dialogLayout.findViewById<TextView>(R.id.power_4)
+        val power5 = dialogLayout.findViewById<TextView>(R.id.power_5)
+        val power6 = dialogLayout.findViewById<TextView>(R.id.power_6)
+        val bubble = dialogLayout.findViewById<TextView>(R.id.bubble_manager)
+        val bubble1 = dialogLayout.findViewById<TextView>(R.id.bubble_1)
+        val bubble2 = dialogLayout.findViewById<TextView>(R.id.bubble_2)
+        val bubble3 = dialogLayout.findViewById<TextView>(R.id.bubble_3)
+
         val cancel = dialogLayout.findViewById<Button>(R.id.cancel_help)
         val enable = dialogLayout.findViewById<Button>(R.id.enable_help)
         val goAccess = dialogLayout.findViewById<Button>(R.id.go_access)
+
         val imageBubble1 = dialogLayout.findViewById<ImageView>(R.id.image_bubble_1)
         val imageBubble2 = dialogLayout.findViewById<ImageView>(R.id.image_bubble_2)
         val imageBubble3 = dialogLayout.findViewById<ImageView>(R.id.image_bubble_3)
         val imagePower1 = dialogLayout.findViewById<ImageView>(R.id.image_power_1)
         val imagePower2 = dialogLayout.findViewById<ImageView>(R.id.image_power_2)
+
+        //Changing COLOR THEME
+        cancel.setTextColor(getButtonColor())
+        enable.setTextColor(getButtonColor())
+        goAccess.setTextColor(getButtonColor())
+        text.setTextColor(getButtonColor())
+        power.setTextColor(getButtonColor())
+        power1.setTextColor(getButtonColor())
+        power2.setTextColor(getButtonColor())
+        power3.setTextColor(getButtonColor())
+        power4.setTextColor(getButtonColor())
+        power5.setTextColor(getButtonColor())
+        power6.setTextColor(getButtonColor())
+        bubble.setTextColor(getButtonColor())
+        bubble1.setTextColor(getButtonColor())
+        bubble2.setTextColor(getButtonColor())
+        bubble3.setTextColor(getButtonColor())
+
 
         //Configuring pictures
         if(nightMode){
@@ -380,11 +411,17 @@ import java.util.*
         val dialogLayout: View = inflater.inflate(R.layout.settings_alert, null)
 
         //Founding BUTTONS
+        val text = dialogLayout.findViewById<TextView>(R.id.text_settings)
         val cancel = dialogLayout.findViewById<Button>(R.id.cancel_settings)
         val settings = dialogLayout.findViewById<Button>(R.id.settings_app)
         val clear = dialogLayout.findViewById<Button>(R.id.clear_data)
 
-        
+        //Changing COLOR THEME
+        cancel.setTextColor(getButtonColor())
+        settings.setTextColor(getButtonColor())
+        clear.setTextColor(getButtonColor())
+        text.setTextColor(getButtonColor())
+
         //Configuring BACKGROUND
         configBack(dialogLayout)
 
@@ -429,8 +466,13 @@ import java.util.*
         val dialogLayout: View = inflater.inflate(R.layout.add_button_alert, null)
 
         //Founding BUTTONS AND EDITTEXTS
+        val text = dialogLayout.findViewById<TextView>(R.id.text_add_button)
         val appRecycler = dialogLayout.findViewById<RecyclerView>(R.id.app_recycler)
         val cancel = dialogLayout.findViewById<Button>(R.id.cancel_add_button)
+
+        //Changing COLOR THEME
+        cancel.setTextColor(getButtonColor())
+        text.setTextColor(getButtonColor())
 
         //Configuring FOR ALL APPS
         val mutableLabels = getAppsLabel()
@@ -478,9 +520,15 @@ import java.util.*
         val dialogLayout: View = inflater.inflate(R.layout.change_controls_alert, null)
 
         //Founding BUTTONS and RECYCLERVIEW
+        val text = dialogLayout.findViewById<TextView>(R.id.text_change_controls)
         val changeRecycler = dialogLayout.findViewById<RecyclerView>(R.id.change_recycler)
         val ok = dialogLayout.findViewById<Button>(R.id.ok_change_position)
         val cancel = dialogLayout.findViewById<Button>(R.id.cancel_change_position)
+
+        //Change COLOR THEME
+        ok.setTextColor(getButtonColor())
+        cancel.setTextColor(getButtonColor())
+        text.setTextColor(getButtonColor())
 
         //Init values for CONTROLS
         val mutableNames = mutableListOf<String>()
@@ -581,10 +629,18 @@ import java.util.*
         val dialogLayout: View = inflater.inflate(R.layout.bubble_manager_alert, null)
 
         //Founding BUTTONS
+        val text = dialogLayout.findViewById<TextView>(R.id.text_bubble_manager)
         val cancel = dialogLayout.findViewById<Button>(R.id.cancel_bubble_manager)
         val enable = dialogLayout.findViewById<Button>(R.id.enable)
         val changePosition = dialogLayout.findViewById<Button>(R.id.change_position)
         val addButton = dialogLayout.findViewById<Button>(R.id.add_button)
+
+        //Changing COLOR THEME
+        cancel.setTextColor(getButtonColor())
+        enable.setTextColor(getButtonColor())
+        changePosition.setTextColor(getButtonColor())
+        addButton.setTextColor(getButtonColor())
+        text.setTextColor(getButtonColor())
 
         //Configuring BACKGROUND
         configBack(dialogLayout)
@@ -648,8 +704,14 @@ import java.util.*
         val dialogLayout: View = inflater.inflate(R.layout.weather_director_alert, null)
 
         //Founding BUTTONS
+        val text = dialogLayout.findViewById<TextView>(R.id.text_weather_director)
         val cancel = dialogLayout.findViewById<Button>(R.id.cancel_weather_director)
         val changeCity = dialogLayout.findViewById<Button>(R.id.city_change)
+
+        //Changing COLOR THEME
+        cancel.setTextColor(getButtonColor())
+        changeCity.setTextColor(getButtonColor())
+        text.setTextColor(getButtonColor())
 
         //Configuring BACKGROUND
         configBack(dialogLayout)
@@ -692,6 +754,11 @@ import java.util.*
         val okCity = dialogLayoutCity.findViewById<Button>(R.id.ok_change_city)
         val cancelCity = dialogLayoutCity.findViewById<Button>(R.id.cancel_change_city)
         val changeCityField = dialogLayoutCity.findViewById<TextInputEditText>(R.id.city_field_in)
+
+        //Changing COLOR THEME
+        okCity.setTextColor(getButtonColor())
+        cancelCity.setTextColor(getButtonColor())
+        changeCityField.setTextColor(getButtonColor())
 
         //Configuring BACKGROUND for CITY
         configBack(dialogLayoutCity)
@@ -749,7 +816,12 @@ import java.util.*
         val dialogLayout: View = inflater.inflate(R.layout.first_change_alert, null)
 
         //Founding BUTTONS
+        val text = dialogLayout.findViewById<TextView>(R.id.text_how_change)
         val understand = dialogLayout.findViewById<Button>(R.id.understand_first_change)
+
+        //Changing COLOR THEME
+        understand.setTextColor(getButtonColor())
+        text.setTextColor(getButtonColor())
 
         //Configuring BACKGROUND
         configBack(dialogLayout)
@@ -775,7 +847,12 @@ import java.util.*
         val dialogLayout: View = inflater.inflate(R.layout.first_change_city_alert, null)
 
         //Founding BUTTONS
+        val text = dialogLayout.findViewById<TextView>(R.id.text_how_change_city)
         val understand = dialogLayout.findViewById<Button>(R.id.understand_first_change_city_alert)
+
+        //Changing COLOR THEME
+        understand.setTextColor(getButtonColor())
+        text.setTextColor(getButtonColor())
 
         //Configuring BACKGROUND
         configBack(dialogLayout)
@@ -801,7 +878,12 @@ import java.util.*
         val dialogLayout: View = inflater.inflate(R.layout.first_add_button_alert, null)
 
         //Founding BUTTONS
+        val text = dialogLayout.findViewById<TextView>(R.id.text_how_add)
         val understand = dialogLayout.findViewById<Button>(R.id.understand_first_add)
+
+        //Changing COLOR THEME
+        understand.setTextColor(getButtonColor())
+        text.setTextColor(getButtonColor())
 
         //Configuring BACKGROUND
         configBack(dialogLayout)
@@ -827,10 +909,18 @@ import java.util.*
         val dialogLayout: View = inflater.inflate(R.layout.welcome_alert, null)
 
         //Founding BUTTONS
+        val text = dialogLayout.findViewById<TextView>(R.id.text_welcome)
+        val subText = dialogLayout.findViewById<TextView>(R.id.text_subwelcome)
         val power = dialogLayout.findViewById<Button>(R.id.bubble)
         val bubble = dialogLayout.findViewById<Button>(R.id.power)
         val logo = dialogLayout.findViewById<ImageView>(R.id.image_logo_shorttasks)
         val imageBubble = dialogLayout.findViewById<ImageView>(R.id.image_bubble)
+
+        //Changing COLOR THEME
+        power.setTextColor(getButtonColor())
+        bubble.setTextColor(getButtonColor())
+        text.setTextColor(getButtonColor())
+        subText.setTextColor(getButtonColor())
 
         //Configuring pictures
         if(nightMode){
@@ -869,11 +959,23 @@ import java.util.*
         val dialogLayout: View = inflater.inflate(R.layout.bubble_manager_first_alert, null)
 
         //Founding BUTTONS
+        val text = dialogLayout.findViewById<TextView>(R.id.bubble_manager)
+        val bubble1 = dialogLayout.findViewById<TextView>(R.id.bubble_1)
+        val bubble2 = dialogLayout.findViewById<TextView>(R.id.bubble_2)
+        val bubble3 = dialogLayout.findViewById<TextView>(R.id.bubble_3)
         val understand = dialogLayout.findViewById<Button>(R.id.cancel_bubble_manager_first)
         val enable = dialogLayout.findViewById<Button>(R.id.enable_first)
         val image1 = dialogLayout.findViewById<ImageView>(R.id.image_bubble_1_first)
         val image2 = dialogLayout.findViewById<ImageView>(R.id.image_bubble_2_first)
         val image3 = dialogLayout.findViewById<ImageView>(R.id.image_bubble_3_first)
+
+        //Changing COLOR THEME
+        understand.setTextColor(getButtonColor())
+        enable.setTextColor(getButtonColor())
+        text.setTextColor(getButtonColor())
+        bubble1.setTextColor(getButtonColor())
+        bubble2.setTextColor(getButtonColor())
+        bubble3.setTextColor(getButtonColor())
 
         //Configuring pictures
         if(nightMode){
@@ -912,10 +1014,28 @@ import java.util.*
         val dialogLayout: View = inflater.inflate(R.layout.power_assistant_first_alert, null)
 
         //Founding BUTTONS
+        val power = dialogLayout.findViewById<TextView>(R.id.power_assistant)
+        val power1 = dialogLayout.findViewById<TextView>(R.id.power_1)
+        val power2 = dialogLayout.findViewById<TextView>(R.id.power_2)
+        val power3 = dialogLayout.findViewById<TextView>(R.id.power_3)
+        val power4 = dialogLayout.findViewById<TextView>(R.id.power_4)
+        val power5 = dialogLayout.findViewById<TextView>(R.id.power_5)
+        val power6 = dialogLayout.findViewById<TextView>(R.id.power_6)
         val understand = dialogLayout.findViewById<Button>(R.id.cancel_power_assistant_first)
         val go = dialogLayout.findViewById<Button>(R.id.go_access_first)
         val image1 = dialogLayout.findViewById<ImageView>(R.id.image_power_1_first)
         val image2 = dialogLayout.findViewById<ImageView>(R.id.image_power_2_first)
+
+        //Changing COLOR THEME
+        understand.setTextColor(getButtonColor())
+        go.setTextColor(getButtonColor())
+        power.setTextColor(getButtonColor())
+        power1.setTextColor(getButtonColor())
+        power2.setTextColor(getButtonColor())
+        power3.setTextColor(getButtonColor())
+        power4.setTextColor(getButtonColor())
+        power5.setTextColor(getButtonColor())
+        power6.setTextColor(getButtonColor())
 
         //Configuring pictures
         if(nightMode){
@@ -954,9 +1074,16 @@ import java.util.*
         val dialogLayout: View = inflater.inflate(R.layout.clear_data_allowing_alert, null)
 
         //Founding BUTTONS
+        val text = dialogLayout.findViewById<TextView>(R.id.text_allow)
+        val subText = dialogLayout.findViewById<TextView>(R.id.text_clear)
         val ok = dialogLayout.findViewById<Button>(R.id.ok_clear)
         val cancel = dialogLayout.findViewById<Button>(R.id.cancel_clear)
 
+        //Changing COLOR THEME
+        ok.setTextColor(getButtonColor())
+        cancel.setTextColor(getButtonColor())
+        text.setTextColor(getButtonColor())
+        subText.setTextColor(getButtonColor())
         //Configuring BACKGROUND
         configBack(dialogLayout)
 

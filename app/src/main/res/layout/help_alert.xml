@@ -56,6 +56,8 @@
         app:layout_constraintBottom_toTopOf="@id/image_power_1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="@dimen/margin_button"
+        android:padding="@dimen/padding_button"
         android:text="@string/go"/>
 
     <!-- Image PARAGRAPH 1_1 -->
@@ -258,6 +260,8 @@
         app:layout_constraintBottom_toTopOf="@id/image_bubble_1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="@dimen/margin_button"
+        android:padding="@dimen/padding_button"
         android:text="@string/enable"/>
 
     <!-- Image PARAGRAPH 2_1 -->

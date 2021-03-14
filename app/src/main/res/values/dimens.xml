@@ -19,4 +19,5 @@
     <dimen name="guideline_percent">0.37</dimen>
     <dimen name="size_app">64dp</dimen>
     <dimen name="size_logo">100dp</dimen>
+    <dimen name="size_item">10sp</dimen>
 </resources>
