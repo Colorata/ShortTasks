@@ -17,7 +17,7 @@
         android:text="@string/weather_director"/>
 
     <!-- Button CHANGE CITY -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/city_change"
         android:layout_width="@dimen/width"
         android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
         android:text="@string/city_for_n_weather"/>
 
     <!-- Button CANCEL -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/cancel_weather_director"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

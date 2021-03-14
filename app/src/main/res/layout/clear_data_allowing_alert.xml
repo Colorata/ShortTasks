@@ -33,7 +33,7 @@
         app:layout_constraintBottom_toTopOf="@id/ok_clear"/>
 
     <!-- Button OK -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/ok_clear"
         android:layout_width="@dimen/width"
         android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
         android:text="@string/ok"/>
 
     <!-- Button CANCEL -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/cancel_clear"
         android:layout_width="@dimen/width"
         android:layout_height="wrap_content"

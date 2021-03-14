@@ -33,7 +33,7 @@
             android:layout_margin="@dimen/margin_recycler"/>
 
         <!-- Button OK -->
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/ok_change_position"
             android:layout_width="@dimen/width"
             android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
             app:layout_constraintTop_toTopOf="@+id/cancel_change_position" />
 
         <!-- Button CANCEL -->
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/cancel_change_position"
             android:layout_width="@dimen/width"
             android:layout_height="wrap_content"

@@ -34,7 +34,7 @@
         android:layout_marginHorizontal="@dimen/margin_recycler"/>
 
     <!-- Button CANCEL -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/cancel_add_button"
         android:layout_width="@dimen/width"
         android:layout_height="wrap_content"

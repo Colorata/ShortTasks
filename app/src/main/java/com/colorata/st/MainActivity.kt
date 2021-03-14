@@ -1,4 +1,4 @@
-package com.colorata.st
+ package com.colorata.st
 
 import android.annotation.SuppressLint
 import android.app.*
@@ -8,25 +8,29 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.content.res.ColorStateList
 import android.content.res.Configuration
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.DisplayMetrics
+import android.util.TypedValue
+import android.view.ContextThemeWrapper
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.AnimationSet
 import android.view.animation.DecelerateInterpolator
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.Person
-import androidx.core.content.ContextCompat
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
@@ -48,7 +52,7 @@ import kotlinx.android.synthetic.main.help_alert.*
 import java.util.*
 
 
-class MainActivity : AppCompatActivity() {
+ class MainActivity : AppCompatActivity() {
 
     //Init values
     private var nightMode = true
@@ -125,6 +129,23 @@ class MainActivity : AppCompatActivity() {
         settings.setOnClickListener { settings() }
         bubble_manager.setOnClickListener { bubbleManager()}
         weather_director.setOnClickListener { weatherDirector() }
+
+        //Changing COLOR TO ELEMENTS
+        text_main.setTextColor(getButtonColor())
+        help.setTextColor(getButtonColor())
+
+        about.setTextColor(getButtonColor())
+
+        settings.setTextColor(getButtonColor())
+
+        bubble_manager.setTextColor(getButtonColor())
+
+        weather_director.setTextColor(getButtonColor())
+
+        main_layout.setBackgroundColor(getBackground())
+
+        window.navigationBarColor = getBackground()
+        window.statusBarColor = getBackground()
     }
 
     //Fun for creating ANIMATIONS
@@ -287,6 +308,14 @@ class MainActivity : AppCompatActivity() {
         val source = dialogLayout.findViewById<Button>(R.id.sourcecode)
         val support = dialogLayout.findViewById<Button>(R.id.support)
         val version = dialogLayout.findViewById<Button>(R.id.version)
+        val text = dialogLayout.findViewById<TextView>(R.id.text_about)
+
+        //Changing COLORS FOR ELEMENTS
+        cancel.setTextColor(getButtonColor())
+        source.setTextColor(getButtonColor())
+        support.setTextColor(getButtonColor())
+        version.setTextColor(getButtonColor())
+        text.setTextColor(getButtonColor())
 
         //Configuring BACKGROUND
         configBack(dialogLayout)
@@ -355,6 +384,7 @@ class MainActivity : AppCompatActivity() {
         val settings = dialogLayout.findViewById<Button>(R.id.settings_app)
         val clear = dialogLayout.findViewById<Button>(R.id.clear_data)
 
+        
         //Configuring BACKGROUND
         configBack(dialogLayout)
 
@@ -702,10 +732,10 @@ class MainActivity : AppCompatActivity() {
     private fun configBack(dialogLayout: View){
         when(nightMode){
             false -> {
-                dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.light_background))
+                dialogLayout.setBackgroundColor(getBackground())
             }
             true -> {
-                dialogLayout.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.dark_background))
+                dialogLayout.setBackgroundColor(getBackground())
             }
         }
         dialogLayout.rootView.fitsSystemWindows = true
@@ -991,4 +1021,100 @@ class MainActivity : AppCompatActivity() {
 
         return userIcon
     }
+
+    //Fun for get Phone THEME
+    private fun getColor(): Int {
+        val typedValue = TypedValue()
+        val contextThemeWrapper = ContextThemeWrapper(this,
+                android.R.style.Theme_DeviceDefault)
+        contextThemeWrapper.theme.resolveAttribute(android.R.attr.colorAccent,
+                typedValue, true)
+        return typedValue.data
+    }
+
+     //Fun for get COLOR THEME BACKGROUND
+     private fun getBackground(): Int {
+         var color = ""
+         when(nightMode){
+             true -> {
+                 when(getColor()) {
+                     -7686920 -> { color = "#162A49" }
+                     -4359937 -> { color = "#2F1845" }
+                     -3625836 -> { color = "#34271C" }
+                     -3955038 -> { color = "#543C38" }
+                     -942723 -> { color = "#4D3830" }
+                     -15007797 -> { color = "#2C4F47" }
+                     -2629914 -> { color = "#242527" }
+                     -8076920 -> { color = "#3D523E" }
+                     -14107177 -> { color = "#395458" }
+                     -6705972 -> { color = "#374151" }
+                     -18727 -> { color = "#503D46" }
+                     -12722945 -> { color = "#2B4449" }
+                     -1668371 -> { color = "#594B5A" }
+                     -4871684 -> { color = "#3D3953" }
+                 }
+             } false -> {
+             when(getColor()) {
+                 -7686920 -> { color = "#8AB4F8" }
+                 -4359937 -> { color = "#C89EF1" }
+                 -3625836 -> { color = "#C8AC94" }
+                 -3955038 -> { color = "#C3A6A2" }
+                 -942723 -> { color = "#E3AF9A" }
+                 -15007797 -> { color = "#95D4C6" }
+                 -2629914 -> { color = "#D7DEE6" }
+                 -8076920 -> { color = "#A1C7A3" }
+                 -14107177 -> { color = "#91CBD4" }
+                 -6705972 -> { color = "#A4B4CE" }
+                 -18727 -> { color = "#FFD6E9" }
+                 -12722945 -> { color = "#B8F2FF" }
+                 -1668371 -> { color = "#EAC1ED" }
+                 -4871684 -> { color = "#C5BBFE" }
+             }
+         }
+         }
+         return Color.parseColor(color)
+     }
+
+     //Fun for get COLOR THEME BUTTON
+     private fun getButtonColor(): Int {
+         var color = "#ffffff"
+         when(nightMode){
+             true -> {
+                 when(getColor()) {
+                     -7686920 -> { color = "#8AB4F8" }
+                     -4359937 -> { color = "#C89EF1" }
+                     -3625836 -> { color = "#C8AC94" }
+                     -3955038 -> { color = "#C3A6A2" }
+                     -942723 -> { color = "#E3AF9A" }
+                     -15007797 -> { color = "#95D4C6" }
+                     -2629914 -> { color = "#D7DEE6" }
+                     -8076920 -> { color = "#A1C7A3" }
+                     -14107177 -> { color = "#91CBD4" }
+                     -6705972 -> { color = "#A4B4CE" }
+                     -18727 -> { color = "#FFD6E9" }
+                     -12722945 -> { color = "#B8F2FF" }
+                     -1668371 -> { color = "#EAC1ED" }
+                     -4871684 -> { color = "#C5BBFE" }
+                 }
+             } false -> {
+                when(getColor()) {
+                    -7686920 -> { color = "#162A49" }
+                    -4359937 -> { color = "#2F1845" }
+                    -3625836 -> { color = "#34271C" }
+                    -3955038 -> { color = "#543C38" }
+                    -942723 -> { color = "#4D3830" }
+                    -15007797 -> { color = "#2C4F47" }
+                    -2629914 -> { color = "#242527" }
+                    -8076920 -> { color = "#3D523E" }
+                    -14107177 -> { color = "#395458" }
+                    -6705972 -> { color = "#374151" }
+                    -18727 -> { color = "#503D46" }
+                    -12722945 -> { color = "#2B4449" }
+                    -1668371 -> { color = "#594B5A" }
+                    -4871684 -> { color = "#3D3953" }
+             }
+         }
+         }
+         return Color.parseColor(color)
+     }
 }

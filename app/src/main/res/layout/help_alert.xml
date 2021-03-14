@@ -48,7 +48,7 @@
         android:layout_margin="@dimen/margin_paragraph_small_horizontal"
         android:layout_marginBottom="@dimen/margin_paragraph_small_bottom"/>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/go_access"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -250,7 +250,7 @@
         android:layout_margin="@dimen/margin_paragraph_small_horizontal"
         android:layout_marginBottom="@dimen/margin_paragraph_small_bottom"/>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/enable_help"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -337,7 +337,7 @@
         android:adjustViewBounds="true"/>
 
     <!-- Button CANCEL -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/cancel_help"
         android:layout_width="@dimen/width"
         android:layout_height="wrap_content"

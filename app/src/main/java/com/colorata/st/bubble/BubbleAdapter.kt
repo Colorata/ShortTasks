@@ -33,11 +33,6 @@ class BubbleAdapter(private val values: MutableList<String>, private val icon: M
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         holder.textView?.text = values[position]
-        /*if (drawable[0] == null){
-            holder.fab?.setImageResource(icon[position])
-        } else {
-            holder.fab?.setImageDrawable(drawable[position])
-        }*/
 
         holder.fab?.setImageResource(icon[position])
 

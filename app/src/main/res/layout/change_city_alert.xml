@@ -27,7 +27,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Button OK -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/ok_change_city"
         android:layout_width="@dimen/width"
         android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
         app:layout_constraintTop_toTopOf="@+id/cancel_change_city" />
 
     <!-- Button CANCEL -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/cancel_change_city"
         android:layout_width="@dimen/width"
         android:layout_height="wrap_content"

@@ -33,7 +33,7 @@
         app:layout_constraintBottom_toTopOf="@id/understand_first_change_city_alert"/>
 
     <!-- Button UNDERSTAND -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/understand_first_change_city_alert"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

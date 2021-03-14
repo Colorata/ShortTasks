@@ -33,7 +33,7 @@
         app:layout_constraintBottom_toTopOf="@id/understand_first_add"/>
 
     <!-- Button UNDERSTAND -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/understand_first_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

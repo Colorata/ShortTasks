@@ -19,7 +19,7 @@
         android:layout_margin="@dimen/margin_text"/>
 
     <!-- Button SOURCE CODE -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/sourcecode"
         android:layout_width="@dimen/width"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
         android:text="@string/source_code"/>
 
     <!-- Button SUPPORT US -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/support"
         android:layout_width="@dimen/width"
         android:layout_height="@dimen/height"
@@ -41,7 +41,7 @@
         android:text="@string/support_us"/>
 
     <!-- Button VERSION -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/version"
         android:layout_width="@dimen/width"
         android:layout_height="@dimen/height"
@@ -52,7 +52,7 @@
         android:text="@string/version_sunray"/>
 
     <!-- Button CANCEL -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/cancel_version"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

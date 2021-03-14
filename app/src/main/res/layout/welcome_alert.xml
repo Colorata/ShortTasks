@@ -79,7 +79,7 @@
             android:adjustViewBounds="true"/>
 
         <!-- Button POWER -->
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/power"
             android:layout_width="@dimen/width"
             android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
             app:layout_constraintTop_toTopOf="@+id/bubble" />
 
         <!-- Button BUBBLE -->
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/bubble"
             android:layout_width="@dimen/width"
             android:layout_height="wrap_content"
