@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".bubble.BubbleActivity">
+    tools:context=".bubble.BubbleActivity"
+    android:id="@+id/bubble_layout">
 
     <!-- RecyclerView for CONTROLS -->
     <androidx.recyclerview.widget.RecyclerView

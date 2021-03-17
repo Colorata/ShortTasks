@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.Drawable
@@ -43,6 +44,7 @@ import com.colorata.st.userbutton.UserButtonAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.activity_bubble.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.bubble_manager
@@ -547,7 +549,7 @@ import java.util.*
 
         //Configuring RECYCLERVIEW
         changeRecycler.layoutManager = GridLayoutManager(applicationContext, 3)
-        var bubbleAdapter = BubbleAdapter(mutableNames, mutableIcons)
+        var bubbleAdapter = BubbleAdapter(mutableNames, mutableIcons, this)
         changeRecycler.adapter = bubbleAdapter
 
         //Configuring BACKGROUND
@@ -587,7 +589,7 @@ import java.util.*
                                     mutableIcons[pos2] = bufferIcon
 
                                     //Updating RECYCLERVIEW
-                                    bubbleAdapter = BubbleAdapter(mutableNames, mutableIcons)
+                                    bubbleAdapter = BubbleAdapter(mutableNames, mutableIcons, this@MainActivity)
                                     changeRecycler.adapter?.notifyItemChanged(pos1)
                                     changeRecycler.adapter?.notifyItemChanged(pos2)
                                     GenerItems().icons = mutableIcons
@@ -754,11 +756,14 @@ import java.util.*
         val okCity = dialogLayoutCity.findViewById<Button>(R.id.ok_change_city)
         val cancelCity = dialogLayoutCity.findViewById<Button>(R.id.cancel_change_city)
         val changeCityField = dialogLayoutCity.findViewById<TextInputEditText>(R.id.city_field_in)
+        val changeCityFieldLayout = dialogLayoutCity.findViewById<TextInputLayout>(R.id.city_field)
 
         //Changing COLOR THEME
         okCity.setTextColor(getButtonColor())
         cancelCity.setTextColor(getButtonColor())
         changeCityField.setTextColor(getButtonColor())
+        changeCityFieldLayout.boxStrokeColor = getButtonColor()
+        changeCityFieldLayout.hintTextColor = ColorStateList.valueOf(getButtonColor())
 
         //Configuring BACKGROUND for CITY
         configBack(dialogLayoutCity)
@@ -1179,6 +1184,7 @@ import java.util.*
                      -12722945 -> { color = "#2B4449" }
                      -1668371 -> { color = "#594B5A" }
                      -4871684 -> { color = "#3D3953" }
+                     else -> { color = "#22221A"}
                  }
              } false -> {
              when(getColor()) {
@@ -1196,9 +1202,15 @@ import java.util.*
                  -12722945 -> { color = "#B8F2FF" }
                  -1668371 -> { color = "#EAC1ED" }
                  -4871684 -> { color = "#C5BBFE" }
+                 else -> { color = "#CDCDC5"}
              }
          }
          }
+
+         val edit = sharedPreference.edit()
+         edit.putString("backColor", color)
+         edit.apply()
+
          return Color.parseColor(color)
      }
 
@@ -1222,6 +1234,7 @@ import java.util.*
                      -12722945 -> { color = "#B8F2FF" }
                      -1668371 -> { color = "#EAC1ED" }
                      -4871684 -> { color = "#C5BBFE" }
+                     else -> { color = "#B47C51"}
                  }
              } false -> {
                 when(getColor()) {
@@ -1239,9 +1252,15 @@ import java.util.*
                     -12722945 -> { color = "#2B4449" }
                     -1668371 -> { color = "#594B5A" }
                     -4871684 -> { color = "#3D3953" }
+                    else -> { color = "#1f2023"}
              }
          }
          }
+
+         val edit = sharedPreference.edit()
+         edit.putString("buttonColor", color)
+         edit.apply()
+
          return Color.parseColor(color)
      }
 }

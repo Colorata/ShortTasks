@@ -1,15 +1,20 @@
 package com.colorata.st.bubble
 
+import android.content.Context
+import android.content.SharedPreferences
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.colorata.st.R
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class BubbleAdapter(private val values: MutableList<String>, private val icon: MutableList<Int>/*, private val drawable: MutableList<Drawable?> = mutableListOf(null)*/): RecyclerView.Adapter<BubbleAdapter.ViewHolder>() {
+class BubbleAdapter(private val values: MutableList<String>, private val icon: MutableList<Int>, private val context: Context): RecyclerView.Adapter<BubbleAdapter.ViewHolder>() {
+
+    private val shared: SharedPreferences = this.context.getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
 
     //Fun for getting COUNT OF CONTROLS
     override fun getItemCount() = values.size
@@ -34,8 +39,11 @@ class BubbleAdapter(private val values: MutableList<String>, private val icon: M
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         holder.textView?.text = values[position]
+        holder.textView?.setTextColor(Color.parseColor(shared.getString("buttonColor", "#ffffff")))
 
         holder.fab?.setImageResource(icon[position])
+        holder.fab?.backgroundTintList = ColorStateList.valueOf(Color.parseColor(shared.getString("buttonColor", "#000000")))
+        holder.fab?.imageTintList = ColorStateList.valueOf(Color.parseColor(shared.getString("backColor", "#ffffff")))
 
     }
 

@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.graphics.Color
 import android.hardware.camera2.CameraManager
 import android.os.Bundle
 import android.os.VibrationEffect
@@ -70,6 +71,10 @@ class BubbleActivity : AppCompatActivity() {
             }
         }
 
+        //Configuring COLORS
+        bubble_layout.setBackgroundColor(getBackgroundColor())
+        text_weather.setTextColor(getButtonColor())
+
         //Getting CONTROLS
         val mutableNames = mutableListOf<String>()
         val mutableIcons = mutableListOf<Int>()
@@ -88,7 +93,7 @@ class BubbleActivity : AppCompatActivity() {
 
         //Configuring RECYCLERVIEW
         bubble_recycler.layoutManager = GridLayoutManager(this, 3)
-        bubble_recycler.adapter = BubbleAdapter(mutableNames, mutableIcons)
+        bubble_recycler.adapter = BubbleAdapter(mutableNames, mutableIcons, this)
 
         //Click listener for CONTROLS in RECYCLERVIEW
         bubble_recycler.addOnItemTouchListener(
@@ -299,6 +304,16 @@ class BubbleActivity : AppCompatActivity() {
     //Getting USER PACKAGE
     private fun getUserPackage(): String{
         return sharedPreference.getString("userPackage", "com.android.settings").toString()
+    }
+
+    //Getting Background COLOR
+    private fun getBackgroundColor(): Int{
+        return Color.parseColor(sharedPreference.getString("backColor", "#000000").toString())
+    }
+
+    //Getting Button COLOR
+    private fun getButtonColor(): Int{
+        return Color.parseColor(sharedPreference.getString("buttonColor", "#000000").toString())
     }
 
 }
