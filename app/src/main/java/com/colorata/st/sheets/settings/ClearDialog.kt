@@ -10,6 +10,7 @@ import android.widget.TextView
 import com.colorata.st.R
 import com.colorata.st.extentions.GetTheme
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.android.synthetic.main.clear_data_allowing_alert.view.*
 
 class ClearDialog(private val context: Context, private val inflater: LayoutInflater) {
 
@@ -22,10 +23,10 @@ class ClearDialog(private val context: Context, private val inflater: LayoutInfl
         val dialogLayout: View = inflater.inflate(R.layout.clear_data_allowing_alert, null)
 
         //Founding BUTTONS
-        val text = dialogLayout.findViewById<TextView>(R.id.text_allow)
-        val subText = dialogLayout.findViewById<TextView>(R.id.text_clear)
-        val ok = dialogLayout.findViewById<Button>(R.id.ok_clear)
-        val cancel = dialogLayout.findViewById<Button>(R.id.cancel_clear)
+        val text = dialogLayout.text_allow
+        val subText = dialogLayout.text_clear
+        val ok = dialogLayout.ok_clear
+        val cancel = dialogLayout.cancel_clear
 
         //Changing COLOR THEME
         ok.setTextColor(GetTheme(context).button)

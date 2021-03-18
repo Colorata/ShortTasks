@@ -14,6 +14,7 @@ import com.colorata.st.R
 import com.colorata.st.extentions.GetTheme
 import com.colorata.st.sheets.settings.ClearDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.android.synthetic.main.settings_alert.view.*
 
 class SettingsDialog(private val context: Context, private val inflater: LayoutInflater) {
 
@@ -25,10 +26,10 @@ class SettingsDialog(private val context: Context, private val inflater: LayoutI
         val dialogLayout: View = inflater.inflate(R.layout.settings_alert, null)
 
         //Founding BUTTONS
-        val text = dialogLayout.findViewById<TextView>(R.id.text_settings)
-        val cancel = dialogLayout.findViewById<Button>(R.id.cancel_settings)
-        val settings = dialogLayout.findViewById<Button>(R.id.settings_app)
-        val clear = dialogLayout.findViewById<Button>(R.id.clear_data)
+        val text = dialogLayout.text_settings
+        val cancel = dialogLayout.cancel_settings
+        val settings = dialogLayout.settings_app
+        val clear = dialogLayout.clear_data
 
         //Changing COLOR THEME
         cancel.setTextColor(GetTheme(context).button)

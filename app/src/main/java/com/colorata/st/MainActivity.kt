@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.animation.AlphaAnimation
 import android.view.animation.AnimationSet
 import android.view.animation.DecelerateInterpolator
@@ -74,7 +75,7 @@ import java.util.*
 
         sharedPreference.edit().putBoolean("nightMode", nightMode).apply()
 
-        if (sharedPreference.getInt("welcome", 0) < 100) {
+        if (sharedPreference.getInt("welcome", 0) < 1) {
             val editor = sharedPreference.edit()
             editor.putInt("welcome", sharedPreference.getInt("welcome", 0) + 1)
             editor.apply()
@@ -92,6 +93,7 @@ import java.util.*
         bubble_manager.setOnClickListener { BubbleManagerDialog(this, layoutInflater).show }
         weather_director.setOnClickListener { WeatherDirector(this, layoutInflater).show }
 
+        Log.d("cool", android.R.style.Theme_DeviceDefault.toString())
         //Changing COLOR TO ELEMENTS
         text_main.setTextColor(GetTheme(this).button)
         help.setTextColor(GetTheme(this).button)

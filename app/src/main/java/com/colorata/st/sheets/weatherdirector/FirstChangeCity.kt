@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.colorata.st.R
 import com.colorata.st.extentions.GetTheme
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.android.synthetic.main.first_change_city_alert.view.*
 
 class FirstChangeCity(private val context: Context, private val inflater: LayoutInflater) {
 
@@ -21,9 +22,9 @@ class FirstChangeCity(private val context: Context, private val inflater: Layout
         val dialogLayout: View = inflater.inflate(R.layout.first_change_city_alert, null)
 
         //Founding BUTTONS
-        val subText = dialogLayout.findViewById<TextView>(R.id.text_tap)
-        val text = dialogLayout.findViewById<TextView>(R.id.text_how_change_city)
-        val understand = dialogLayout.findViewById<Button>(R.id.understand_first_change_city_alert)
+        val subText = dialogLayout.text_tap
+        val text = dialogLayout.text_how_change_city
+        val understand = dialogLayout.understand_first_change_city_alert
 
         //Changing COLOR THEME
         subText.setTextColor(GetTheme(context).button)

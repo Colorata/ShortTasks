@@ -12,6 +12,7 @@ import com.colorata.st.R
 import com.colorata.st.extentions.GetTheme
 import com.colorata.st.extentions.ShowBubble
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.android.synthetic.main.bubble_manager_first_alert.view.*
 
 class FirstBubbleManager(private val context: Context, private val inflater: LayoutInflater, private val shared: SharedPreferences) {
 
@@ -24,15 +25,15 @@ class FirstBubbleManager(private val context: Context, private val inflater: Lay
         val dialogLayout: View = inflater.inflate(R.layout.bubble_manager_first_alert, null)
 
         //Founding BUTTONS
-        val text = dialogLayout.findViewById<TextView>(R.id.bubble_manager)
-        val bubble1 = dialogLayout.findViewById<TextView>(R.id.bubble_1)
-        val bubble2 = dialogLayout.findViewById<TextView>(R.id.bubble_2)
-        val bubble3 = dialogLayout.findViewById<TextView>(R.id.bubble_3)
-        val understand = dialogLayout.findViewById<Button>(R.id.cancel_bubble_manager_first)
-        val enable = dialogLayout.findViewById<Button>(R.id.enable_first)
-        val image1 = dialogLayout.findViewById<ImageView>(R.id.image_bubble_1_first)
-        val image2 = dialogLayout.findViewById<ImageView>(R.id.image_bubble_2_first)
-        val image3 = dialogLayout.findViewById<ImageView>(R.id.image_bubble_3_first)
+        val text = dialogLayout.bubble_manager
+        val bubble1 = dialogLayout.bubble_1
+        val bubble2 = dialogLayout.bubble_2
+        val bubble3 = dialogLayout.bubble_3
+        val understand = dialogLayout.cancel_bubble_manager_first
+        val enable = dialogLayout.enable_first
+        val image1 = dialogLayout.image_bubble_1_first
+        val image2 = dialogLayout.image_bubble_2_first
+        val image3 = dialogLayout.image_bubble_3_first
 
         //Changing COLOR THEME
         understand.setTextColor(GetTheme(context).button)

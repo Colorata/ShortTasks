@@ -13,6 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.android.synthetic.main.change_city_alert.view.*
 
 class ChangeCity(private val context: Context, private val inflaterCity: LayoutInflater) {
 
@@ -26,10 +27,10 @@ class ChangeCity(private val context: Context, private val inflaterCity: LayoutI
         val dialogLayoutCity: View = inflaterCity.inflate(R.layout.change_city_alert, null)
 
         //Founding BUTTON AND EDITTEXTS for CITY
-        val okCity = dialogLayoutCity.findViewById<Button>(R.id.ok_change_city)
-        val cancelCity = dialogLayoutCity.findViewById<Button>(R.id.cancel_change_city)
-        val changeCityField = dialogLayoutCity.findViewById<TextInputEditText>(R.id.city_field_in)
-        val changeCityFieldLayout = dialogLayoutCity.findViewById<TextInputLayout>(R.id.city_field)
+        val okCity = dialogLayoutCity.ok_change_city
+        val cancelCity = dialogLayoutCity.cancel_change_city
+        val changeCityField = dialogLayoutCity.city_field_in
+        val changeCityFieldLayout = dialogLayoutCity.city_field
 
         //Changing COLOR THEME
         okCity.setTextColor(GetTheme(context).button)

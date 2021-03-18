@@ -12,6 +12,7 @@ import com.colorata.st.extentions.GetTheme
 import com.colorata.st.sheets.weatherdirector.ChangeCity
 import com.colorata.st.sheets.weatherdirector.FirstChangeCity
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.android.synthetic.main.weather_director_alert.view.*
 
 class WeatherDirector(private val context: Context, private val inflater: LayoutInflater) {
 
@@ -25,9 +26,9 @@ class WeatherDirector(private val context: Context, private val inflater: Layout
         val dialogLayout: View = inflater.inflate(R.layout.weather_director_alert, null)
 
         //Founding BUTTONS
-        val text = dialogLayout.findViewById<TextView>(R.id.text_weather_director)
-        val cancel = dialogLayout.findViewById<Button>(R.id.cancel_weather_director)
-        val changeCity = dialogLayout.findViewById<Button>(R.id.city_change)
+        val text = dialogLayout.text_weather_director
+        val cancel = dialogLayout.cancel_weather_director
+        val changeCity = dialogLayout.city_change
 
         //Changing COLOR THEME
         cancel.setTextColor(GetTheme(context).button)

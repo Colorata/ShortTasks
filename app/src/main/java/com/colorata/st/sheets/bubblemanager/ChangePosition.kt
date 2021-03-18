@@ -15,6 +15,7 @@ import com.colorata.st.bubble.RecyclerItemClickListener
 import com.colorata.st.extentions.GenerItems
 import com.colorata.st.extentions.GetTheme
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.android.synthetic.main.change_controls_alert.view.*
 
 class ChangePosition(private val context: Context, private val inflater: LayoutInflater) {
 
@@ -36,10 +37,10 @@ class ChangePosition(private val context: Context, private val inflater: LayoutI
         val dialogLayout: View = inflater.inflate(R.layout.change_controls_alert, null)
 
         //Founding BUTTONS and RECYCLERVIEW
-        val text = dialogLayout.findViewById<TextView>(R.id.text_change_controls)
-        val changeRecycler = dialogLayout.findViewById<RecyclerView>(R.id.change_recycler)
-        val ok = dialogLayout.findViewById<Button>(R.id.ok_change_position)
-        val cancel = dialogLayout.findViewById<Button>(R.id.cancel_change_position)
+        val text = dialogLayout.text_change_controls
+        val changeRecycler = dialogLayout.change_recycler
+        val ok = dialogLayout.ok_change_position
+        val cancel = dialogLayout.cancel_change_position
 
         //Change COLOR THEME
         ok.setTextColor(GetTheme(context).button)

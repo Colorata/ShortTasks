@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.colorata.st.R
 import com.colorata.st.extentions.GetTheme
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.android.synthetic.main.first_add_button_alert.view.*
 
 class FirstAddButton(private val context: Context, private val inflater: LayoutInflater) {
 
@@ -21,9 +22,9 @@ class FirstAddButton(private val context: Context, private val inflater: LayoutI
         val dialogLayout: View = inflater.inflate(R.layout.first_add_button_alert, null)
 
         //Founding BUTTONS
-        val text = dialogLayout.findViewById<TextView>(R.id.text_how_add)
-        val subText = dialogLayout.findViewById<TextView>(R.id.text_tap)
-        val understand = dialogLayout.findViewById<Button>(R.id.understand_first_add)
+        val text = dialogLayout.text_how_add
+        val subText = dialogLayout.text_tap
+        val understand = dialogLayout.understand_first_add
 
         //Changing COLOR THEME
         subText.setTextColor(GetTheme(context).button)

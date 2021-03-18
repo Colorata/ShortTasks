@@ -9,10 +9,12 @@ import android.widget.TextView
 import com.colorata.st.R
 import com.colorata.st.extentions.GetTheme
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.android.synthetic.main.first_change_alert.view.*
 
 class FirstChange(private val context: Context, private val inflater: LayoutInflater) {
 
     val show = firstChange()
+
     //Fun for the FIRST CHANGE in BUBBLE MANAGER
     @SuppressLint("InflateParams")
     private fun firstChange(){
@@ -20,8 +22,8 @@ class FirstChange(private val context: Context, private val inflater: LayoutInfl
         val dialogLayout: View = inflater.inflate(R.layout.first_change_alert, null)
 
         //Founding BUTTONS
-        val text = dialogLayout.findViewById<TextView>(R.id.text_how_change)
-        val understand = dialogLayout.findViewById<Button>(R.id.understand_first_change)
+        val text = dialogLayout.text_how_change
+        val understand = dialogLayout.understand_first_change
 
         //Changing COLOR THEME
         understand.setTextColor(GetTheme(context).button)

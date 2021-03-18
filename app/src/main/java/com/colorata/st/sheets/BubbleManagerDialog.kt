@@ -15,6 +15,7 @@ import com.colorata.st.sheets.bubblemanager.ChangePosition
 import com.colorata.st.sheets.bubblemanager.FirstAddButton
 import com.colorata.st.sheets.bubblemanager.FirstChange
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.android.synthetic.main.bubble_manager_alert.view.*
 
 class BubbleManagerDialog(private val context: Context, private val inflater: LayoutInflater) {
 
@@ -29,11 +30,11 @@ class BubbleManagerDialog(private val context: Context, private val inflater: La
         val dialogLayout: View = inflater.inflate(R.layout.bubble_manager_alert, null)
 
         //Founding BUTTONS
-        val text = dialogLayout.findViewById<TextView>(R.id.text_bubble_manager)
-        val cancel = dialogLayout.findViewById<Button>(R.id.cancel_bubble_manager)
-        val enable = dialogLayout.findViewById<Button>(R.id.enable)
-        val changePosition = dialogLayout.findViewById<Button>(R.id.change_position)
-        val addButton = dialogLayout.findViewById<Button>(R.id.add_button)
+        val text = dialogLayout.text_bubble_manager
+        val cancel = dialogLayout.cancel_bubble_manager
+        val enable = dialogLayout.enable
+        val changePosition = dialogLayout.change_position
+        val addButton = dialogLayout.add_button
 
         //Changing COLOR THEME
         cancel.setTextColor(GetTheme(context).button)

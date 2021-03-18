@@ -31,6 +31,7 @@ class GetTheme(private val context: Context) {
         when(shared.getBoolean("nightMode", false)){
             true -> {
                 when(color()) {
+                    -7224321 -> { color = "#162A49" }
                     -7686920 -> { color = "#162A49" }
                     -4359937 -> { color = "#2F1845" }
                     -3625836 -> { color = "#34271C" }
@@ -49,6 +50,7 @@ class GetTheme(private val context: Context) {
                 }
             } false -> {
             when(color()) {
+                -7224321 -> { color = "#8AB4F8" }
                 -7686920 -> { color = "#8AB4F8" }
                 -4359937 -> { color = "#C89EF1" }
                 -3625836 -> { color = "#C8AC94" }
@@ -81,6 +83,7 @@ class GetTheme(private val context: Context) {
         when(shared.getBoolean("nightMode", false)){
             true -> {
                 when(color()) {
+                    -7224321 -> { color = "#8AB4F8" }
                     -7686920 -> { color = "#8AB4F8" }
                     -4359937 -> { color = "#C89EF1" }
                     -3625836 -> { color = "#C8AC94" }
@@ -99,6 +102,7 @@ class GetTheme(private val context: Context) {
                 }
             } false -> {
             when(color()) {
+                -7224321 -> { color = "#162A49" }
                 -7686920 -> { color = "#162A49" }
                 -4359937 -> { color = "#2F1845" }
                 -3625836 -> { color = "#34271C" }

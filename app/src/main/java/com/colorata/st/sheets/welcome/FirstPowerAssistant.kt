@@ -13,7 +13,7 @@ import android.widget.TextView
 import com.colorata.st.R
 import com.colorata.st.extentions.GetTheme
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import kotlinx.android.synthetic.main.help_alert.view.*
+import kotlinx.android.synthetic.main.power_assistant_first_alert.view.*
 
 class FirstPowerAssistant(private val context: Context, private val inflater: LayoutInflater, private val shared: SharedPreferences) {
 
@@ -26,17 +26,17 @@ class FirstPowerAssistant(private val context: Context, private val inflater: La
         val dialogLayout: View = inflater.inflate(R.layout.power_assistant_first_alert, null)
 
         //Founding BUTTONS
-        val power = dialogLayout.findViewById<TextView>(R.id.power_assistant)
-        val power1 = dialogLayout.findViewById<TextView>(R.id.power_1)
-        val power2 = dialogLayout.findViewById<TextView>(R.id.power_2)
-        val power3 = dialogLayout.findViewById<TextView>(R.id.power_3)
-        val power4 = dialogLayout.findViewById<TextView>(R.id.power_4)
-        val power5 = dialogLayout.findViewById<TextView>(R.id.power_5)
-        val power6 = dialogLayout.findViewById<TextView>(R.id.power_6)
-        val understand = dialogLayout.findViewById<Button>(R.id.cancel_power_assistant_first)
-        val go = dialogLayout.findViewById<Button>(R.id.go_access_first)
-        val image1 = dialogLayout.findViewById<ImageView>(R.id.image_power_1_first)
-        val image2 = dialogLayout.findViewById<ImageView>(R.id.image_power_2_first)
+        val power = dialogLayout.power_assistant
+        val power1 = dialogLayout.power_1
+        val power2 = dialogLayout.power_2
+        val power3 = dialogLayout.power_3
+        val power4 = dialogLayout.power_4
+        val power5 = dialogLayout.power_5
+        val power6 = dialogLayout.power_6
+        val understand = dialogLayout.cancel_power_assistant_first
+        val go = dialogLayout.go_access_first
+        val image1 = dialogLayout.image_power_1_first
+        val image2 = dialogLayout.image_power_2_first
 
         //Changing COLOR THEME
         understand.setTextColor(GetTheme(context).button)

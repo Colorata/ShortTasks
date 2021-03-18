@@ -13,6 +13,7 @@ import com.colorata.st.R
 import com.colorata.st.extentions.GetTheme
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.about_alert.view.*
 
 class AboutDialog(private val context: Context, private val inflater: LayoutInflater) {
 
@@ -26,11 +27,11 @@ class AboutDialog(private val context: Context, private val inflater: LayoutInfl
         val dialogLayout: View = inflater.inflate(R.layout.about_alert, null)
 
         //Founding BUTTONS
-        val cancel = dialogLayout.findViewById<Button>(R.id.cancel_version)
-        val source = dialogLayout.findViewById<Button>(R.id.sourcecode)
-        val support = dialogLayout.findViewById<Button>(R.id.support)
-        val version = dialogLayout.findViewById<Button>(R.id.version)
-        val text = dialogLayout.findViewById<TextView>(R.id.text_about)
+        val cancel = dialogLayout.cancel_version
+        val source = dialogLayout.sourcecode
+        val support = dialogLayout.support
+        val version = dialogLayout.version
+        val text = dialogLayout.text_about
 
         //Changing COLORS FOR ELEMENTS
         cancel.setTextColor(GetTheme(context).button)

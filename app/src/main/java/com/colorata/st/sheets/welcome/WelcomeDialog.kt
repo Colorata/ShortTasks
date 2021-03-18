@@ -5,12 +5,10 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import com.colorata.st.R
 import com.colorata.st.extentions.GetTheme
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.android.synthetic.main.welcome_alert.view.*
 
 class WelcomeDialog(private val context: Context, private val inflater: LayoutInflater, private val shared: SharedPreferences){
 
@@ -23,12 +21,12 @@ class WelcomeDialog(private val context: Context, private val inflater: LayoutIn
         val dialogLayout: View = inflater.inflate(R.layout.welcome_alert, null)
 
         //Founding BUTTONS
-        val text = dialogLayout.findViewById<TextView>(R.id.text_welcome)
-        val subText = dialogLayout.findViewById<TextView>(R.id.text_subwelcome)
-        val power = dialogLayout.findViewById<Button>(R.id.bubble)
-        val bubble = dialogLayout.findViewById<Button>(R.id.power)
-        val logo = dialogLayout.findViewById<ImageView>(R.id.image_logo_shorttasks)
-        val imageBubble = dialogLayout.findViewById<ImageView>(R.id.image_bubble)
+        val text = dialogLayout.text_welcome
+        val subText = dialogLayout.text_subwelcome
+        val power = dialogLayout.bubble
+        val bubble = dialogLayout.power
+        val logo = dialogLayout.image_logo_shorttasks
+        val imageBubble = dialogLayout.image_bubble
 
         //Changing COLOR THEME
         power.setTextColor(GetTheme(context).button)

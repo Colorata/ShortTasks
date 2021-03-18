@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
-import android.graphics.Color
 import android.hardware.camera2.CameraManager
 import android.os.Bundle
 import android.os.VibrationEffect
@@ -19,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.colorata.st.R
 import com.colorata.st.extentions.GenerItems
+import com.colorata.st.extentions.GetTheme
 import com.colorata.st.weather.WeatherResponse
 import com.colorata.st.weather.WeatherService
 import kotlinx.android.synthetic.main.activity_bubble.*
@@ -72,8 +72,8 @@ class BubbleActivity : AppCompatActivity() {
         }
 
         //Configuring COLORS
-        bubble_layout.setBackgroundColor(getBackgroundColor())
-        text_weather.setTextColor(getButtonColor())
+        bubble_layout.setBackgroundColor(GetTheme(this).back)
+        text_weather.setTextColor(GetTheme(this).button)
 
         //Getting CONTROLS
         val mutableNames = mutableListOf<String>()
@@ -304,16 +304,6 @@ class BubbleActivity : AppCompatActivity() {
     //Getting USER PACKAGE
     private fun getUserPackage(): String{
         return sharedPreference.getString("userPackage", "com.android.settings").toString()
-    }
-
-    //Getting Background COLOR
-    private fun getBackgroundColor(): Int{
-        return Color.parseColor(sharedPreference.getString("backColor", "#000000").toString())
-    }
-
-    //Getting Button COLOR
-    private fun getButtonColor(): Int{
-        return Color.parseColor(sharedPreference.getString("buttonColor", "#000000").toString())
     }
 
 }

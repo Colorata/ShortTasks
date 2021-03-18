@@ -17,6 +17,7 @@ import com.colorata.st.extentions.UserButton
 import com.colorata.st.userbutton.UserButtonAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.add_button_alert.view.*
 
 class AddButton(private val context: Context, private val inflater: LayoutInflater) {
 
@@ -32,9 +33,9 @@ class AddButton(private val context: Context, private val inflater: LayoutInflat
         val dialogLayout: View = inflater.inflate(R.layout.add_button_alert, null)
 
         //Founding BUTTONS AND EDITTEXTS
-        val text = dialogLayout.findViewById<TextView>(R.id.text_add_button)
-        val appRecycler = dialogLayout.findViewById<RecyclerView>(R.id.app_recycler)
-        val cancel = dialogLayout.findViewById<Button>(R.id.cancel_add_button)
+        val text = dialogLayout.text_add_button
+        val appRecycler = dialogLayout.app_recycler
+        val cancel = dialogLayout.cancel_add_button
 
         //Changing COLOR THEME
         cancel.setTextColor(GetTheme(context).button)
