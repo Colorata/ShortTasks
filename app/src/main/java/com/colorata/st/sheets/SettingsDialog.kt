@@ -1,0 +1,75 @@
+package com.colorata.st.sheets
+
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.Button
+import android.widget.TextView
+import com.colorata.st.R
+import com.colorata.st.extentions.GetTheme
+import com.colorata.st.sheets.settings.ClearDialog
+import com.google.android.material.bottomsheet.BottomSheetDialog
+
+class SettingsDialog(private val context: Context, private val inflater: LayoutInflater) {
+
+    val show = settings()
+    //Fun for BOTTOM SHEET SETTINGS
+    @SuppressLint("InflateParams")
+    fun settings(){
+        val materialBuilder = BottomSheetDialog(context)
+        val dialogLayout: View = inflater.inflate(R.layout.settings_alert, null)
+
+        //Founding BUTTONS
+        val text = dialogLayout.findViewById<TextView>(R.id.text_settings)
+        val cancel = dialogLayout.findViewById<Button>(R.id.cancel_settings)
+        val settings = dialogLayout.findViewById<Button>(R.id.settings_app)
+        val clear = dialogLayout.findViewById<Button>(R.id.clear_data)
+
+        //Changing COLOR THEME
+        cancel.setTextColor(GetTheme(context).button)
+        settings.setTextColor(GetTheme(context).button)
+        clear.setTextColor(GetTheme(context).button)
+        text.setTextColor(GetTheme(context).button)
+
+        //Configuring BACKGROUND
+        GetTheme(context).confBack(dialogLayout)
+
+        //Showing BOTTOM SHEET
+        materialBuilder.setContentView(dialogLayout)
+        materialBuilder.show()
+
+        //Click listener for APP SETTINGS BUTTON
+        settings.setOnClickListener {
+            if (materialBuilder.isShowing) {
+                materialBuilder.dismiss()
+
+                //Going to SYSTEM SETTINGS
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri = Uri.fromParts("package", context.packageName, null)
+                intent.data = uri
+                context.startActivity(intent)
+            }
+        }
+
+        //Click listener for CLEAR BUTTON
+        clear.setOnClickListener {
+            if (materialBuilder.isShowing){
+                materialBuilder.dismiss()
+                ClearDialog(context, inflater).clearData()
+            }
+        }
+
+        //Click listener for CANCEL BUTTON
+        cancel.setOnClickListener {
+            if(materialBuilder.isShowing){
+                materialBuilder.dismiss()
+            }
+        }
+    }
+
+}
