@@ -1,5 +1,6 @@
 package com.colorata.st.extentions
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -26,14 +27,15 @@ class ShowBubble(private val context: Context) {
     private val shortcutId = "Bubble Manager"
     val bubble = showBubble()
 
+    @SuppressLint("UnspecifiedImmutableFlag")
     @RequiresApi(Build.VERSION_CODES.R)
     private fun buildBubbleNotification(appContext: Context): Notification {
         val pi = PendingIntent.getActivity(
                 appContext,
                 0,
                 Intent(appContext, BubbleActivity::class.java),
-                PendingIntent.FLAG_UPDATE_CURRENT
-        )
+             PendingIntent.FLAG_UPDATE_CURRENT
+            )
         val bubble = NotificationCompat.BubbleMetadata.Builder()
                 .setDesiredHeight(4000)
                 .setIcon(IconCompat.createWithResource(appContext, R.drawable.ic_logo_bubble))

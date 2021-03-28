@@ -33,16 +33,14 @@
         <item name="android:insetRight">@dimen/margin_button</item>
         <item name="android:insetLeft">@dimen/margin_button</item>
         <item name="android:padding">@dimen/padding_button</item>
+        <item name="cornerRadius">20dp</item>
     </style>
+
 
     <!--TODO: fix bad animation -->
     <!--
-    <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
-    </style>
-
     <style name="BaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
         <item name="android:windowIsFloating">false</item>
-        <item name="bottomSheetStyle">@style/BottomSheet</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowLightNavigationBar">true</item>
@@ -52,5 +50,5 @@
         <item name="cornerFamily">rounded</item>
     </style>
 
-    <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog" /> -->
+    <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog" />-->
 </resources>

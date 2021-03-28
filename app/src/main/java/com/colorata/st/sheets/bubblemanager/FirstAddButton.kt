@@ -42,7 +42,7 @@ class FirstAddButton(private val context: Context, private val inflater: LayoutI
         understand.setOnClickListener {
             if(materialBuilder.isShowing){
                 materialBuilder.dismiss()
-                ChangePosition(context, inflater).change
+                AddButton(context, inflater).show
             }
         }
     }

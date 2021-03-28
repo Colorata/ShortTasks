@@ -27,7 +27,8 @@
         app:layout_constraintEnd_toStartOf="@id/support"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_about"
-        android:text="@string/source_code"/>
+        android:text="@string/source_code"
+        app:cornerRadius="20dp"/>
 
     <!-- Button SUPPORT US -->
     <com.google.android.material.button.MaterialButton

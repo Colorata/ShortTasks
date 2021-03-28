@@ -113,6 +113,7 @@ class BubbleActivity : AppCompatActivity() {
                                                 "com.google.android.apps.gsa.search_gesture.GestureActivity"
                                         )
                                         startActivity(i)
+                                        onBackPressed()
                                     }
                                     "Tethering" -> {
 
@@ -124,6 +125,7 @@ class BubbleActivity : AppCompatActivity() {
                                                 "com.android.settings.TetherSettings"
                                         )
                                         startActivity(i)
+                                        onBackPressed()
                                     }
                                     "WiFi" -> {
 
@@ -131,6 +133,7 @@ class BubbleActivity : AppCompatActivity() {
                                         val i = Intent(Settings.ACTION_WIFI_SETTINGS)
                                         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                         startActivity(i)
+                                        onBackPressed()
                                     }
                                     "Flashlight" -> {
 
@@ -152,6 +155,7 @@ class BubbleActivity : AppCompatActivity() {
                                         val i = Intent(Settings.ACTION_BLUETOOTH_SETTINGS)
                                         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                         startActivity(i)
+                                        onBackPressed()
                                     }
                                     "MobData" -> {
 
@@ -159,6 +163,7 @@ class BubbleActivity : AppCompatActivity() {
                                         val i = Intent(Settings.ACTION_DATA_USAGE_SETTINGS)
                                         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                         startActivity(i)
+                                        onBackPressed()
                                     }
                                     "Nearby Sharing" -> {
 
@@ -170,6 +175,7 @@ class BubbleActivity : AppCompatActivity() {
                                                 "com.google.android.gms.nearby.sharing.ReceiveSurfaceActivity"
                                         )
                                         startActivity(i)
+                                        onBackPressed()
                                     }
                                     "Location" -> {
 
@@ -177,6 +183,7 @@ class BubbleActivity : AppCompatActivity() {
                                         val i = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                                         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                         startActivity(i)
+                                        onBackPressed()
                                     }
                                     "Calculator" -> {
 
@@ -188,6 +195,7 @@ class BubbleActivity : AppCompatActivity() {
                                                 "com.android.calculator2.Calculator"
                                         )
                                         startActivity(i)
+                                        onBackPressed()
                                     }
                                     "Battery Saver" -> {
 
@@ -195,6 +203,7 @@ class BubbleActivity : AppCompatActivity() {
                                         val i = Intent(Settings.ACTION_BATTERY_SAVER_SETTINGS)
                                         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                         startActivity(i)
+                                        onBackPressed()
                                     }
                                     "Google Tasks" -> {
 
@@ -206,6 +215,7 @@ class BubbleActivity : AppCompatActivity() {
                                                 "com.google.android.apps.tasks.ui.TaskListsActivity"
                                         )
                                         startActivity(i)
+                                        onBackPressed()
                                     }
                                     "Notifications" -> {
 
@@ -221,6 +231,7 @@ class BubbleActivity : AppCompatActivity() {
                                         val i: Intent? = packageManager.getLaunchIntentForPackage(getUserPackage())
                                         i?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                         startActivity(i)
+                                        onBackPressed()
                                     }
                                 }
                             }
