@@ -25,7 +25,6 @@ class ShowBubble(private val context: Context) {
     private val notifId = 1337
     private val notifChannel = "Bubble Manager"
     private val shortcutId = "Bubble Manager"
-    val bubble = showBubble()
 
     @SuppressLint("UnspecifiedImmutableFlag")
     @RequiresApi(Build.VERSION_CODES.R)
@@ -36,10 +35,11 @@ class ShowBubble(private val context: Context) {
             Intent(appContext, BubbleActivity::class.java),
             PendingIntent.FLAG_UPDATE_CURRENT
         )
-        val bubble = NotificationCompat.BubbleMetadata.Builder()
+        val bubble = NotificationCompat.BubbleMetadata.Builder(
+            pi,
+            IconCompat.createWithResource(appContext, R.drawable.logo_st)
+        )
             .setDesiredHeight(4000)
-            .setIcon(IconCompat.createWithResource(appContext, R.drawable.logo_st))
-            .setIntent(pi)
             .apply { setAutoExpandBubble(true); setSuppressNotification(true) }
             .build()
 
@@ -81,7 +81,7 @@ class ShowBubble(private val context: Context) {
     }
 
     @RequiresApi(Build.VERSION_CODES.R)
-    fun showBubble() {
+    fun show() {
         NotificationManagerCompat.from(context).let { mgr ->
             if (!channelCreated) {
                 mgr.createNotificationChannel(

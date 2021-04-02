@@ -15,7 +15,6 @@ fun color(context: Context): Int {
         android.R.style.Theme_DeviceDefault)
     contextThemeWrapper.theme.resolveAttribute(android.R.attr.colorAccent,
         typedValue, true)
-    Log.d("SystemColor", typedValue.data.toString())
     return typedValue.data
 }
 

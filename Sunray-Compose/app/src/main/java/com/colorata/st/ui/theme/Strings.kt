@@ -1,5 +1,51 @@
 package com.colorata.st.ui.theme
 
-enum class Strings(val s: String){
-    SHORTTASKS("ShortTasks")
+object Strings{
+    const val shortTasks = "ShortTasks"
+    const val bubbleManager = "Bubble Manager"
+    const val powerAssistant = "PowerAssistant"
+    const val enable = "Enable"
+    const val next = "Next?"
+    const val go = "Go!"
+    const val welcome = "Welcome"
+    const val main = "Main"
+    const val show = "Show"
+    const val relatedPosts = "Related Posts"
+    const val preferToUse = "I Prefer to use..."
+    const val bubble = "Bubble"
+    const val power = "Power"
+    const val features = "Features"
+    const val weatherDirector = "Weather Director"
+    const val bubbleManagerSettingsSubTitle = "Bubble Manager Settings"
+    const val weatherDirectorSettingsSubTitle = "Weather Director Settings"
+    const val powerAssistantSettingsSubTitle = "Power Assistant Settings"
+    const val position = "Position"
+    const val add = "Add"
+    const val help = "Help"
+    const val city = "City"
+    const val edit = "Edit"
+    const val more = "More"
+    const val about = "About"
+    const val shortTasksSettingsSubTitle = "ShortTasks Settings"
+    const val didntUnderstandSubTitle = "Didn't understand?"
+    const val aboutShortTasksSubTitle = "AboutShortTasks"
+    const val settings = "Settings"
+    const val erase = "Erase"
+    const val weather = "Weather"
+    const val feedback = "Feedback"
+    const val donation = "Donation"
+    const val version = "Version"
+
+    const val welcomeMainSubTitle = "Welcome to the Colorata family!"
+    const val bubbleMainSubTitle = "You will learn how to use Bubble Manager"
+    const val powerMainSubTitle = "You will learn how to use Power Assistant"
+
+    const val bubbleHelpSubTitle = "How tu use Bubble Manager?"
+    const val bubbleHelp1 = "Click Enable"
+    const val bubbleHelp2 = "Go to Notifications"
+
+    const val powerHelpSubTitle = "How to use Power Assistant?"
+    const val powerHelp1 = "Go to Accessibility settings and turn on ShortTasks"
+    const val powerHelp2 = "Press power button and tap ShortTasks"
+    const val powerHelp3 = "Select your elements and tap to the bottom button"
 }

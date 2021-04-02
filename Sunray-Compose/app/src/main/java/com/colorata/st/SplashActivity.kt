@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
-import android.view.Window
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.*
@@ -13,15 +12,13 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.colorata.st.extensions.presets.SText
 import com.colorata.st.ui.theme.*
 import java.util.*
 import kotlin.concurrent.schedule
@@ -79,8 +76,8 @@ fun Splash() {
             modifier = Modifier.padding(Dimens.LOGO_PADDING.dp)
         )
         SText(
-            text = Strings.SHORTTASKS.s,
-            fontSize = Dimens.TITLE.sp
+            text = Strings.shortTasks,
+            fontSize = Dimens.SPLASH_TITLE.sp
         )
     }
 }

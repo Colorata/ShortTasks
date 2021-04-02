@@ -2,70 +2,32 @@ package com.colorata.st.screens
 
 import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.colorata.st.R
-import com.colorata.st.ui.theme.RelatedCard
-import com.colorata.st.ui.theme.SButton
-import com.colorata.st.ui.theme.Title
-import com.colorata.st.ui.theme.backColor
+import com.colorata.st.extensions.presets.SButton
+import com.colorata.st.extensions.presets.Screen
+import com.colorata.st.extensions.presets.TButtonDefault
+import com.colorata.st.ui.theme.ListComponents
+import com.colorata.st.ui.theme.Strings
 
 @ExperimentalAnimationApi
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun MoreScreen() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = backColor(LocalContext.current))
-    ) {
-
-        val title = listOf(
-            "More", "Settings", "Help", "About"
+    Screen(
+        titles = ListComponents.MORE_SCREEN.titles,
+        subTitles = ListComponents.MORE_SCREEN.subTitles,
+        icons = ListComponents.MORE_SCREEN.icons,
+        hidden = listOf(
+            { TButtonDefault() },
+            { SettingsContent() },
+            { HelpContent() },
+            { AboutContent() }
         )
-
-        val subTitle = listOf(
-            "More", "ShortTasks settings", "Didn't understand?", "About ShortTasks"
-        )
-
-        val icon = listOf(
-            R.drawable.abc_vector_test,
-            R.drawable.ic_outline_settings_24,
-            R.drawable.ic_outline_help_outline_24,
-            R.drawable.ic_outline_info_24
-        )
-        LazyColumn(
-            modifier = Modifier.fillMaxHeight()) {
-            items(items = title, itemContent = { item ->
-                when (item) {
-                    "More" -> {
-                        Title(title = item, subTitle = "Related Posts")
-                    }
-                    else -> {
-                        RelatedCard(
-                            title = item,
-                            subTitle = subTitle[title.indexOf(item)],
-                            icon = icon[title.indexOf(item)]
-                        ){
-                            when(item){
-                                "Settings" -> SettingsContent()
-                                "Help" -> HelpContent()
-                                "About" -> AboutContent()
-                            }
-                        }
-                    }
-                }
-            })
-        }
-
-    }
+    )
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, group = "Hidden Content")
@@ -77,7 +39,7 @@ fun SettingsContent(){
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.End
     ) {
-        SButton(modifier = Modifier, text = "Erase") {
+        SButton(modifier = Modifier, text = Strings.erase) {
             Log.d("Clicked", "Erase")
         }
     }
@@ -91,11 +53,11 @@ fun HelpContent(){
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-            SButton(modifier = Modifier.padding(end = 10.dp, bottom = 10.dp), text = "Bubble") {
+            SButton(modifier = Modifier.padding(end = 10.dp, bottom = 10.dp), text = Strings.bubble) {
                 Log.d("Clicked", "Bubble")
             }
 
-            SButton(modifier = Modifier, text = "Power") {
+            SButton(modifier = Modifier, text = Strings.power) {
                 Log.d("Clicked", "Power")
             }
         }
@@ -104,7 +66,7 @@ fun HelpContent(){
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-            SButton(modifier = Modifier, text = "Weather") {
+            SButton(modifier = Modifier, text = Strings.weather) {
                 Log.d("Clicked", "Weather")
             }
         }
@@ -119,11 +81,11 @@ fun AboutContent(){
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-            SButton(modifier = Modifier.padding(end = 10.dp, bottom = 10.dp), text = "Feedback") {
+            SButton(modifier = Modifier.padding(end = 10.dp, bottom = 10.dp), text = Strings.feedback) {
                 Log.d("Clicked", "Feedback")
             }
 
-            SButton(modifier = Modifier, text = "Donation") {
+            SButton(modifier = Modifier, text = Strings.donation) {
                 Log.d("Clicked", "Donation")
             }
         }
@@ -132,7 +94,7 @@ fun AboutContent(){
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-            SButton(modifier = Modifier, text = "Version") {
+            SButton(modifier = Modifier, text = Strings.version) {
                 Log.d("Clicked", "Weather")
             }
         }

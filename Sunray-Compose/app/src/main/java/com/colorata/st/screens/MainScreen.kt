@@ -3,10 +3,7 @@ package com.colorata.st.screens
 import android.content.Intent
 import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -14,62 +11,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.colorata.st.CurrentScreen
-import com.colorata.st.R
 import com.colorata.st.SecondaryActivity
+import com.colorata.st.extensions.presets.SButton
+import com.colorata.st.extensions.presets.SText
+import com.colorata.st.extensions.presets.Screen
+import com.colorata.st.extensions.presets.TButtonDefault
 import com.colorata.st.ui.theme.*
 
 @ExperimentalAnimationApi
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun MainScreen() {
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = backColor(LocalContext.current))
-    ) {
-
-        val title = listOf(
-            "Main", "Welcome", "Bubble Manager", "Power Assistant"
-        )
-
-        val subTitle = listOf(
-            "Main", "Welcome to Colorata family!", "You will learn how to use Bubble Manager", "You will learn how to use Power Assistant"
-        )
-
-        val icon = listOf(
-            R.drawable.abc_vector_test,
-            R.drawable.ic_outline_announcement_24,
-            R.drawable.ic_outline_bubble_chart_24,
-            R.drawable.ic_outline_power_settings_new_24
-        )
-        LazyColumn(
-            modifier = Modifier.fillMaxHeight()) {
-            items(items = title, itemContent = { item ->
-                when (item) {
-                    "Main" -> {
-                        Title(title = "Main", subTitle = "Related Posts")
-                    }
-                    else -> {
-                        RelatedCard(
-                            title = item,
-                            subTitle = subTitle[title.indexOf(item)],
-                            icon = icon[title.indexOf(item)]
-                        ){
-                            when(item){
-                                "Welcome" -> WelcomeContent()
-                                "Bubble Manager" -> BubbleMainScreenContent()
-                                "Power Assistant" -> PowerMainScreenContent()
-                            }
-                        }
-                    }
-                }
-            })
-        }
-
-    }
+    Screen(
+        titles = ListComponents.MAIN_SCREEN.titles,
+        subTitles = ListComponents.MAIN_SCREEN.subTitles,
+        icons = ListComponents.MAIN_SCREEN.icons,
+        hidden = listOf({ TButtonDefault() }, { WelcomeContent()}, { BubbleMainScreenContent()}, { PowerMainScreenContent()})
+    )
 }
-
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, group = "Hidden Content")
 @Composable
@@ -80,7 +39,7 @@ fun BubbleMainScreenContent(){
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.End
     ) {
-        SButton(modifier = Modifier, text = "Show") {
+        SButton(modifier = Modifier, text = Strings.show) {
             Log.d("Clicked", "Show")
         }
     }
@@ -96,7 +55,7 @@ fun PowerMainScreenContent(){
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.End
     ) {
-        SButton(modifier = Modifier, text = "Show") {
+        SButton(modifier = Modifier, text = Strings.show) {
             Log.d("Clicked", "Show")
         }
     }
@@ -112,7 +71,7 @@ fun WelcomeContent(){
             horizontalArrangement = Arrangement.Start
         ) {
             SText(
-                text = "I prefer to use...",
+                text = Strings.preferToUse,
                 modifier = Modifier.padding(bottom = 10.dp),
                 fontSize = 25.sp
             )
@@ -122,15 +81,15 @@ fun WelcomeContent(){
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-            SButton(modifier = Modifier.padding(end = 10.dp), text = "Bubble") {
-                Log.d("Clicked", "Bubble")
+            SButton(modifier = Modifier.padding(end = 10.dp), text = Strings.bubble) {
+                Log.d("Clicked", Strings.bubble)
                 val intent = Intent(context, SecondaryActivity::class.java)
                 intent.putExtra("Screen", CurrentScreen.BUBBLE)
                 context.startActivity(intent)
             }
 
-            SButton(modifier = Modifier, text = "Power") {
-                Log.d("Clicked", "Power")
+            SButton(modifier = Modifier, text = Strings.power) {
+                Log.d("Clicked", Strings.power)
                 val intent = Intent(context, SecondaryActivity::class.java)
                 intent.putExtra("Screen", CurrentScreen.POWER)
                 context.startActivity(intent)
