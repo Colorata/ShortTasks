@@ -10,10 +10,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.colorata.st.extensions.ShowBubble
+import com.colorata.st.extensions.getBottomNavigationHeight
 import com.colorata.st.extensions.presets.SButton
 import com.colorata.st.extensions.presets.Screen
 import com.colorata.st.extensions.presets.TButtonDefault
-import com.colorata.st.ui.theme.ListComponents
+import com.colorata.st.ui.theme.SDimens
+import com.colorata.st.ui.theme.ScreenComponents
 import com.colorata.st.ui.theme.Strings
 
 @ExperimentalFoundationApi
@@ -21,11 +23,11 @@ import com.colorata.st.ui.theme.Strings
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun FeatureScreen() {
-
     Screen(
-        titles = ListComponents.FEATURES_SCREEN.titles,
-        subTitles = ListComponents.FEATURES_SCREEN.subTitles,
-        icons = ListComponents.FEATURES_SCREEN.icons,
+        titles = ScreenComponents.FeaturesScreen.titles,
+        subTitles = ScreenComponents.FeaturesScreen.subTitles,
+        icons = ScreenComponents.FeaturesScreen.icons,
+        modifier = Modifier.padding(bottom = getBottomNavigationHeight()),
         hidden = listOf(
             { TButtonDefault() },
             { BubbleManagerContent() },
@@ -41,12 +43,15 @@ fun FeatureScreen() {
 fun BubbleManagerContent(){
 
     val context = LocalContext.current
-    Column(modifier = Modifier.padding(30.dp)) {
+    Column(modifier = Modifier.padding(SDimens.largePadding)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-            SButton(modifier = Modifier.padding(end = 10.dp, bottom = 10.dp), text = Strings.position) {
+            SButton(modifier = Modifier.padding(
+                end = SDimens.smallPadding,
+                bottom = SDimens.smallPadding
+            ), text = Strings.position) {
                 Log.d("Clicked", "Position")
             }
 
@@ -59,7 +64,7 @@ fun BubbleManagerContent(){
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-            SButton(modifier = Modifier.padding(end = 10.dp), text = Strings.enable) {
+            SButton(modifier = Modifier.padding(end = SDimens.smallPadding), text = Strings.enable) {
                 Log.d("Clicked", "Enable")
                 ShowBubble(context).show()
             }
@@ -76,11 +81,11 @@ fun BubbleManagerContent(){
 fun WeatherDirectorContent(){
     Row(
         modifier = Modifier
-            .padding(30.dp)
+            .padding(SDimens.largePadding)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.End
     ) {
-        SButton(modifier = Modifier.padding(end = 10.dp), text = Strings.city) {
+        SButton(modifier = Modifier.padding(end = SDimens.smallPadding), text = Strings.city) {
             Log.d("Clicked", "City")
         }
 
@@ -95,11 +100,11 @@ fun WeatherDirectorContent(){
 fun PowerAssistantContent(){
     Row(
         modifier = Modifier
-            .padding(30.dp)
+            .padding(SDimens.largePadding)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.End
     ) {
-        SButton(modifier = Modifier.padding(end = 10.dp), text = Strings.edit) {
+        SButton(modifier = Modifier.padding(end = SDimens.smallPadding), text = Strings.edit) {
             Log.d("Clicked", "Edit")
         }
 

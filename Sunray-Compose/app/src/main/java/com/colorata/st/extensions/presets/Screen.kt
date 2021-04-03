@@ -12,8 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
-import com.colorata.st.ui.theme.Dimens
-import com.colorata.st.ui.theme.ListComponents
+import com.colorata.st.ui.theme.SDimens
+import com.colorata.st.ui.theme.ScreenComponents
 import com.colorata.st.ui.theme.backColor
 
 @ExperimentalAnimationApi
@@ -22,11 +22,12 @@ fun Screen(
     titles: List<String>,
     subTitles: List<String>,
     icons: List<Int>,
-    titleFontSize: TextUnit = Dimens.CARD_TITLE.sp,
+    modifier: Modifier = Modifier,
+    titleFontSize: TextUnit = SDimens.cardTitle,
     hidden: List<@Composable () -> Unit>
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(color = backColor(LocalContext.current))
     ) {
@@ -62,9 +63,9 @@ fun Screen(
 fun ScreenDefault(){
     val hidden = listOf<@androidx.compose.runtime.Composable () -> Unit> ({ TButtonDefault() }, { TButtonDefault()}, { TButtonDefault()}, { TButtonDefault()})
     Screen(
-        titles = ListComponents.MAIN_SCREEN.titles,
-        subTitles = ListComponents.MAIN_SCREEN.subTitles,
-        icons = ListComponents.MAIN_SCREEN.icons,
+        titles = ScreenComponents.MainScreen.titles,
+        subTitles = ScreenComponents.MainScreen.subTitles,
+        icons = ScreenComponents.MainScreen.icons,
         hidden = hidden
     )
 }

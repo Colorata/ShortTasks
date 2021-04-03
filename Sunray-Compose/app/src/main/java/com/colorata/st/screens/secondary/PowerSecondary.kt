@@ -22,10 +22,10 @@ import com.colorata.st.ui.theme.*
 @Composable
 fun PowerSecondary(){
     Screen(
-        titles = ListComponents.POWER_HELP.titles,
-        subTitles = ListComponents.POWER_HELP.subTitles,
-        icons = ListComponents.POWER_HELP.icons,
-        titleFontSize = Dimens.HELP_TITLE.sp,
+        titles = ScreenComponents.PowerHelp.titles,
+        subTitles = ScreenComponents.PowerHelp.subTitles,
+        icons = ScreenComponents.PowerHelp.icons,
+        titleFontSize = SDimens.subTitle,
         hidden = listOf(
             { TButtonDefault() },
             { Help1() },
@@ -43,7 +43,7 @@ private fun Help1(){
     val context = LocalContext.current
     Row(
         modifier = Modifier
-            .padding(30.dp)
+            .padding(SDimens.largePadding)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.End
     ) {
@@ -58,7 +58,7 @@ private fun Help1(){
 private fun Help2(){
     Row(
         modifier = Modifier
-            .padding(30.dp)
+            .padding(SDimens.largePadding)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.End
     ) {
@@ -71,7 +71,7 @@ private fun Help2(){
 private fun Help3(){
     Row(
         modifier = Modifier
-            .padding(30.dp)
+            .padding(SDimens.largePadding)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.End
     ) {

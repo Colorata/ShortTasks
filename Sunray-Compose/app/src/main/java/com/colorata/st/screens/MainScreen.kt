@@ -9,23 +9,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.colorata.st.CurrentScreen
 import com.colorata.st.SecondaryActivity
+import com.colorata.st.extensions.getBottomNavigationHeight
 import com.colorata.st.extensions.presets.SButton
 import com.colorata.st.extensions.presets.SText
 import com.colorata.st.extensions.presets.Screen
 import com.colorata.st.extensions.presets.TButtonDefault
-import com.colorata.st.ui.theme.*
+import com.colorata.st.ui.theme.SDimens
+import com.colorata.st.ui.theme.ScreenComponents
+import com.colorata.st.ui.theme.Strings
 
 @ExperimentalAnimationApi
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun MainScreen() {
     Screen(
-        titles = ListComponents.MAIN_SCREEN.titles,
-        subTitles = ListComponents.MAIN_SCREEN.subTitles,
-        icons = ListComponents.MAIN_SCREEN.icons,
+        titles = ScreenComponents.MainScreen.titles,
+        subTitles = ScreenComponents.MainScreen.subTitles,
+        icons = ScreenComponents.MainScreen.icons,
+        modifier = Modifier.padding(bottom = getBottomNavigationHeight()),
         hidden = listOf({ TButtonDefault() }, { WelcomeContent()}, { BubbleMainScreenContent()}, { PowerMainScreenContent()})
     )
 }
@@ -35,7 +38,7 @@ fun MainScreen() {
 fun BubbleMainScreenContent(){
     Row(
         modifier = Modifier
-            .padding(30.dp)
+            .padding(SDimens.largePadding)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.End
     ) {
@@ -51,7 +54,7 @@ fun BubbleMainScreenContent(){
 fun PowerMainScreenContent(){
     Row(
         modifier = Modifier
-            .padding(30.dp)
+            .padding(SDimens.largePadding)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.End
     ) {
@@ -65,15 +68,15 @@ fun PowerMainScreenContent(){
 @Composable
 fun WelcomeContent(){
     val context = LocalContext.current
-    Column(modifier = Modifier.padding(30.dp)) {
+    Column(modifier = Modifier.padding(SDimens.largePadding)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Start
         ) {
             SText(
                 text = Strings.preferToUse,
-                modifier = Modifier.padding(bottom = 10.dp),
-                fontSize = 25.sp
+                modifier = Modifier.padding(bottom = SDimens.smallPadding),
+                fontSize = SDimens.cardTitle
             )
         }
 
@@ -81,7 +84,7 @@ fun WelcomeContent(){
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-            SButton(modifier = Modifier.padding(end = 10.dp), text = Strings.bubble) {
+            SButton(modifier = Modifier.padding(end = SDimens.smallPadding), text = Strings.bubble) {
                 Log.d("Clicked", Strings.bubble)
                 val intent = Intent(context, SecondaryActivity::class.java)
                 intent.putExtra("Screen", CurrentScreen.BUBBLE)

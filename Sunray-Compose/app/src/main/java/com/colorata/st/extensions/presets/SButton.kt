@@ -9,9 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.colorata.st.ui.theme.BorderColor
+import com.colorata.st.ui.theme.SDimens
 import java.util.*
 
 @Composable
@@ -20,7 +19,7 @@ fun SButton(text: String = "", modifier: Modifier, onClick: () -> Unit){
         onClick = onClick,
         shape = CircleShape,
         border = BorderStroke(
-            width = 1.dp,
+            width = SDimens.borderWidth,
             color = BorderColor
         ),
         modifier = modifier,
@@ -28,7 +27,7 @@ fun SButton(text: String = "", modifier: Modifier, onClick: () -> Unit){
     ) {
         SText(
             text = text.toUpperCase(Locale.ROOT),
-            fontSize = 14.sp,
+            fontSize = SDimens.buttonText,
             fontWeight = FontWeight.SemiBold,
         )
     }

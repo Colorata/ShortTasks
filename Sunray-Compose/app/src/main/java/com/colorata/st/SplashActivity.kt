@@ -73,11 +73,11 @@ fun Splash() {
         Image(
             painter = painterResource(id = R.drawable.logo_st),
             contentDescription = "",
-            modifier = Modifier.padding(Dimens.LOGO_PADDING.dp)
+            modifier = Modifier.padding(SDimens.logoPadding)
         )
         SText(
             text = Strings.shortTasks,
-            fontSize = Dimens.SPLASH_TITLE.sp
+            fontSize = SDimens.splashTitle
         )
     }
 }

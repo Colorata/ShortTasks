@@ -19,27 +19,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.colorata.st.R
+import com.colorata.st.ui.theme.SDimens
 import com.colorata.st.ui.theme.backColor
 import com.colorata.st.ui.theme.buttonColor
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @ExperimentalAnimationApi
 @Composable
-fun RelatedCard(titleFontSize: TextUnit = 24.sp, subTitleFontSize: TextUnit = 16.sp, title: String, subTitle: String, icon: Int, hidden: @Composable () -> Unit){
+fun RelatedCard(titleFontSize: TextUnit = SDimens.cardTitle, subTitleFontSize: TextUnit = SDimens.subTitle, title: String, subTitle: String, icon: Int, hidden: @Composable () -> Unit){
 
     var show by remember {
         mutableStateOf(false)
     }
 
 
-    Card(shape = RoundedCornerShape(30.dp),
-        border = BorderStroke(width = 2.dp, color = buttonColor(LocalContext.current)),
+    Card(shape = RoundedCornerShape(SDimens.roundedCorner),
+        border = BorderStroke(width = SDimens.borderWidth, color = buttonColor(LocalContext.current)),
         backgroundColor = backColor(LocalContext.current),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp)
+            .padding(SDimens.cardPadding)
     ) {
         Column(modifier = Modifier.clickable { show = !show }) {
             Row(
@@ -52,7 +52,7 @@ fun RelatedCard(titleFontSize: TextUnit = 24.sp, subTitleFontSize: TextUnit = 16
                         painter = painterResource(id = R.drawable.background),
                         contentDescription = "",
                         modifier = Modifier
-                            .size(200.dp),
+                            .size(SDimens.cardHeight),
                         colorFilter = ColorFilter.tint(color = buttonColor(LocalContext.current))
                     )
 
@@ -60,7 +60,7 @@ fun RelatedCard(titleFontSize: TextUnit = 24.sp, subTitleFontSize: TextUnit = 16
                         painter = painterResource(icon),
                         contentDescription = "",
                         modifier = Modifier
-                            .size(50.dp),
+                            .size(SDimens.postImageSize),
                         colorFilter = ColorFilter.tint(color = buttonColor(LocalContext.current))
                     )
                 }
@@ -74,7 +74,7 @@ fun RelatedCard(titleFontSize: TextUnit = 24.sp, subTitleFontSize: TextUnit = 16
                         text = title,
                         fontSize = titleFontSize,
                         modifier = Modifier
-                            .padding(20.dp)
+                            .padding(SDimens.normalPadding)
                             .fillMaxWidth(),
                         textAlign = TextAlign.Start
                     )
@@ -83,7 +83,11 @@ fun RelatedCard(titleFontSize: TextUnit = 24.sp, subTitleFontSize: TextUnit = 16
                         text = subTitle,
                         fontSize = subTitleFontSize,
                         modifier = Modifier
-                            .padding(bottom = 20.dp, end = 20.dp, start = 20.dp)
+                            .padding(
+                                bottom = SDimens.normalPadding,
+                                end = SDimens.normalPadding,
+                                start = SDimens.normalPadding
+                            )
                             .fillMaxWidth(),
                         textAlign = TextAlign.Start
                     )
@@ -109,6 +113,6 @@ private fun RelatedCardPreview(){
         subTitle = "Card SubTitle",
         icon = R.drawable.ic_outline_wb_sunny_24
     ) {
-        SText(text = "Top", modifier = Modifier.padding(30.dp))
+        SText(text = "Top", modifier = Modifier.padding(SDimens.largePadding))
     }
 }

@@ -7,10 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.colorata.st.extensions.getBottomNavigationHeight
 import com.colorata.st.extensions.presets.SButton
 import com.colorata.st.extensions.presets.Screen
 import com.colorata.st.extensions.presets.TButtonDefault
-import com.colorata.st.ui.theme.ListComponents
+import com.colorata.st.ui.theme.SDimens
+import com.colorata.st.ui.theme.ScreenComponents
 import com.colorata.st.ui.theme.Strings
 
 @ExperimentalAnimationApi
@@ -18,9 +20,10 @@ import com.colorata.st.ui.theme.Strings
 @Composable
 fun MoreScreen() {
     Screen(
-        titles = ListComponents.MORE_SCREEN.titles,
-        subTitles = ListComponents.MORE_SCREEN.subTitles,
-        icons = ListComponents.MORE_SCREEN.icons,
+        titles = ScreenComponents.MoreScreen.titles,
+        subTitles = ScreenComponents.MoreScreen.subTitles,
+        icons = ScreenComponents.MoreScreen.icons,
+        modifier = Modifier.padding(bottom = getBottomNavigationHeight()),
         hidden = listOf(
             { TButtonDefault() },
             { SettingsContent() },
@@ -35,7 +38,7 @@ fun MoreScreen() {
 fun SettingsContent(){
     Row(
         modifier = Modifier
-            .padding(30.dp)
+            .padding(SDimens.largePadding)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.End
     ) {
@@ -48,12 +51,15 @@ fun SettingsContent(){
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, group = "Hidden Content")
 @Composable
 fun HelpContent(){
-    Column(modifier = Modifier.padding(30.dp)) {
+    Column(modifier = Modifier.padding(SDimens.largePadding)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-            SButton(modifier = Modifier.padding(end = 10.dp, bottom = 10.dp), text = Strings.bubble) {
+            SButton(modifier = Modifier.padding(
+                end = SDimens.smallPadding,
+                bottom = SDimens.smallPadding
+            ), text = Strings.bubble) {
                 Log.d("Clicked", "Bubble")
             }
 
@@ -76,12 +82,15 @@ fun HelpContent(){
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, group = "Hidden Content")
 @Composable
 fun AboutContent(){
-    Column(modifier = Modifier.padding(30.dp)) {
+    Column(modifier = Modifier.padding(SDimens.largePadding)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-            SButton(modifier = Modifier.padding(end = 10.dp, bottom = 10.dp), text = Strings.feedback) {
+            SButton(modifier = Modifier.padding(
+                end = SDimens.smallPadding,
+                bottom = SDimens.smallPadding
+            ), text = Strings.feedback) {
                 Log.d("Clicked", "Feedback")
             }
 

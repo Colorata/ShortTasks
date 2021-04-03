@@ -11,7 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.colorata.st.ui.theme.SDimens
 
 @Composable
 fun Title(title: String, subTitle: String){
@@ -23,11 +23,11 @@ fun Title(title: String, subTitle: String){
             text = title, modifier = Modifier
                 .padding(
                     top = mainPadding,
-                    start = 20.dp,
-                    end = 30.dp
+                    start = SDimens.normalPadding,
+                    end = SDimens.largePadding
                 )
                 .fillMaxWidth(),
-            fontSize = 60.sp,
+            fontSize = SDimens.screenTitle,
             fontWeight = FontWeight.Medium,
             textAlign = TextAlign.Start
         )
@@ -35,13 +35,13 @@ fun Title(title: String, subTitle: String){
         SText(
             text = subTitle, modifier = Modifier
                 .padding(
-                    top = 30.dp,
-                    start = 30.dp,
-                    end = 30.dp,
-                    bottom = 10.dp
+                    top = SDimens.largePadding,
+                    start = SDimens.largePadding,
+                    end = SDimens.largePadding,
+                    bottom = SDimens.smallPadding
                 )
                 .fillMaxWidth(),
-            fontSize = 16.sp,
+            fontSize = SDimens.subTitle,
             fontWeight = FontWeight.Light,
             textAlign = TextAlign.Start
         )
