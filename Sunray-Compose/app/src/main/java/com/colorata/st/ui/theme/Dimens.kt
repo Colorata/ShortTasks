@@ -16,6 +16,7 @@ object SDimens{
     val cardPadding = 10.dp
     val cardHeight = 200.dp
     val postImageSize = 50.dp
+    val elementSize = 60.dp
 
     val smallPadding = 10.dp
     val normalPadding = 20.dp

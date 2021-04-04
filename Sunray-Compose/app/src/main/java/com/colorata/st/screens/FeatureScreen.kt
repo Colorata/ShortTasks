@@ -9,8 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.colorata.st.CurrentScreen
 import com.colorata.st.extensions.ShowBubble
 import com.colorata.st.extensions.getBottomNavigationHeight
+import com.colorata.st.extensions.goToSecondary
 import com.colorata.st.extensions.presets.SButton
 import com.colorata.st.extensions.presets.Screen
 import com.colorata.st.extensions.presets.TButtonDefault
@@ -52,11 +54,15 @@ fun BubbleManagerContent(){
                 end = SDimens.smallPadding,
                 bottom = SDimens.smallPadding
             ), text = Strings.position) {
-                Log.d("Clicked", "Position")
+
+                goToSecondary(context, CurrentScreen.POSITION)
+
             }
 
             SButton(modifier = Modifier, text = Strings.add) {
+
                 Log.d("Clicked", "Add")
+
             }
         }
 
@@ -65,12 +71,16 @@ fun BubbleManagerContent(){
             horizontalArrangement = Arrangement.End
         ) {
             SButton(modifier = Modifier.padding(end = SDimens.smallPadding), text = Strings.enable) {
+
                 Log.d("Clicked", "Enable")
                 ShowBubble(context).show()
+
             }
 
             SButton(modifier = Modifier, text = Strings.help) {
+
                 Log.d("Clicked", "Help")
+
             }
         }
     }
@@ -86,11 +96,15 @@ fun WeatherDirectorContent(){
         horizontalArrangement = Arrangement.End
     ) {
         SButton(modifier = Modifier.padding(end = SDimens.smallPadding), text = Strings.city) {
+
             Log.d("Clicked", "City")
+
         }
 
         SButton(modifier = Modifier, text = Strings.help) {
+
             Log.d("Clicked", "Help")
+
         }
     }
 }
@@ -105,11 +119,15 @@ fun PowerAssistantContent(){
         horizontalArrangement = Arrangement.End
     ) {
         SButton(modifier = Modifier.padding(end = SDimens.smallPadding), text = Strings.edit) {
+
             Log.d("Clicked", "Edit")
+
         }
 
         SButton(modifier = Modifier, text = Strings.help) {
+
             Log.d("Clicked", "Help")
+
         }
     }
 }

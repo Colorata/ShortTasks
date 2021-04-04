@@ -1,4 +1,4 @@
-package com.colorata.st
+package com.colorata.st.activities
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import com.colorata.st.Navigation
+import com.colorata.st.ui.theme.Strings
 import com.colorata.st.ui.theme.backColor
 import com.colorata.st.ui.theme.backInt
 
@@ -42,8 +44,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val shared: SharedPreferences = getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
-        shared.edit().putBoolean("nightMode", nightMode).apply()
+        val shared: SharedPreferences = getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+        shared.edit().putBoolean(Strings.nightMode, nightMode).apply()
 
         window.navigationBarColor = backInt(this)
         window.statusBarColor = Color.TRANSPARENT

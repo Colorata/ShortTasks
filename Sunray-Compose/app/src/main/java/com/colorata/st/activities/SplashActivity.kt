@@ -1,4 +1,4 @@
-package com.colorata.st
+package com.colorata.st.activities
 
 import android.content.Context
 import android.content.Intent
@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.colorata.st.R
 import com.colorata.st.extensions.presets.SText
 import com.colorata.st.ui.theme.*
 import java.util.*
@@ -43,12 +44,10 @@ class SplashActivity : AppCompatActivity() {
             }
         }
 
-        val shared: SharedPreferences = getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
-        shared.edit().putBoolean("nightMode", nightMode).apply()
+        val shared: SharedPreferences = getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+        shared.edit().putBoolean(Strings.nightMode, nightMode).apply()
         window.navigationBarColor = backInt(this)
         window.statusBarColor = backInt(this)
-
-        window.setDecorFitsSystemWindows(false)
 
         Timer().schedule(2000){
             val intent = Intent(this@SplashActivity, MainActivity::class.java)

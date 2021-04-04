@@ -16,6 +16,8 @@ import android.service.controls.templates.ToggleTemplate
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.colorata.st.activities.MainActivity
+import com.colorata.st.ui.theme.Strings
 import java.lang.reflect.Method
 import java.util.concurrent.Flow
 import java.util.function.Consumer
@@ -46,7 +48,10 @@ class PowerAssistant : ControlsProviderService() {
             )
             .setControlId(name)
             .setStatus(1)
-            .setControlTemplate(ToggleTemplate("button", ControlButton(enabled, "button"))).build()
+            .setControlTemplate(ToggleTemplate(
+                Strings.button,
+                ControlButton(enabled, Strings.button)
+            )).build()
 
     //Init FLASHLIGHT STATE
     private var flashlightOn = false
@@ -57,18 +62,18 @@ class PowerAssistant : ControlsProviderService() {
         get() {
 
             return mutableListOf(
-                addControls(name = "Search", icon = R.drawable.ic_outline_search_24),
-                addControls("Tethering", "HotSpot and Tethering", R.drawable.ic_outline_wifi_tethering_24, true),
-                addControls("WiFi", "Wi-Fi", R.drawable.ic_outline_network_wifi_24, true),
-                addControls("Flashlight", "Flashlight", R.drawable.ic_outline_flash_on_24, false),
-                addControls("Bluetooth", "Bluetooth", R.drawable.ic_outline_bluetooth_24, true),
-                addControls("MobData", "Mobile Data", R.drawable.ic_outline_network_cell_24, true),
-                addControls("NearShare", "Nearby Sharing", R.drawable.ic_outline_share_24, true),
-                addControls("Location", "Location", R.drawable.ic_outline_location_on_24, true),
-                addControls("Calc", "Calculator", R.drawable.ic_outline_calculate_24, true),
-                addControls("BatSave", "Battery Saver", R.drawable.ic_outline_power_settings_new_24, true),
-                addControls("Tasks", "Google Tasks", R.drawable.ic_outline_add_task_24, true),
-                addControls("Notify", "Notifications", R.drawable.ic_outline_announcement_24, true)
+                addControls(name = Strings.search, icon = R.drawable.ic_outline_search_24),
+                addControls(name = Strings.tethering, icon = R.drawable.ic_outline_wifi_tethering_24),
+                addControls(name = Strings.wifi, icon = R.drawable.ic_outline_network_wifi_24),
+                addControls(name = Strings.flashlight, icon = R.drawable.ic_outline_flash_on_24),
+                addControls(name = Strings.bluetooth, icon = R.drawable.ic_outline_bluetooth_24),
+                addControls(name = Strings.mobData, icon = R.drawable.ic_outline_network_cell_24),
+                addControls(name = Strings.nearShare, icon = R.drawable.ic_outline_share_24),
+                addControls(name = Strings.location, icon = R.drawable.ic_outline_location_on_24),
+                addControls(name = Strings.calc, icon = R.drawable.ic_outline_calculate_24),
+                addControls(name = Strings.batSave, icon = R.drawable.ic_outline_power_settings_new_24),
+                addControls(name = Strings.tasks, icon = R.drawable.ic_outline_add_task_24),
+                addControls(name = Strings.notify, icon = R.drawable.ic_outline_announcement_24)
             )
 
         }
@@ -98,7 +103,7 @@ class PowerAssistant : ControlsProviderService() {
         )*/
 
         when (controlId) {
-            "Search" -> {
+            Strings.search -> {
 
                 //Going to GOOGLE SEARCH
                 val i = Intent()
@@ -115,7 +120,7 @@ class PowerAssistant : ControlsProviderService() {
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                 consumer.accept(ControlAction.RESPONSE_OK)
             }
-            "Tethering" -> {
+            Strings.tethering -> {
 
                 //Going to TETHERING SETTINGS
                 val i = Intent()
@@ -129,7 +134,7 @@ class PowerAssistant : ControlsProviderService() {
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                 consumer.accept(ControlAction.RESPONSE_OK)
             }
-            "WiFi" -> {
+            Strings.wifi -> {
 
                 //Going to WIFI SETTINGS
                 val i = Intent(Settings.ACTION_WIFI_SETTINGS)
@@ -142,7 +147,7 @@ class PowerAssistant : ControlsProviderService() {
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                 consumer.accept(ControlAction.RESPONSE_OK)
             }
-            "Flashlight" -> {
+            Strings.flashlight -> {
 
                 //Changing FLASHLIGHT STATE
                 val cameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
@@ -158,7 +163,7 @@ class PowerAssistant : ControlsProviderService() {
 
                 consumer.accept(ControlAction.RESPONSE_OK)
             }
-            "Bluetooth" -> {
+            Strings.bluetooth -> {
 
                 //Going to BLUETOOTH SETTINGS
                 val i = Intent(Settings.ACTION_BLUETOOTH_SETTINGS)
@@ -171,7 +176,7 @@ class PowerAssistant : ControlsProviderService() {
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                 consumer.accept(ControlAction.RESPONSE_OK)
             }
-            "MobData" -> {
+            Strings.mobData -> {
 
                 //Going to DATA USAGE SETTINGS
                 val i = Intent(Settings.ACTION_DATA_USAGE_SETTINGS)
@@ -184,7 +189,7 @@ class PowerAssistant : ControlsProviderService() {
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                 consumer.accept(ControlAction.RESPONSE_OK)
             }
-            "NearShare" -> {
+            Strings.nearShare -> {
 
                 //Going to NEARBY SHARING PAGE
                 val i = Intent()
@@ -201,7 +206,7 @@ class PowerAssistant : ControlsProviderService() {
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                 consumer.accept(ControlAction.RESPONSE_OK)
             }
-            "Location" -> {
+            Strings.location -> {
 
                 //Going to LOCATION SETTINGS
                 val i = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
@@ -214,7 +219,7 @@ class PowerAssistant : ControlsProviderService() {
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                 consumer.accept(ControlAction.RESPONSE_OK)
             }
-            "Calc" -> {
+            Strings.calc -> {
 
                 //Going to GOOGLE CALCULATOR
                 val i = Intent()
@@ -231,7 +236,7 @@ class PowerAssistant : ControlsProviderService() {
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                 consumer.accept(ControlAction.RESPONSE_OK)
             }
-            "BatSave" -> {
+            Strings.batSave -> {
 
                 //Going to BATTERY SAVER
                 val i = Intent(Settings.ACTION_BATTERY_SAVER_SETTINGS)
@@ -244,7 +249,7 @@ class PowerAssistant : ControlsProviderService() {
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                 consumer.accept(ControlAction.RESPONSE_OK)
             }
-            "Tasks" -> {
+            Strings.tasks -> {
 
                 //Going to GOOGLE TASKS
                 val i = Intent()
@@ -261,7 +266,7 @@ class PowerAssistant : ControlsProviderService() {
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                 consumer.accept(ControlAction.RESPONSE_OK)
             }
-            "Notify" -> {
+            Strings.notify -> {
 
                 //Showing NOTIFICATIONS
                 val sbservice = getSystemService("statusbar")

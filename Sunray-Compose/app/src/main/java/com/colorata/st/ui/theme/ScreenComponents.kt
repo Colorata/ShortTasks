@@ -4,18 +4,18 @@ import com.colorata.st.R
 
 object ScreenComponents{
     object BubbleHelp {
-        val titles = listOf(
+        val titles = mutableListOf(
             Strings.bubbleManager,
             Strings.bubbleHelp1,
             Strings.bubbleHelp2
         )
 
-        val subTitles = listOf(
+        val subTitles = mutableListOf(
             Strings.bubbleHelpSubTitle,
             "", "", ""
         )
 
-        val icons = listOf(
+        val icons = mutableListOf(
             R.drawable.abc_vector_test,
             R.drawable.ic_outline_add_circle_24,
             R.drawable.ic_outline_circle_notifications_24,
@@ -24,19 +24,19 @@ object ScreenComponents{
     }
 
     object PowerHelp {
-        val titles = listOf(
+        val titles = mutableListOf(
             Strings.powerAssistant,
             Strings.powerHelp1,
             Strings.powerHelp2,
             Strings.powerHelp3
         )
 
-        val subTitles = listOf(
+        val subTitles = mutableListOf(
         Strings.powerHelpSubTitle,
         "", "", ""
         )
 
-        val icons = listOf(
+        val icons = mutableListOf(
             R.drawable.abc_vector_test,
             R.drawable.ic_outline_accessibility_24,
             R.drawable.ic_outline_power_settings_new_24,
@@ -45,44 +45,41 @@ object ScreenComponents{
     }
 
     object MainScreen {
-        val titles = listOf(
+        val titles = mutableListOf(
             Strings.main,
-            Strings.welcome,
             Strings.bubbleManager,
             Strings.powerAssistant
         )
 
-        val subTitles = listOf(
+        val subTitles = mutableListOf(
             Strings.relatedPosts,
-            Strings.welcomeMainSubTitle,
             Strings.bubbleMainSubTitle,
             Strings.powerMainSubTitle
         )
 
-        val icons = listOf(
+        val icons = mutableListOf(
             R.drawable.abc_vector_test,
-            R.drawable.ic_outline_announcement_24,
             R.drawable.ic_outline_bubble_chart_24,
             R.drawable.ic_outline_power_settings_new_24
         )
     }
 
     object FeaturesScreen {
-        val titles = listOf(
+        val titles = mutableListOf(
         Strings.features,
         Strings.bubbleManager,
         Strings.weatherDirector,
         Strings.powerAssistant
         )
 
-        val subTitles = listOf(
+        val subTitles = mutableListOf(
             Strings.relatedPosts,
             Strings.bubbleManagerSettingsSubTitle,
             Strings.weatherDirectorSettingsSubTitle,
             Strings.powerAssistantSettingsSubTitle
         )
 
-        val icons = listOf(
+        val icons = mutableListOf(
             R.drawable.abc_vector_test,
             R.drawable.ic_outline_bubble_chart_24,
             R.drawable.ic_outline_cloud_24,
@@ -91,21 +88,21 @@ object ScreenComponents{
     }
 
     object MoreScreen {
-        val titles = listOf(
+        val titles = mutableListOf(
         Strings.more,
         Strings.settings,
         Strings.help,
         Strings.about
         )
 
-        val subTitles = listOf(
+        val subTitles = mutableListOf(
             Strings.relatedPosts,
             Strings.shortTasksSettingsSubTitle,
             Strings.didntUnderstandSubTitle,
             Strings.aboutShortTasksSubTitle
         )
 
-        val icons = listOf(
+        val icons = mutableListOf(
             R.drawable.abc_vector_test,
             R.drawable.ic_outline_settings_24,
             R.drawable.ic_outline_help_outline_24,

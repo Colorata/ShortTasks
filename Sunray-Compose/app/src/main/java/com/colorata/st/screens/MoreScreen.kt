@@ -42,7 +42,14 @@ fun SettingsContent(){
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.End
     ) {
-        SButton(modifier = Modifier, text = Strings.erase) {
+        SButton(
+            modifier = Modifier.padding(end = SDimens.smallPadding),
+            text = Strings.erase
+        ) {
+            Log.d("Clicked", "Erase")
+        }
+
+        SButton(modifier = Modifier, text = Strings.theme) {
             Log.d("Clicked", "Erase")
         }
     }

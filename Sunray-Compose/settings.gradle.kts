@@ -4,9 +4,9 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven {
-            url "https://kotlin.bintray.com/kotlinx"
+            url = uri("https://kotlin.bintray.com/kotlinx")
         }
     }
 }
 rootProject.name = "ShortTasks"
-include ':app'
+include(":app")

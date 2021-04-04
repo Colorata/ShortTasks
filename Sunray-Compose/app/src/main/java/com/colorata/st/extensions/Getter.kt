@@ -26,3 +26,9 @@ fun getNavBarHeight(): Dp {
     }
     return pxToDp(navigationBarHeight).dp
 }
+
+@Composable
+fun isNewUser(): Boolean{
+    val shared = LocalContext.current.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+    return shared.getBoolean(Strings.isNewUser, true)
+}

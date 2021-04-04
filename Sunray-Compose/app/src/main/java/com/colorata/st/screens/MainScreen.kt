@@ -1,19 +1,19 @@
 package com.colorata.st.screens
 
 import android.content.Intent
-import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.colorata.st.CurrentScreen
-import com.colorata.st.SecondaryActivity
+import com.colorata.st.activities.SecondaryActivity
 import com.colorata.st.extensions.getBottomNavigationHeight
 import com.colorata.st.extensions.presets.SButton
-import com.colorata.st.extensions.presets.SText
 import com.colorata.st.extensions.presets.Screen
 import com.colorata.st.extensions.presets.TButtonDefault
 import com.colorata.st.ui.theme.SDimens
@@ -29,13 +29,14 @@ fun MainScreen() {
         subTitles = ScreenComponents.MainScreen.subTitles,
         icons = ScreenComponents.MainScreen.icons,
         modifier = Modifier.padding(bottom = getBottomNavigationHeight()),
-        hidden = listOf({ TButtonDefault() }, { WelcomeContent()}, { BubbleMainScreenContent()}, { PowerMainScreenContent()})
+        hidden = listOf({ TButtonDefault() }, { BubbleMainScreenContent()}, { PowerMainScreenContent()})
     )
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, group = "Hidden Content")
 @Composable
 fun BubbleMainScreenContent(){
+    val context = LocalContext.current
     Row(
         modifier = Modifier
             .padding(SDimens.largePadding)
@@ -43,7 +44,9 @@ fun BubbleMainScreenContent(){
         horizontalArrangement = Arrangement.End
     ) {
         SButton(modifier = Modifier, text = Strings.show) {
-            Log.d("Clicked", "Show")
+            val intent = Intent(context, SecondaryActivity::class.java)
+            intent.putExtra(Strings.screen, CurrentScreen.BUBBLE)
+            context.startActivity(intent)
         }
     }
 }
@@ -52,6 +55,7 @@ fun BubbleMainScreenContent(){
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, group = "Hidden Content")
 @Composable
 fun PowerMainScreenContent(){
+    val context = LocalContext.current
     Row(
         modifier = Modifier
             .padding(SDimens.largePadding)
@@ -59,44 +63,9 @@ fun PowerMainScreenContent(){
         horizontalArrangement = Arrangement.End
     ) {
         SButton(modifier = Modifier, text = Strings.show) {
-            Log.d("Clicked", "Show")
-        }
-    }
-}
-
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, group = "Hidden Content")
-@Composable
-fun WelcomeContent(){
-    val context = LocalContext.current
-    Column(modifier = Modifier.padding(SDimens.largePadding)) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Start
-        ) {
-            SText(
-                text = Strings.preferToUse,
-                modifier = Modifier.padding(bottom = SDimens.smallPadding),
-                fontSize = SDimens.cardTitle
-            )
-        }
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
-        ) {
-            SButton(modifier = Modifier.padding(end = SDimens.smallPadding), text = Strings.bubble) {
-                Log.d("Clicked", Strings.bubble)
-                val intent = Intent(context, SecondaryActivity::class.java)
-                intent.putExtra("Screen", CurrentScreen.BUBBLE)
-                context.startActivity(intent)
-            }
-
-            SButton(modifier = Modifier, text = Strings.power) {
-                Log.d("Clicked", Strings.power)
-                val intent = Intent(context, SecondaryActivity::class.java)
-                intent.putExtra("Screen", CurrentScreen.POWER)
-                context.startActivity(intent)
-            }
+            val intent = Intent(context, SecondaryActivity::class.java)
+            intent.putExtra(Strings.screen, CurrentScreen.BUBBLE)
+            context.startActivity(intent)
         }
     }
 }

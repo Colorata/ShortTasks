@@ -5,5 +5,9 @@ enum class CurrentScreen {
     FEATURES,
     MORE,
     BUBBLE,
-    POWER
+    POWER,
+    POSITION,
+    ADD_BUTTON,
+    CHANGE_CITY,
+    EDIT_POWER
 }

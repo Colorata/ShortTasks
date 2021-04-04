@@ -1,12 +1,12 @@
 package com.colorata.st.extensions
 
-import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Build
 import android.provider.Settings
 import androidx.annotation.RequiresApi
@@ -16,8 +16,8 @@ import androidx.core.app.Person
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
-import com.colorata.st.BubbleActivity
 import com.colorata.st.R
+import com.colorata.st.activities.BubbleActivity
 
 class ShowBubble(private val context: Context) {
 
@@ -26,20 +26,25 @@ class ShowBubble(private val context: Context) {
     private val notifChannel = "Bubble Manager"
     private val shortcutId = "Bubble Manager"
 
-    @SuppressLint("UnspecifiedImmutableFlag")
-    @RequiresApi(Build.VERSION_CODES.R)
+    @RequiresApi(Build.VERSION_CODES.S)
     private fun buildBubbleNotification(appContext: Context): Notification {
+        val piFlag = if (Build.VERSION.SDK_INT == Build.VERSION_CODES.S) {
+            PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        } else {
+            PendingIntent.FLAG_UPDATE_CURRENT
+        }
+
         val pi = PendingIntent.getActivity(
             appContext,
             0,
             Intent(appContext, BubbleActivity::class.java),
-            PendingIntent.FLAG_UPDATE_CURRENT
+            piFlag
         )
         val bubble = NotificationCompat.BubbleMetadata.Builder(
             pi,
             IconCompat.createWithResource(appContext, R.drawable.logo_st)
         )
-            .setDesiredHeight(4000)
+            .setDesiredHeight(Resources.getSystem().displayMetrics.heightPixels)
             .apply { setAutoExpandBubble(true); setSuppressNotification(true) }
             .build()
 
@@ -80,7 +85,7 @@ class ShowBubble(private val context: Context) {
         return builder.build()
     }
 
-    @RequiresApi(Build.VERSION_CODES.R)
+    @RequiresApi(Build.VERSION_CODES.S)
     fun show() {
         NotificationManagerCompat.from(context).let { mgr ->
             if (!channelCreated) {

@@ -20,9 +20,9 @@ fun color(context: Context): Int {
 
 //Fun for get COLOR THEME BACKGROUND
 fun backInt(context: Context): Int {
-    val shared: SharedPreferences = context.getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
+    val shared: SharedPreferences = context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
     var color = ""
-    when (shared.getBoolean("nightMode", false)) {
+    when (shared.getBoolean(Strings.nightMode, false)) {
         true -> when (color(context)) {
             -5715974 -> color = "162A49"
             -7224321 -> color = "162A49"
@@ -63,10 +63,6 @@ fun backInt(context: Context): Int {
         }
     }
 
-    val edit = shared.edit()
-    edit.putInt("backColor", android.graphics.Color.parseColor("#$color"))
-    edit.apply()
-
     return android.graphics.Color.parseColor("#$color")
 }
 
@@ -74,9 +70,9 @@ fun backColor(context: Context) = Color(backInt(context))
 
 //Fun for get COLOR THEME BUTTON
 fun buttonInt(context: Context): Int {
-    val shared: SharedPreferences = context.getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
+    val shared: SharedPreferences = context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
     var color = "#ffffff"
-    when (shared.getBoolean("nightMode", false)) {
+    when (shared.getBoolean(Strings.nightMode, false)) {
         true -> {
             when (color(context)) {
                 -5715974 -> color =  "8AB4F8"
@@ -120,10 +116,6 @@ fun buttonInt(context: Context): Int {
             }
         }
     }
-
-    val edit = shared.edit()
-    edit.putInt("buttonColor", android.graphics.Color.parseColor("#$color"))
-    edit.apply()
 
     return android.graphics.Color.parseColor("#$color")
 }
