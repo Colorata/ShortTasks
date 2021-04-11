@@ -1,7 +1,13 @@
 package com.colorata.st.extensions
 
 import android.annotation.SuppressLint
+import android.bluetooth.BluetoothAdapter
 import android.content.Context
+import android.hardware.camera2.CameraManager
+import android.location.LocationManager
+import android.net.wifi.WifiManager
+import android.os.PowerManager
+import android.provider.Settings
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
@@ -16,6 +22,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.Serializable
+import java.lang.reflect.Method
 
 @Composable
 fun getBottomNavigationHeight(): Dp {
@@ -101,4 +108,36 @@ fun getCurrentWeather(context: Context): MutableList<Serializable> {
         }
     })
     return mutableListOf(currentRight, currentFeels, currentFloat)
+}
+
+fun isWifiEnabled(context: Context): Boolean {
+    val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+    return wifiManager.isWifiEnabled
+}
+
+fun isBluetoothEnabled(): Boolean {
+    val adapter = BluetoothAdapter.getDefaultAdapter()
+    return adapter.isEnabled
+}
+
+fun isLocationEnabled(mContext: Context): Boolean {
+    val lm = mContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    return lm.isProviderEnabled(LocationManager.GPS_PROVIDER) || lm.isProviderEnabled(
+        LocationManager.NETWORK_PROVIDER)
+}
+
+fun isMobileDataEnabled(context: Context): Boolean =
+    Settings.Secure.getInt(context.contentResolver, "mobile_data", 1) == 1
+
+fun isBatterySaverEnabled(context: Context): Boolean {
+    val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+    return powerManager.isPowerSaveMode
+}
+
+fun isHotspotEnabled(context: Context): Boolean {
+    val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+    val method: Method = wifiManager.javaClass.getDeclaredMethod("getWifiApState")
+    method.isAccessible = true
+    val actualState = method.invoke(wifiManager, null as Array<Any?>?) as Int
+    return actualState == 13
 }

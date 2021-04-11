@@ -40,6 +40,9 @@ object Strings{
     const val nightMode = "nightMode"
     const val theme = "Theme"
     const val positionScreenSubTitle = "Change positions of elements"
+    const val mediaVolume = "Media Volume"
+    const val ringVolume = "Ring Volume"
+    const val brightness = "Brightness"
 
     const val bubbleMainSubTitle = "You will learn how to use Bubble Manager"
     const val powerMainSubTitle = "You will learn how to use Power Assistant"
@@ -63,7 +66,7 @@ object Strings{
     const val location = "Location"
     const val calc = "Calculator"
     const val batSave = "Battery Saver"
-    const val tasks = "Google Tasksk"
+    const val tasks = "Google Tasks"
     const val notify = "Notifications"
     const val button = "Button"
 

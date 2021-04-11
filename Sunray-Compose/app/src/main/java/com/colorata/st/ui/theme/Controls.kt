@@ -3,12 +3,12 @@ package com.colorata.st.ui.theme
 import com.colorata.st.R
 
 enum class Controls(
-    id: Int,
-    title: String,
-    subTitle: String = "",
-    enabled: Boolean = false,
-    icon: Int,
-    isRange: Boolean
+    val id: Int,
+    val title: String,
+    val subTitle: String = "",
+    val enabled: Boolean = false,
+    val icon: Int,
+    val isRange: Boolean
 ) {
     SEARCH(id = 1500, title = Strings.search, icon = R.drawable.ic_outline_search_24, enabled = true, isRange = false),
     HOTSPOT(id = 1501, title = Strings.tethering, icon = R.drawable.ic_outline_wifi_tethering_24, isRange = false),
@@ -21,5 +21,8 @@ enum class Controls(
     CALCULATOR(id = 1508, title = Strings.calc, icon = R.drawable.ic_outline_calculate_24, enabled = true, isRange = false),
     BATTERY_SAVER(id = 1509, title = Strings.batSave, icon = R.drawable.ic_outline_power_settings_new_24, isRange = false),
     GOOGLE_TASKS(id = 1510, title = Strings.tasks, icon = R.drawable.ic_outline_add_task_24, enabled = true, isRange = false),
-    NOTIFICATIONS(id = 1511, title = Strings.notify, icon = R.drawable.ic_outline_announcement_24, enabled = true, isRange = false)
+    NOTIFICATIONS(id = 1511, title = Strings.notify, icon = R.drawable.ic_outline_announcement_24, enabled = true, isRange = false),
+    MEDIA_VOLUME(id = 1512, title = Strings.mediaVolume, icon = R.drawable.ic_outline_music_note_24, isRange = true),
+    RING_VOLUME(id = 1513, title = Strings.ringVolume, icon = R.drawable.ic_outline_circle_notifications_24, isRange = true),
+    BRIGHTNESS(id = 1514, title = Strings.brightness, icon = R.drawable.ic_outline_brightness_7_24, isRange = true)
 }

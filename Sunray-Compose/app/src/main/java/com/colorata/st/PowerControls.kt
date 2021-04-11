@@ -19,7 +19,7 @@ import android.service.controls.templates.RangeTemplate
 import android.service.controls.templates.ToggleTemplate
 import android.util.Log
 import com.colorata.st.activities.MainActivity
-import com.colorata.st.extensions.getCurrentWeather
+import com.colorata.st.extensions.*
 import com.colorata.st.ui.theme.*
 import io.reactivex.Flowable
 import io.reactivex.processors.ReplayProcessor
@@ -59,37 +59,41 @@ class PowerControls : ControlsProviderService() {
         val currentFeels = shared.getString("CurrentFeelsWeather", "Error")
         val currentFloat = shared.getFloat("CurrentFloatWeather", 0.0f)
 
-
-        Log.d("Weather", getCurrentWeather(this).toString())
         controls.clear()
-        controls.add(buildToggleControl(
-            id = 1337,
-            title = "First",
-            icon = R.drawable.ic_outline_calculate_24,
-            enabled = toggleState1
-        ))
-        controls.add(buildRangeControl(
-            id = 1338,
-            title = "Range",
-            icon = R.drawable.ic_outline_check_circle_outline_24,
-            state = rangeState
-        ))
-
-        controls.add(buildToggleControl(
-            id = 1440,
-            title = "Second",
-            icon = R.drawable.ic_outline_network_cell_24,
-            enabled = toggleState2
-        ))
 
         controls.add(buildRangeControl(
             id = 1441,
             title = currentRight!!,
-            icon = R.drawable.ic_outline_check_circle_outline_24,
+            icon = R.drawable.ic_outline_cloud_24,
             state = currentFloat,
             subTitle = currentFeels!!,
             isWeather = true
         ))
+
+        Controls.values().forEach { control ->
+            if (control.isRange){
+                controls.add(buildRangeControl(
+                    id = control.id,
+                    title = control.title,
+                    icon = control.icon,
+                ))
+            } else {
+                controls.add(buildToggleControl(
+                    id = control.id,
+                    title = control.title,
+                    icon = control.icon,
+                    enabled = when (control.id) {
+                        //1501 -> isHotspotEnabled(this)
+                        1502 -> isWifiEnabled(this)
+                        1504 -> isBluetoothEnabled()
+                        1505 -> isMobileDataEnabled(this)
+                        1507 -> isLocationEnabled(this)
+                        1509 -> isBatterySaverEnabled(this)
+                        else -> false
+                    }
+                ))
+            }
+        }
 
         Log.d("Controls", controls.size.toString())
         for (i in controls){
@@ -139,10 +143,8 @@ class PowerControls : ControlsProviderService() {
                 }
                 1441.toString() -> {
                     consumer.accept(ControlAction.RESPONSE_OK)
-                    flow.onNext(controls[3])
+                    flow.onNext(controls[0])
                 }
-
-                else -> consumer.accept(ControlAction.RESPONSE_FAIL)
             }
         } ?: consumer.accept(ControlAction.RESPONSE_FAIL)
     }
