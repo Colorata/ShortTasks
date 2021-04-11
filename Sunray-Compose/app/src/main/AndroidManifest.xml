@@ -52,6 +52,18 @@
                 <action android:name="android.service.controls.ControlsProviderService" />
             </intent-filter>
         </service>
+
+        <service
+            android:name=".PowerControls"
+            android:exported="true"
+            android:label="PowerOfShorts"
+            android:permission="android.permission.BIND_CONTROLS">
+            <intent-filter>
+                <action android:name="android.service.controls.ControlsProviderService" />
+            </intent-filter>
+        </service>
+
+
         <service
             android:name=".AccessibilityService"
             android:enabled="true"

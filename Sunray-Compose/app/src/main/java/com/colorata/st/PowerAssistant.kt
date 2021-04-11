@@ -18,6 +18,7 @@ import androidx.annotation.RequiresApi
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.colorata.st.activities.MainActivity
 import com.colorata.st.ui.theme.Strings
+import io.reactivex.processors.ReplayProcessor
 import java.lang.reflect.Method
 import java.util.concurrent.Flow
 import java.util.function.Consumer
@@ -25,6 +26,9 @@ import java.util.function.Consumer
 
 @RequiresApi(30)
 class PowerAssistant : ControlsProviderService() {
+
+    private val controlFlows =
+        mutableMapOf<String, ReplayProcessor<Control>>()
 
     //Fun for adding CONTROLS IN POWER ASSISTANT
     @SuppressLint("WrongConstant", "UnspecifiedImmutableFlag")
@@ -58,7 +62,6 @@ class PowerAssistant : ControlsProviderService() {
 
     //Creating LIST of CONTROLS
     private val controlList: List<Control>
-        @SuppressLint("WrongConstant")
         get() {
 
             return mutableListOf(
@@ -102,186 +105,174 @@ class PowerAssistant : ControlsProviderService() {
             PackageManager.DONT_KILL_APP
         )*/
 
-        when (controlId) {
-            Strings.search -> {
+        consumer.accept(ControlAction.RESPONSE_OK)
+        controlFlows[controlId]?.let { flow ->
 
-                //Going to GOOGLE SEARCH
-                val i = Intent()
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                i.setClassName(
-                    "com.google.android.googlequicksearchbox",
-                    "com.google.android.apps.gsa.search_gesture.GestureActivity"
-                )
-                startActivity(i)
+            when (controlId) {
+                Strings.search -> {
 
-                //Power Assistant HIDING
-                val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
-                intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
-                LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
-                consumer.accept(ControlAction.RESPONSE_OK)
-            }
-            Strings.tethering -> {
+                    //Going to GOOGLE SEARCH
+                    val i = Intent()
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    i.setClassName(
+                        "com.google.android.googlequicksearchbox",
+                        "com.google.android.apps.gsa.search_gesture.GestureActivity"
+                    )
+                    startActivity(i)
 
-                //Going to TETHERING SETTINGS
-                val i = Intent()
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                i.setClassName("com.android.settings", "com.android.settings.TetherSettings")
-                startActivity(i)
-
-                //Power Assistant HIDING
-                val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
-                intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
-                LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
-                consumer.accept(ControlAction.RESPONSE_OK)
-            }
-            Strings.wifi -> {
-
-                //Going to WIFI SETTINGS
-                val i = Intent(Settings.ACTION_WIFI_SETTINGS)
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(i)
-
-                //Power Assistant HIDING
-                val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
-                intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
-                LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
-                consumer.accept(ControlAction.RESPONSE_OK)
-            }
-            Strings.flashlight -> {
-
-                //Changing FLASHLIGHT STATE
-                val cameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
-                if (!flashlightOn) {
-                    flashlightOn = !flashlightOn
-                    val cameraId = cameraManager.cameraIdList[0]
-                    cameraManager.setTorchMode(cameraId, flashlightOn)
-                } else if (flashlightOn) {
-                    flashlightOn = !flashlightOn
-                    val cameraId = cameraManager.cameraIdList[0]
-                    cameraManager.setTorchMode(cameraId, flashlightOn)
+                    //Power Assistant HIDING
+                    val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
+                    intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
+                    LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                 }
+                Strings.tethering -> {
 
-                consumer.accept(ControlAction.RESPONSE_OK)
+                    //Going to TETHERING SETTINGS
+                    val i = Intent()
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    i.setClassName("com.android.settings", "com.android.settings.TetherSettings")
+                    startActivity(i)
+
+                    //Power Assistant HIDING
+                    val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
+                    intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
+                    LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
+                }
+                Strings.wifi -> {
+
+                    //Going to WIFI SETTINGS
+                    val i = Intent(Settings.ACTION_WIFI_SETTINGS)
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(i)
+
+                    //Power Assistant HIDING
+                    val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
+                    intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
+                    LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
+                }
+                Strings.flashlight -> {
+
+                    //Changing FLASHLIGHT STATE
+                    val cameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
+                    flashlightOn = !flashlightOn
+                    val cameraId = cameraManager.cameraIdList[0]
+                    cameraManager.setTorchMode(cameraId, flashlightOn)
+
+                    flow.onNext(addControls(name = Strings.search, icon = R.drawable.ic_outline_search_24, enabled = true))
+                }
+                Strings.bluetooth -> {
+
+                    //Going to BLUETOOTH SETTINGS
+                    val i = Intent(Settings.ACTION_BLUETOOTH_SETTINGS)
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(i)
+
+                    //Power Assistant HIDING
+                    val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
+                    intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
+                    LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
+                }
+                Strings.mobData -> {
+
+                    //Going to DATA USAGE SETTINGS
+                    val i = Intent(Settings.ACTION_DATA_USAGE_SETTINGS)
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(i)
+
+                    //Power Assistant HIDING
+                    val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
+                    intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
+                    LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
+                }
+                Strings.nearShare -> {
+
+                    //Going to NEARBY SHARING PAGE
+                    val i = Intent()
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    i.setClassName(
+                        "com.google.android.gms",
+                        "com.google.android.gms.nearby.sharing.ReceiveSurfaceActivity"
+                    )
+                    startActivity(i)
+
+                    //Power Assistant HIDING
+                    val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
+                    intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
+                    LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
+                }
+                Strings.location -> {
+
+                    //Going to LOCATION SETTINGS
+                    val i = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(i)
+
+                    //Power Assistant HIDING
+                    val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
+                    intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
+                    LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
+                }
+                Strings.calc -> {
+
+                    //Going to GOOGLE CALCULATOR
+                    val i = Intent()
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    i.setClassName(
+                        "com.google.android.calculator",
+                        "com.android.calculator2.Calculator"
+                    )
+                    startActivity(i)
+
+                    //Power Assistant HIDING
+                    val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
+                    intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
+                    LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
+                }
+                Strings.batSave -> {
+
+                    //Going to BATTERY SAVER
+                    val i = Intent(Settings.ACTION_BATTERY_SAVER_SETTINGS)
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(i)
+
+                    //Power Assistant HIDING
+                    val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
+                    intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
+                    LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
+                }
+                Strings.tasks -> {
+
+                    //Going to GOOGLE TASKS
+                    val i = Intent()
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    i.setClassName(
+                        "com.google.android.apps.tasks",
+                        "com.google.android.apps.tasks.ui.TaskListsActivity"
+                    )
+                    startActivity(i)
+
+                    //Power Assistant HIDING
+                    val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
+                    intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
+                    LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
+                }
+                Strings.notify -> {
+
+                    //Showing NOTIFICATIONS
+                    val sbservice = getSystemService("statusbar")
+                    val statusbarManager = Class.forName("android.app.StatusBarManager")
+                    val showsb: Method = statusbarManager.getMethod("expandNotificationsPanel")
+                    showsb.invoke(sbservice)
+
+                    //Power Assistant HIDING
+                    val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
+                    intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
+                    LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
+                }
+                else -> let {  }
             }
-            Strings.bluetooth -> {
 
-                //Going to BLUETOOTH SETTINGS
-                val i = Intent(Settings.ACTION_BLUETOOTH_SETTINGS)
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(i)
-
-                //Power Assistant HIDING
-                val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
-                intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
-                LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
-                consumer.accept(ControlAction.RESPONSE_OK)
-            }
-            Strings.mobData -> {
-
-                //Going to DATA USAGE SETTINGS
-                val i = Intent(Settings.ACTION_DATA_USAGE_SETTINGS)
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(i)
-
-                //Power Assistant HIDING
-                val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
-                intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
-                LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
-                consumer.accept(ControlAction.RESPONSE_OK)
-            }
-            Strings.nearShare -> {
-
-                //Going to NEARBY SHARING PAGE
-                val i = Intent()
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                i.setClassName(
-                    "com.google.android.gms",
-                    "com.google.android.gms.nearby.sharing.ReceiveSurfaceActivity"
-                )
-                startActivity(i)
-
-                //Power Assistant HIDING
-                val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
-                intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
-                LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
-                consumer.accept(ControlAction.RESPONSE_OK)
-            }
-            Strings.location -> {
-
-                //Going to LOCATION SETTINGS
-                val i = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(i)
-
-                //Power Assistant HIDING
-                val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
-                intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
-                LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
-                consumer.accept(ControlAction.RESPONSE_OK)
-            }
-            Strings.calc -> {
-
-                //Going to GOOGLE CALCULATOR
-                val i = Intent()
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                i.setClassName(
-                    "com.google.android.calculator",
-                    "com.android.calculator2.Calculator"
-                )
-                startActivity(i)
-
-                //Power Assistant HIDING
-                val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
-                intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
-                LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
-                consumer.accept(ControlAction.RESPONSE_OK)
-            }
-            Strings.batSave -> {
-
-                //Going to BATTERY SAVER
-                val i = Intent(Settings.ACTION_BATTERY_SAVER_SETTINGS)
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(i)
-
-                //Power Assistant HIDING
-                val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
-                intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
-                LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
-                consumer.accept(ControlAction.RESPONSE_OK)
-            }
-            Strings.tasks -> {
-
-                //Going to GOOGLE TASKS
-                val i = Intent()
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                i.setClassName(
-                    "com.google.android.apps.tasks",
-                    "com.google.android.apps.tasks.ui.TaskListsActivity"
-                )
-                startActivity(i)
-
-                //Power Assistant HIDING
-                val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
-                intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
-                LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
-                consumer.accept(ControlAction.RESPONSE_OK)
-            }
-            Strings.notify -> {
-
-                //Showing NOTIFICATIONS
-                val sbservice = getSystemService("statusbar")
-                val statusbarManager = Class.forName("android.app.StatusBarManager")
-                val showsb: Method = statusbarManager.getMethod("expandNotificationsPanel")
-                showsb.invoke(sbservice)
-
-                //Power Assistant HIDING
-                val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
-                intent.putExtra("action", GLOBAL_ACTION_POWER_DIALOG)
-                LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
-                consumer.accept(ControlAction.RESPONSE_OK)
-            }
         }
-
 
     }
 

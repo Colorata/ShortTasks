@@ -6,8 +6,9 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddCircle
@@ -16,17 +17,22 @@ import androidx.compose.material.icons.outlined.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.compose.*
+import com.colorata.st.extensions.getBottomNavigationHeight
 import com.colorata.st.extensions.getNavBarHeight
+import com.colorata.st.extensions.presets.SText
 import com.colorata.st.extensions.pxToDp
 import com.colorata.st.screens.FeatureScreen
 import com.colorata.st.screens.MainScreen
 import com.colorata.st.screens.MoreScreen
+import com.colorata.st.ui.theme.SDimens
 import com.colorata.st.ui.theme.Strings
 import com.colorata.st.ui.theme.backColor
 import com.colorata.st.ui.theme.buttonColor
@@ -85,10 +91,88 @@ fun BottomNav(state: MutableState<CurrentScreen>){
     }
 }*/
 
+@ExperimentalAnimationApi
 @Composable
 fun BottomNav(navController: NavController){
 
     val shared = LocalContext.current.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+
+    /*var showMain by remember {
+        mutableStateOf(true)
+    }
+
+    var showFeatures by remember {
+        mutableStateOf(false)
+    }
+
+    var showMore by remember {
+        mutableStateOf(false)
+    }
+
+    Row(
+        modifier = Modifier.padding(SDimens.smallPadding, bottom = 50.dp).fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.clickable {
+                showMain = true
+                showFeatures = false
+                showMore = false
+                navController.navigate(Strings.main)
+            }
+        ) {
+            Image(
+                imageVector = Icons.Outlined.KeyboardArrowUp,
+                contentDescription = ""
+            )
+            AnimatedVisibility(visible = showMain) {
+                Text(text = Strings.main)
+            }
+        }
+
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.clickable {
+                showMain = false
+                showFeatures = true
+                showMore = false
+                navController.navigate(Strings.features)
+            }
+        ) {
+            Image(
+                imageVector = Icons.Outlined.AddCircle,
+                contentDescription = ""
+            )
+            AnimatedVisibility(visible = showFeatures) {
+                Text(text = Strings.features)
+            }
+        }
+
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.clickable {
+                showMain = false
+                showFeatures = false
+                showMore = true
+                navController.navigate(Strings.more)
+            }
+        ) {
+            Image(
+                imageVector = Icons.Outlined.KeyboardArrowDown,
+                contentDescription = ""
+            )
+            AnimatedVisibility(visible = showMore) {
+                Text(text = Strings.more)
+            }
+        }
+    }
+*/
+
     BottomNavigation(
         contentColor = buttonColor(LocalContext.current),
         backgroundColor = backColor(LocalContext.current),
@@ -105,7 +189,7 @@ fun BottomNav(navController: NavController){
         val currentRoute = navBackStackEntry?.arguments?.getString(KEY_ROUTE)
         BottomNavigationItem(
             selected = currentRoute == Strings.main,
-            onClick = { navController.navigate(Strings.main) },
+            onClick = { navController.navigate(Strings.main){ launchSingleTop = true } },
             icon = {
                 Icon(
                     imageVector = Icons.Outlined.KeyboardArrowUp,
@@ -113,12 +197,12 @@ fun BottomNav(navController: NavController){
                 )
             },
             label = { Text(text = Strings.main) },
-            alwaysShowLabel = false,
+            alwaysShowLabel = false
         )
 
         BottomNavigationItem(
             selected = currentRoute== Strings.features,
-            onClick = { navController.navigate(Strings.features)},
+            onClick = { navController.navigate(Strings.features){ launchSingleTop = true } },
             icon = {
                 Icon(
                     imageVector = Icons.Outlined.AddCircle,
@@ -126,13 +210,12 @@ fun BottomNav(navController: NavController){
                 )
             },
             label = { Text(text = Strings.features)},
-            alwaysShowLabel = false,
-
+            alwaysShowLabel = false
             )
 
         BottomNavigationItem(
             selected = currentRoute == Strings.more,
-            onClick = { navController.navigate(Strings.more) },
+            onClick = { navController.navigate(Strings.more){ launchSingleTop = true } },
             icon = {
                 Icon(
                     imageVector = Icons.Outlined.KeyboardArrowDown,
@@ -179,7 +262,10 @@ fun MainUI(){
 fun Navigation(){
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    Scaffold(bottomBar = { BottomNav(navController = navController)}) {
+    Scaffold(
+        bottomBar = { BottomNav(navController = navController) },
+        backgroundColor = Color.Transparent
+    ) {
             NavHost(
                 navController = navController,
                 startDestination = Strings.main

@@ -66,6 +66,31 @@ fun backInt(context: Context): Int {
     return android.graphics.Color.parseColor("#$color")
 }
 
+fun backIntControl(context: Context): Int{
+    val color: String
+    when (color(context)) {
+        -5715974 -> color = "162A49"
+        -7224321 -> color = "162A49"
+        -7686920 -> color = "162A49"
+        -4359937 -> color = "2F1845"
+        -3625836 -> color = "34271C"
+        -3955038 -> color = "543C38"
+        -942723 -> color = "4D3830"
+        -15007797 -> color = "2C4F47"
+        -2629914 -> color = "242527"
+        -8076920 -> color = "3D523E"
+        -14107177 -> color = "395458"
+        -6705972 -> color = "374151"
+        -18727 -> color = "#03D46"
+        -12722945 -> color = "2B4449"
+        -1668371 -> color = "594B5A"
+        -4871684 -> color = "3D3953"
+        else -> color = "22221A"
+    }
+
+    return android.graphics.Color.parseColor("#$color")
+}
+
 fun backColor(context: Context) = Color(backInt(context))
 
 //Fun for get COLOR THEME BUTTON

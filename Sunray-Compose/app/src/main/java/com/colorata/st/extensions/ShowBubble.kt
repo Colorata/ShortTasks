@@ -25,13 +25,15 @@ class ShowBubble(private val context: Context) {
     private val notifId = 1337
     private val notifChannel = "Bubble Manager"
     private val shortcutId = "Bubble Manager"
+    private val flagMutable = 0x02000000
 
-    @RequiresApi(Build.VERSION_CODES.S)
+    @RequiresApi(Build.VERSION_CODES.R)
     private fun buildBubbleNotification(appContext: Context): Notification {
-        val piFlag = if (Build.VERSION.SDK_INT == Build.VERSION_CODES.S) {
-            PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        
+        val piFlag = if (Build.VERSION.SDK_INT == 10000) {
+            flagMutable or PendingIntent.FLAG_UPDATE_CURRENT
         } else {
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT or flagMutable
         }
 
         val pi = PendingIntent.getActivity(
@@ -85,7 +87,7 @@ class ShowBubble(private val context: Context) {
         return builder.build()
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
+    @RequiresApi(Build.VERSION_CODES.R)
     fun show() {
         NotificationManagerCompat.from(context).let { mgr ->
             if (!channelCreated) {
