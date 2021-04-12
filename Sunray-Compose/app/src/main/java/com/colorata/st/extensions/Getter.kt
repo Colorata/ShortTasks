@@ -1,14 +1,17 @@
 package com.colorata.st.extensions
 
 import android.annotation.SuppressLint
+import android.app.NotificationManager
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.hardware.camera2.CameraManager
 import android.location.LocationManager
+import android.media.AudioManager
 import android.net.wifi.WifiManager
 import android.os.PowerManager
 import android.provider.Settings
 import android.util.Log
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
@@ -140,4 +143,49 @@ fun isHotspotEnabled(context: Context): Boolean {
     method.isAccessible = true
     val actualState = method.invoke(wifiManager, null as Array<Any?>?) as Int
     return actualState == 13
+}
+
+fun getBrightness(
+    context: Context
+): Int {
+    Settings.System.putInt(
+        context.contentResolver,
+        Settings.System.SCREEN_BRIGHTNESS_MODE,
+        Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL
+    )
+
+    return Settings.System.getInt(context.contentResolver, Settings.System.SCREEN_BRIGHTNESS)
+}
+
+fun getMediaVolume(context: Context): Float {
+    val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager?
+    val max = audioManager!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
+    return audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)/(max/100)
+}
+
+fun getRingVolume(context: Context): Float {
+    val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager?
+    val max = audioManager!!.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION).toFloat()
+    return audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION)/(max/100)
+}
+
+fun isAutoRotationEnabled(context: Context): Boolean {
+    val enabled = Settings.System.getInt(context.contentResolver, Settings.System.ACCELEROMETER_ROTATION)
+    Log.d("rotation", enabled.toString())
+    return enabled == 1
+}
+
+fun isDNDEnabled(context: Context): Boolean {
+    val notificationManager =
+        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    return notificationManager.currentInterruptionFilter == NotificationManager.INTERRUPTION_FILTER_PRIORITY
+}
+
+fun isNightLightEnabled(): Boolean {
+    return AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
+}
+
+fun isFlightModeEnabled(context: Context): Boolean {
+    val enabled = Settings.Global.getInt(context.contentResolver, Settings.Global.AIRPLANE_MODE_ON)
+    return enabled == 1
 }

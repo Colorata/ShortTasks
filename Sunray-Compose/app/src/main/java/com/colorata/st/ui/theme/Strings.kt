@@ -43,6 +43,10 @@ object Strings{
     const val mediaVolume = "Media Volume"
     const val ringVolume = "Ring Volume"
     const val brightness = "Brightness"
+    const val autoRotate = "Auto Rotation"
+    const val dnd = "DND"
+    const val nightLight = "Night Light"
+    const val flightMode = "Airplane Mode"
 
     const val bubbleMainSubTitle = "You will learn how to use Bubble Manager"
     const val powerMainSubTitle = "You will learn how to use Power Assistant"

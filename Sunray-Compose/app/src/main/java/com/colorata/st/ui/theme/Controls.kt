@@ -24,5 +24,9 @@ enum class Controls(
     NOTIFICATIONS(id = 1511, title = Strings.notify, icon = R.drawable.ic_outline_announcement_24, enabled = true, isRange = false),
     MEDIA_VOLUME(id = 1512, title = Strings.mediaVolume, icon = R.drawable.ic_outline_music_note_24, isRange = true),
     RING_VOLUME(id = 1513, title = Strings.ringVolume, icon = R.drawable.ic_outline_circle_notifications_24, isRange = true),
-    BRIGHTNESS(id = 1514, title = Strings.brightness, icon = R.drawable.ic_outline_brightness_7_24, isRange = true)
+    BRIGHTNESS(id = 1514, title = Strings.brightness, icon = R.drawable.ic_outline_brightness_7_24, isRange = true),
+    AUTO_ROTATE(id = 1515, title = Strings.autoRotate, icon = R.drawable.ic_outline_screen_rotation_24, isRange = false),
+    DND(id = 1516, title = Strings.dnd, icon = R.drawable.ic_outline_do_disturb_on_24, isRange = false),
+    NIGHT_LIGHT(id = 1517, title = Strings.nightLight, icon = R.drawable.ic_outline_nightlight_24, isRange = false),
+    FLIGHT_MODE(id = 1518, title = Strings.flightMode, icon = R.drawable.ic_outline_flight_24, isRange = false)
 }

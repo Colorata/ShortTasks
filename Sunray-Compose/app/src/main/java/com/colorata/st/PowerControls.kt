@@ -1,8 +1,6 @@
 package com.colorata.st
 
-import android.annotation.SuppressLint
 import android.app.PendingIntent
-import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -20,7 +18,9 @@ import android.service.controls.templates.ToggleTemplate
 import android.util.Log
 import com.colorata.st.activities.MainActivity
 import com.colorata.st.extensions.*
-import com.colorata.st.ui.theme.*
+import com.colorata.st.ui.theme.Controls
+import com.colorata.st.ui.theme.Strings
+import com.colorata.st.ui.theme.backIntControl
 import io.reactivex.Flowable
 import io.reactivex.processors.ReplayProcessor
 import org.reactivestreams.FlowAdapters
@@ -28,17 +28,72 @@ import java.util.*
 import java.util.concurrent.Flow
 import java.util.function.Consumer
 
-private const val TOGGLE_ID = 1337
-private const val RANGE_ID = 1338
-
 class PowerControls : ControlsProviderService() {
     private val controlFlows =
         mutableMapOf<String, ReplayProcessor<Control>>()
-    private var toggleState1 = false
     private var toggleState2 = false
     private var rangeState = 50f
 
-    private var controls: MutableList<Control> = mutableListOf()
+    private val controls: MutableList<Control>
+        get() {
+            val list = mutableListOf<Control>()
+            getCurrentWeather(this)
+
+            val shared = getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+            val currentRight = shared.getString("CurrentRightWeather", "Error")
+            val currentFeels = shared.getString("CurrentFeelsWeather", "Error")
+            val currentFloat = shared.getFloat("CurrentFloatWeather", 0.0f)
+
+            list.clear()
+
+            list.add(buildRangeControl(
+                id = 1441,
+                title = currentRight!!,
+                icon = R.drawable.ic_outline_cloud_24,
+                state = currentFloat,
+                subTitle = currentFeels!!,
+                isWeather = true,
+                minValue = -50f,
+                maxValue = 50f
+            ))
+
+
+            Controls.values().forEach { control ->
+                if (control.isRange){
+                    list.add(buildRangeControl(
+                        id = control.id,
+                        title = control.title,
+                        icon = control.icon,
+                        state = when(control.id) {
+                            1514 -> (getBrightness(applicationContext)/2.55).toFloat()
+                            1513 -> getRingVolume(this)
+                            1512 -> getMediaVolume(this)
+                            else -> 50f
+                        }
+                    ))
+                } else {
+                    list.add(buildToggleControl(
+                        id = control.id,
+                        title = control.title,
+                        icon = control.icon,
+                        enabled = when (control.id) {
+                            //1501 -> isHotspotEnabled(this)
+                            1502 -> isWifiEnabled(this)
+                            1504 -> isBluetoothEnabled()
+                            1505 -> isMobileDataEnabled(this)
+                            1507 -> isLocationEnabled(this)
+                            1509 -> isBatterySaverEnabled(this)
+                            1515 -> isAutoRotationEnabled(this)
+                            1516 -> isDNDEnabled(this)
+                            1517 -> isNightLightEnabled()
+                            1518 -> isFlightModeEnabled(this)
+                            else -> false
+                        }
+                    ))
+                }
+            }
+            return list
+        }
 
     override fun createPublisherForAllAvailable(): Flow.Publisher<Control> =
         FlowAdapters.toFlowPublisher(
@@ -52,50 +107,6 @@ class PowerControls : ControlsProviderService() {
 
         controlIds.forEach { controlFlows[it] = flow }
 
-        getCurrentWeather(this)
-
-        val shared = getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
-        val currentRight = shared.getString("CurrentRightWeather", "Error")
-        val currentFeels = shared.getString("CurrentFeelsWeather", "Error")
-        val currentFloat = shared.getFloat("CurrentFloatWeather", 0.0f)
-
-        controls.clear()
-
-        controls.add(buildRangeControl(
-            id = 1441,
-            title = currentRight!!,
-            icon = R.drawable.ic_outline_cloud_24,
-            state = currentFloat,
-            subTitle = currentFeels!!,
-            isWeather = true
-        ))
-
-        Controls.values().forEach { control ->
-            if (control.isRange){
-                controls.add(buildRangeControl(
-                    id = control.id,
-                    title = control.title,
-                    icon = control.icon,
-                ))
-            } else {
-                controls.add(buildToggleControl(
-                    id = control.id,
-                    title = control.title,
-                    icon = control.icon,
-                    enabled = when (control.id) {
-                        //1501 -> isHotspotEnabled(this)
-                        1502 -> isWifiEnabled(this)
-                        1504 -> isBluetoothEnabled()
-                        1505 -> isMobileDataEnabled(this)
-                        1507 -> isLocationEnabled(this)
-                        1509 -> isBatterySaverEnabled(this)
-                        else -> false
-                    }
-                ))
-            }
-        }
-
-        Log.d("Controls", controls.size.toString())
         for (i in controls){
             flow.onNext(i)
         }
@@ -110,41 +121,97 @@ class PowerControls : ControlsProviderService() {
     ) {
         controlFlows[controlId]?.let { flow ->
             when (controlId) {
-                TOGGLE_ID.toString() -> {
-                    consumer.accept(ControlAction.RESPONSE_OK)
-                    if (action is BooleanAction) toggleState1 = action.newState
-                    controls[0] = buildToggleControl(
-                        id = TOGGLE_ID,
-                        title = if (toggleState1) "SubTitle" else "Title",
-                        enabled = toggleState1,
-                        icon = R.drawable.ic_outline_bubble_chart_24
-                    )
-                    flow.onNext(controls[0])
-                }
-                RANGE_ID.toString() -> {
-                    consumer.accept(ControlAction.RESPONSE_OK)
-                    if (action is FloatAction) rangeState = action.newValue
-                    flow.onNext(buildRangeControl(
-                        id = 1338,
-                        title = "Range",
-                        icon = R.drawable.ic_outline_check_circle_outline_24,
-                        state = rangeState
-                    ))
-                }
-                1440.toString() -> {
-                    consumer.accept(ControlAction.RESPONSE_OK)
-                    if (action is BooleanAction) toggleState2 = action.newState
-                    flow.onNext(buildToggleControl(
-                        id = 1440,
-                        title = if (toggleState2) "First" else "Second",
-                        enabled = toggleState2,
-                        icon = R.drawable.ic_outline_bubble_chart_24
-                    ))
-                }
+
                 1441.toString() -> {
                     consumer.accept(ControlAction.RESPONSE_OK)
                     flow.onNext(controls[0])
                 }
+
+                1512.toString() -> {
+                    consumer.accept(ControlAction.RESPONSE_OK)
+                    if (action is FloatAction) rangeState = action.newValue
+                    changeMediaVolume(this, rangeState.toInt())
+                    flow.onNext(buildRangeControl(
+                        id = 1512,
+                        title = Controls.MEDIA_VOLUME.title,
+                        icon = Controls.MEDIA_VOLUME.icon,
+                        state = rangeState
+                    ))
+                }
+
+                1513.toString() -> {
+                    consumer.accept(ControlAction.RESPONSE_OK)
+                    if (action is FloatAction) rangeState = action.newValue
+                    changeRingVolume(this, rangeState.toInt())
+                    flow.onNext(buildRangeControl(
+                        id = 1513,
+                        title = Controls.RING_VOLUME.title,
+                        icon = Controls.RING_VOLUME.icon,
+                        state = rangeState
+                    ))
+                }
+
+                1514.toString() -> {
+                    consumer.accept(ControlAction.RESPONSE_OK)
+                    if (action is FloatAction) rangeState = action.newValue
+                    changeBrightness(applicationContext, (rangeState*2.55).toInt())
+                    Log.d("Brightness", (getBrightness(applicationContext)/2.55).toString())
+                    flow.onNext(buildRangeControl(
+                        id = 1514,
+                        title = Controls.BRIGHTNESS.title,
+                        icon = Controls.BRIGHTNESS.icon,
+                        state = rangeState
+                    ))
+                }
+
+                1515.toString() -> {
+                    consumer.accept(ControlAction.RESPONSE_OK)
+                    if (action is BooleanAction) toggleState2 = action.newState
+                    enableAutoRotate(this, toggleState2)
+                    flow.onNext(buildToggleControl(
+                        id = 1515,
+                        title = Controls.AUTO_ROTATE.title,
+                        enabled = toggleState2,
+                        icon = Controls.AUTO_ROTATE.icon
+                    ))
+                }
+
+                1516.toString() -> {
+                    consumer.accept(ControlAction.RESPONSE_OK)
+                    if (action is BooleanAction) toggleState2 = action.newState
+                    enableDND(this, toggleState2)
+                    flow.onNext(buildToggleControl(
+                        id = 1516,
+                        title = Controls.DND.title,
+                        enabled = toggleState2,
+                        icon = Controls.DND.icon
+                    ))
+                }
+
+                1517.toString() -> {
+                    consumer.accept(ControlAction.RESPONSE_OK)
+                    if (action is BooleanAction) toggleState2 = action.newState
+                    enableNightLight(toggleState2)
+                    flow.onNext(buildToggleControl(
+                        id = 1517,
+                        title = Controls.NIGHT_LIGHT.title,
+                        enabled = toggleState2,
+                        icon = Controls.NIGHT_LIGHT.icon
+                    ))
+                }
+
+                1518.toString() -> {
+                    consumer.accept(ControlAction.RESPONSE_OK)
+                    if (action is BooleanAction) toggleState2 = action.newState
+                    enableFlightMode(this, toggleState2)
+                    flow.onNext(buildToggleControl(
+                        id = 1518,
+                        title = Controls.FLIGHT_MODE.title,
+                        enabled = toggleState2,
+                        icon = Controls.FLIGHT_MODE.icon
+                    ))
+                }
+                else -> consumer.accept(ControlAction.RESPONSE_OK)
             }
         } ?: consumer.accept(ControlAction.RESPONSE_FAIL)
     }
@@ -160,7 +227,7 @@ class PowerControls : ControlsProviderService() {
         val pi = PendingIntent.getActivity(
             this,
             0,
-            Intent(),
+            Intent(this, MainActivity::class.java),
             PendingIntent.FLAG_IMMUTABLE
         )
 
@@ -204,8 +271,8 @@ class PowerControls : ControlsProviderService() {
     private fun buildRangeControl(
         id: Int,
         title: String,
-        minValue: Float = -50f,
-        maxValue: Float = 50f,
+        minValue: Float = 0f,
+        maxValue: Float = 100f,
         state: Float = (minValue + maxValue)/2,
         step: Float = 1f,
         icon: Int,
@@ -219,12 +286,13 @@ class PowerControls : ControlsProviderService() {
             maxValue,
             state,
             if(isWeather) 0.01f else step,
-            if(isWeather) "%1.2f " + "℃" else "%1.0f"
+            if(isWeather) "%1.2f " + "℃" else "%1.0f%%"
         ),
         titleRes = title,
         subTitle = subTitle,
         type = DeviceTypes.TYPE_THERMOSTAT,
         icon = icon
     )
+
 
 }
