@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
-import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -47,12 +46,9 @@ class MainActivity : AppCompatActivity() {
 
         val shared: SharedPreferences = getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
         shared.edit().putBoolean(Strings.nightMode, nightMode).apply()
-/*
+
         window.navigationBarColor = backInt(this)
         window.statusBarColor = Color.TRANSPARENT
-        window.setDecorFitsSystemWindows(false)*/
-        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
-
-
+        window.setDecorFitsSystemWindows(false)
     }
 }

@@ -1,24 +1,22 @@
 package com.colorata.st.extensions
 
 import android.app.NotificationManager
+import android.app.UiModeManager
+import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.hardware.camera2.CameraManager
+import android.media.AudioManager
 import android.provider.Settings
+import android.service.controls.ControlsProviderService
+import androidx.appcompat.app.AppCompatDelegate
 import com.colorata.st.CurrentScreen
+import com.colorata.st.R
 import com.colorata.st.activities.SecondaryActivity
 import com.colorata.st.ui.theme.Strings
-import androidx.core.content.ContextCompat.getSystemService
 
-import android.media.AudioManager
-import android.util.Log
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.ContextCompat
-
-
-fun setIsNewUser(context: Context, new: Boolean){
-    val shared = context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
-    shared.edit().putBoolean(Strings.isNewUser, new).apply()
-}
 
 fun goToSecondary(context: Context, screen: CurrentScreen){
     val intent = Intent(context, SecondaryActivity::class.java)
@@ -63,7 +61,6 @@ fun changeRingVolume(context: Context, percents: Int){
 
 fun enableAutoRotate(context: Context, enabled: Boolean) {
     val enable = if (enabled) 1 else 0
-    Log.d("enable", enable.toString())
     Settings.System.putInt(context.contentResolver, Settings.System.ACCELEROMETER_ROTATION, enable)
 }
 
@@ -73,12 +70,18 @@ fun enableDND(context: Context, enabled: Boolean) {
     else notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
 }
 
-fun enableNightLight(enabled: Boolean) {
-    if (enabled) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-    else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+fun enableBluetooth(enabled: Boolean) {
+    val adapter = BluetoothAdapter.getDefaultAdapter()
+    if (enabled) adapter.enable() else adapter.disable()
 }
 
-fun enableFlightMode(context: Context, enabled: Boolean) {
-    val enable = if (enabled) 1 else 0
-    Settings.Global.putInt(context.contentResolver, Settings.Global.AIRPLANE_MODE_ON, enable)
+fun enableDarkMode(context: Context, enabled: Boolean) {
+    val manager = context.getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
+    manager.nightMode = if (enabled) UiModeManager.MODE_NIGHT_YES else UiModeManager.MODE_NIGHT_NO
+}
+
+fun Context.enableFlashlight(enabled: Boolean) {
+    val cameraManager = getSystemService(ControlsProviderService.CAMERA_SERVICE) as CameraManager
+    val cameraId = cameraManager.cameraIdList[0]
+    cameraManager.setTorchMode(cameraId, enabled)
 }

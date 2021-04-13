@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.colorata.st.extensions.getBottomNavigationHeight
 import com.colorata.st.extensions.presets.SButton
 import com.colorata.st.extensions.presets.Screen
@@ -63,22 +62,10 @@ fun HelpContent(){
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-            SButton(modifier = Modifier.padding(
-                end = SDimens.smallPadding,
-                bottom = SDimens.smallPadding
-            ), text = Strings.bubble) {
-                Log.d("Clicked", "Bubble")
-            }
-
-            SButton(modifier = Modifier, text = Strings.power) {
+            SButton(modifier = Modifier.padding(end = SDimens.smallPadding), text = Strings.power) {
                 Log.d("Clicked", "Power")
             }
-        }
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
-        ) {
             SButton(modifier = Modifier, text = Strings.weather) {
                 Log.d("Clicked", "Weather")
             }

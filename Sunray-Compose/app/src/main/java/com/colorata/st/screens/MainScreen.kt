@@ -29,26 +29,8 @@ fun MainScreen() {
         subTitles = ScreenComponents.MainScreen.subTitles,
         icons = ScreenComponents.MainScreen.icons,
         modifier = Modifier.padding(bottom = getBottomNavigationHeight()),
-        hidden = listOf({ TButtonDefault() }, { BubbleMainScreenContent()}, { PowerMainScreenContent()})
+        hidden = listOf({ TButtonDefault() }, { PowerMainScreenContent()})
     )
-}
-
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, group = "Hidden Content")
-@Composable
-fun BubbleMainScreenContent(){
-    val context = LocalContext.current
-    Row(
-        modifier = Modifier
-            .padding(SDimens.largePadding)
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.End
-    ) {
-        SButton(modifier = Modifier, text = Strings.show) {
-            val intent = Intent(context, SecondaryActivity::class.java)
-            intent.putExtra(Strings.screen, CurrentScreen.BUBBLE)
-            context.startActivity(intent)
-        }
-    }
 }
 
 
@@ -64,7 +46,7 @@ fun PowerMainScreenContent(){
     ) {
         SButton(modifier = Modifier, text = Strings.show) {
             val intent = Intent(context, SecondaryActivity::class.java)
-            intent.putExtra(Strings.screen, CurrentScreen.BUBBLE)
+            intent.putExtra(Strings.screen, CurrentScreen.POWER)
             context.startActivity(intent)
         }
     }

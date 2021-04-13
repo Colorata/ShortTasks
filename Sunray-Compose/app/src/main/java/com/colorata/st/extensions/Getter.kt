@@ -4,13 +4,12 @@ import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
-import android.hardware.camera2.CameraManager
+import android.content.res.Configuration
 import android.location.LocationManager
 import android.media.AudioManager
 import android.net.wifi.WifiManager
 import android.os.PowerManager
 import android.provider.Settings
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
@@ -47,74 +46,8 @@ fun getNavBarHeight(): Dp {
     return pxToDp(navigationBarHeight).dp
 }
 
-@Composable
-fun isNewUser(): Boolean{
-    val shared = LocalContext.current.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
-    return shared.getBoolean(Strings.isNewUser, true)
-}
-
-fun getCurrentWeather(context: Context): MutableList<Serializable> {
-
-    //TODO: fix bug current is null after response
-    val baseUrl = "https://api.openweathermap.org/"
-    val appId = "201d8e3dd3a424462228eed61610772d"
-
-    val shared = context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
-
-    var currentRight = ""
-    var currentFeels = ""
-    var currentFloat = 0f
-
-    //Getting city info
-    val city = shared.getString("city", "Moscow").toString()
-
-    //Building service to get info
-    val retrofit = Retrofit.Builder()
-        .baseUrl(baseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    val service = retrofit.create(WeatherService::class.java)
-    val call = service.getCurrentWeatherData(city, "metric", appId)
-
-    //CALLING
-    call.enqueue(object : Callback<WeatherResponse> {
-
-        //Fun if SUCCESS
-        override fun onResponse(
-            call: Call<WeatherResponse>,
-            response: Response<WeatherResponse>
-        ) {
-            if (response.code() == 200) {
-                val weatherResponse = response.body()!!
-
-                //Configuring TEXT
-                currentRight = weatherResponse.name?.replace("’", "")!!
-                currentFeels = "Feels: " + weatherResponse.main!!.feels + " \u2103"
-                currentFloat = weatherResponse.main!!.temp
-
-                val edit = shared.edit()
-                edit.putString("CurrentRightWeather", currentRight)
-                edit.putString("CurrentFeelsWeather", currentFeels)
-                edit.putFloat("CurrentFloatWeather", currentFloat)
-                edit.apply()
-                /*Log.d("Weather", currentRight)
-                Log.d("Weather", currentFeels)
-                Log.d("Weather", currentFloat.toString())*/
-            }
-        }
-
-        //Fun if FAIL
-        @SuppressLint("SetTextI18n")
-        override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
-            currentRight = "Error"
-            currentFeels = "Error"
-        }
-    })
-    return mutableListOf(currentRight, currentFeels, currentFloat)
-}
-
-fun isWifiEnabled(context: Context): Boolean {
-    val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+fun Context.isWifiEnabled(): Boolean {
+    val wifiManager = getSystemService(Context.WIFI_SERVICE) as WifiManager
     return wifiManager.isWifiEnabled
 }
 
@@ -123,69 +56,61 @@ fun isBluetoothEnabled(): Boolean {
     return adapter.isEnabled
 }
 
-fun isLocationEnabled(mContext: Context): Boolean {
-    val lm = mContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+fun Context.isLocationEnabled(): Boolean {
+    val lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
     return lm.isProviderEnabled(LocationManager.GPS_PROVIDER) || lm.isProviderEnabled(
         LocationManager.NETWORK_PROVIDER)
 }
 
-fun isMobileDataEnabled(context: Context): Boolean =
-    Settings.Secure.getInt(context.contentResolver, "mobile_data", 1) == 1
+fun Context.isMobileDataEnabled(): Boolean =
+    Settings.Secure.getInt(contentResolver, "mobile_data", 1) == 1
 
-fun isBatterySaverEnabled(context: Context): Boolean {
-    val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+fun Context.isBatterySaverEnabled(): Boolean {
+    val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
     return powerManager.isPowerSaveMode
 }
 
-fun isHotspotEnabled(context: Context): Boolean {
-    val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
-    val method: Method = wifiManager.javaClass.getDeclaredMethod("getWifiApState")
-    method.isAccessible = true
-    val actualState = method.invoke(wifiManager, null as Array<Any?>?) as Int
-    return actualState == 13
-}
-
-fun getBrightness(
-    context: Context
-): Int {
+fun Context.getBrightness(): Int {
     Settings.System.putInt(
-        context.contentResolver,
+        contentResolver,
         Settings.System.SCREEN_BRIGHTNESS_MODE,
         Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL
     )
 
-    return Settings.System.getInt(context.contentResolver, Settings.System.SCREEN_BRIGHTNESS)
+    return Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS)
 }
 
-fun getMediaVolume(context: Context): Float {
-    val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager?
+fun Context.getMediaVolume(): Float {
+    val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager?
     val max = audioManager!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
     return audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)/(max/100)
 }
 
-fun getRingVolume(context: Context): Float {
-    val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager?
+fun Context.getRingVolume(): Float {
+    val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager?
     val max = audioManager!!.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION).toFloat()
     return audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION)/(max/100)
 }
 
-fun isAutoRotationEnabled(context: Context): Boolean {
-    val enabled = Settings.System.getInt(context.contentResolver, Settings.System.ACCELEROMETER_ROTATION)
-    Log.d("rotation", enabled.toString())
+fun Context.isAutoRotationEnabled(): Boolean {
+    val enabled = Settings.System.getInt(contentResolver, Settings.System.ACCELEROMETER_ROTATION)
     return enabled == 1
 }
 
-fun isDNDEnabled(context: Context): Boolean {
+fun Context.isDNDEnabled(): Boolean {
     val notificationManager =
-        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     return notificationManager.currentInterruptionFilter == NotificationManager.INTERRUPTION_FILTER_PRIORITY
 }
 
-fun isNightLightEnabled(): Boolean {
-    return AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
+fun Context.isDarkThemeEnabled(): Boolean {
+    return resources.configuration.uiMode and
+            Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 }
 
-fun isFlightModeEnabled(context: Context): Boolean {
-    val enabled = Settings.Global.getInt(context.contentResolver, Settings.Global.AIRPLANE_MODE_ON)
-    return enabled == 1
+fun Context.isAirplaneEnabled(): Boolean {
+    return Settings.System.getInt(
+        contentResolver,
+        Settings.Global.AIRPLANE_MODE_ON, 0
+    ) != 0
 }

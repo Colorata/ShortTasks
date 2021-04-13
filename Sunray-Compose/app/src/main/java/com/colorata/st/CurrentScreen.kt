@@ -4,7 +4,6 @@ enum class CurrentScreen {
     MAIN,
     FEATURES,
     MORE,
-    BUBBLE,
     POWER,
     POSITION,
     ADD_BUTTON,

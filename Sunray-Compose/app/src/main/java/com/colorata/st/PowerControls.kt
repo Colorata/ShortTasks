@@ -1,5 +1,6 @@
 package com.colorata.st
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -15,15 +16,20 @@ import android.service.controls.templates.ControlButton
 import android.service.controls.templates.ControlTemplate
 import android.service.controls.templates.RangeTemplate
 import android.service.controls.templates.ToggleTemplate
-import android.util.Log
-import com.colorata.st.activities.MainActivity
 import com.colorata.st.extensions.*
+import com.colorata.st.extensions.weather.WeatherResponse
+import com.colorata.st.extensions.weather.WeatherService
 import com.colorata.st.ui.theme.Controls
 import com.colorata.st.ui.theme.Strings
 import com.colorata.st.ui.theme.backIntControl
 import io.reactivex.Flowable
 import io.reactivex.processors.ReplayProcessor
 import org.reactivestreams.FlowAdapters
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 import java.util.concurrent.Flow
 import java.util.function.Consumer
@@ -37,14 +43,67 @@ class PowerControls : ControlsProviderService() {
     private val controls: MutableList<Control>
         get() {
             val list = mutableListOf<Control>()
-            getCurrentWeather(this)
 
             val shared = getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
-            val currentRight = shared.getString("CurrentRightWeather", "Error")
-            val currentFeels = shared.getString("CurrentFeelsWeather", "Error")
-            val currentFloat = shared.getFloat("CurrentFloatWeather", 0.0f)
+
+            var currentRight = shared.getString("CurrentRightWeather" , "")
+            var currentFeels = shared.getString("CurrentFeelsWeather", "")
+            var currentFloat = shared.getFloat("CurrentFloatWeather", 0f)
+
+            val city = shared.getString("city", "Moscow").toString()
 
             list.clear()
+
+            val retrofit = Retrofit.Builder()
+                .baseUrl(Strings.baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+            val service = retrofit.create(WeatherService::class.java)
+            val call = service.getCurrentWeatherData(city, "metric", Strings.appId)
+
+            //CALLING
+            call.enqueue(object : Callback<WeatherResponse> {
+
+                //Fun if SUCCESS
+                override fun onResponse(
+                    call: Call<WeatherResponse>,
+                    response: Response<WeatherResponse>
+                ) {
+                    if (response.code() == 200) {
+                        val weatherResponse = response.body()!!
+
+                        //Configuring TEXT
+                        currentRight = weatherResponse.name?.replace("’", "")!!
+                        currentFeels = "Feels: " + weatherResponse.main!!.feels + " \u2103"
+                        currentFloat = weatherResponse.main!!.temp
+
+                        val edit = shared.edit()
+                        edit.putString("CurrentRightWeather", currentRight)
+                        edit.putString("CurrentFeelsWeather", currentFeels)
+                        edit.putFloat("CurrentFloatWeather", currentFloat)
+                        edit.apply()
+
+                        list.add(buildRangeControl(
+                            id = 1441,
+                            title = currentRight!!,
+                            icon = R.drawable.ic_outline_cloud_24,
+                            state = currentFloat,
+                            subTitle = currentFeels!!,
+                            isWeather = true,
+                            minValue = -50f,
+                            maxValue = 50f
+                        ))
+                    }
+                }
+
+                //Fun if FAIL
+                @SuppressLint("SetTextI18n")
+                override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
+                    currentRight = "Error"
+                    currentFeels = "Error"
+                }
+            })
 
             list.add(buildRangeControl(
                 id = 1441,
@@ -57,7 +116,6 @@ class PowerControls : ControlsProviderService() {
                 maxValue = 50f
             ))
 
-
             Controls.values().forEach { control ->
                 if (control.isRange){
                     list.add(buildRangeControl(
@@ -65,11 +123,12 @@ class PowerControls : ControlsProviderService() {
                         title = control.title,
                         icon = control.icon,
                         state = when(control.id) {
-                            1514 -> (getBrightness(applicationContext)/2.55).toFloat()
-                            1513 -> getRingVolume(this)
-                            1512 -> getMediaVolume(this)
+                            1514 -> (this.getBrightness()/2.55).toFloat()
+                            1513 -> this.getRingVolume()
+                            1512 -> this.getMediaVolume()
                             else -> 50f
-                        }
+                        },
+                        intent = control.intent
                     ))
                 } else {
                     list.add(buildToggleControl(
@@ -77,18 +136,18 @@ class PowerControls : ControlsProviderService() {
                         title = control.title,
                         icon = control.icon,
                         enabled = when (control.id) {
-                            //1501 -> isHotspotEnabled(this)
-                            1502 -> isWifiEnabled(this)
+                            1502 -> this.isWifiEnabled()
                             1504 -> isBluetoothEnabled()
-                            1505 -> isMobileDataEnabled(this)
-                            1507 -> isLocationEnabled(this)
-                            1509 -> isBatterySaverEnabled(this)
-                            1515 -> isAutoRotationEnabled(this)
-                            1516 -> isDNDEnabled(this)
-                            1517 -> isNightLightEnabled()
-                            1518 -> isFlightModeEnabled(this)
+                            1505 -> this.isMobileDataEnabled()
+                            1507 -> this.isLocationEnabled()
+                            1509 -> this.isBatterySaverEnabled()
+                            1515 -> this.isAutoRotationEnabled()
+                            1516 -> this.isDNDEnabled()
+                            1517 -> this.isDarkThemeEnabled()
+                            1518 -> this.isAirplaneEnabled()
                             else -> false
-                        }
+                        },
+                        intent = control.intent
                     ))
                 }
             }
@@ -127,6 +186,31 @@ class PowerControls : ControlsProviderService() {
                     flow.onNext(controls[0])
                 }
 
+                1503.toString() -> {
+                    consumer.accept(ControlAction.RESPONSE_OK)
+                    if (action is BooleanAction) toggleState2 = action.newState
+                    this.enableFlashlight(toggleState2)
+                    flow.onNext(buildToggleControl(
+                        id = 1503,
+                        title = Controls.FLASHLIGHT.title,
+                        enabled = toggleState2,
+                        icon = Controls.FLASHLIGHT.icon,
+                        intent = Controls.FLASHLIGHT.intent
+                    ))
+                }
+                1504.toString() -> {
+                    consumer.accept(ControlAction.RESPONSE_OK)
+                    if (action is BooleanAction) toggleState2 = action.newState
+                    enableBluetooth(toggleState2)
+                    flow.onNext(buildToggleControl(
+                        id = 1504,
+                        title = Controls.BLUETOOTH.title,
+                        enabled = toggleState2,
+                        icon = Controls.BLUETOOTH.icon,
+                        intent = Controls.BLUETOOTH.intent
+                    ))
+                }
+
                 1512.toString() -> {
                     consumer.accept(ControlAction.RESPONSE_OK)
                     if (action is FloatAction) rangeState = action.newValue
@@ -135,7 +219,8 @@ class PowerControls : ControlsProviderService() {
                         id = 1512,
                         title = Controls.MEDIA_VOLUME.title,
                         icon = Controls.MEDIA_VOLUME.icon,
-                        state = rangeState
+                        state = rangeState,
+                        intent = Controls.MEDIA_VOLUME.intent
                     ))
                 }
 
@@ -147,7 +232,8 @@ class PowerControls : ControlsProviderService() {
                         id = 1513,
                         title = Controls.RING_VOLUME.title,
                         icon = Controls.RING_VOLUME.icon,
-                        state = rangeState
+                        state = rangeState,
+                        intent = Controls.RING_VOLUME.intent
                     ))
                 }
 
@@ -155,12 +241,12 @@ class PowerControls : ControlsProviderService() {
                     consumer.accept(ControlAction.RESPONSE_OK)
                     if (action is FloatAction) rangeState = action.newValue
                     changeBrightness(applicationContext, (rangeState*2.55).toInt())
-                    Log.d("Brightness", (getBrightness(applicationContext)/2.55).toString())
                     flow.onNext(buildRangeControl(
                         id = 1514,
                         title = Controls.BRIGHTNESS.title,
                         icon = Controls.BRIGHTNESS.icon,
-                        state = rangeState
+                        state = rangeState,
+                        intent = Controls.BRIGHTNESS.intent
                     ))
                 }
 
@@ -172,7 +258,8 @@ class PowerControls : ControlsProviderService() {
                         id = 1515,
                         title = Controls.AUTO_ROTATE.title,
                         enabled = toggleState2,
-                        icon = Controls.AUTO_ROTATE.icon
+                        icon = Controls.AUTO_ROTATE.icon,
+                        intent = Controls.AUTO_ROTATE.intent
                     ))
                 }
 
@@ -184,26 +271,27 @@ class PowerControls : ControlsProviderService() {
                         id = 1516,
                         title = Controls.DND.title,
                         enabled = toggleState2,
-                        icon = Controls.DND.icon
+                        icon = Controls.DND.icon,
+                        intent = Controls.DND.intent
                     ))
                 }
 
                 1517.toString() -> {
                     consumer.accept(ControlAction.RESPONSE_OK)
                     if (action is BooleanAction) toggleState2 = action.newState
-                    enableNightLight(toggleState2)
+                    enableDarkMode(this, toggleState2)
                     flow.onNext(buildToggleControl(
                         id = 1517,
                         title = Controls.NIGHT_LIGHT.title,
                         enabled = toggleState2,
-                        icon = Controls.NIGHT_LIGHT.icon
+                        icon = Controls.NIGHT_LIGHT.icon,
+                        intent = Controls.NIGHT_LIGHT.intent
                     ))
                 }
 
                 1518.toString() -> {
                     consumer.accept(ControlAction.RESPONSE_OK)
                     if (action is BooleanAction) toggleState2 = action.newState
-                    enableFlightMode(this, toggleState2)
                     flow.onNext(buildToggleControl(
                         id = 1518,
                         title = Controls.FLIGHT_MODE.title,
@@ -213,7 +301,7 @@ class PowerControls : ControlsProviderService() {
                 }
                 else -> consumer.accept(ControlAction.RESPONSE_OK)
             }
-        } ?: consumer.accept(ControlAction.RESPONSE_FAIL)
+        }
     }
 
     private fun buildControl(
@@ -222,12 +310,13 @@ class PowerControls : ControlsProviderService() {
         subTitle: String = "",
         type: Int,
         template: ControlTemplate,
-        icon: Int
+        icon: Int,
+        intent: Intent
     ): Control {
         val pi = PendingIntent.getActivity(
             this,
             0,
-            Intent(this, MainActivity::class.java),
+            intent,
             PendingIntent.FLAG_IMMUTABLE
         )
 
@@ -252,7 +341,8 @@ class PowerControls : ControlsProviderService() {
         title: String,
         enabled: Boolean = false,
         icon: Int,
-        subTitle: String = ""
+        subTitle: String = "",
+        intent: Intent = Intent()
     ) = buildControl(
         id = id,
         template = ToggleTemplate(
@@ -265,7 +355,8 @@ class PowerControls : ControlsProviderService() {
         titleRes = title,
         type = DeviceTypes.TYPE_GENERIC_ON_OFF,
         icon = icon,
-        subTitle = subTitle
+        subTitle = subTitle,
+        intent = intent
     )
 
     private fun buildRangeControl(
@@ -277,7 +368,8 @@ class PowerControls : ControlsProviderService() {
         step: Float = 1f,
         icon: Int,
         subTitle: String = "",
-        isWeather: Boolean = false
+        isWeather: Boolean = false,
+        intent: Intent = Intent()
     ) = buildControl(
         id = id,
         template = RangeTemplate(
@@ -291,8 +383,8 @@ class PowerControls : ControlsProviderService() {
         titleRes = title,
         subTitle = subTitle,
         type = DeviceTypes.TYPE_THERMOSTAT,
-        icon = icon
+        icon = icon,
+        intent = intent
     )
-
 
 }
