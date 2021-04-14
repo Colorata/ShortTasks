@@ -48,6 +48,8 @@ object Strings{
     const val maxMaxDegrees = "100℃"
     const val minDegrees = "Minimum Degrees"
     const val maxDegrees = "Maximum Degrees"
+    const val save = "Save"
+    const val degrees = "Degrees"
 
     const val bubbleMainSubTitle = "You will learn how to use Bubble Manager"
     const val powerMainSubTitle = "You will learn how to use Power Assistant"

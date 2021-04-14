@@ -46,11 +46,14 @@ class PowerControls : ControlsProviderService() {
 
             val shared = getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
 
+            var minDegrees = shared.getInt(Strings.minDegrees, -50).toFloat()
+            var maxDegrees = shared.getInt(Strings.maxDegrees, 50).toFloat()
+
             var currentRight = shared.getString("CurrentRightWeather" , "")
             var currentFeels = shared.getString("CurrentFeelsWeather", "")
             var currentFloat = shared.getFloat("CurrentFloatWeather", 0f)
 
-            val city = shared.getString("city", "Moscow").toString()
+            val city = shared.getString(Strings.city, "Moscow").toString()
 
             list.clear()
 
@@ -105,6 +108,15 @@ class PowerControls : ControlsProviderService() {
                 }
             })
 
+            if (currentFloat < minDegrees) {
+                minDegrees = currentFloat
+                shared.edit().putInt(Strings.minDegrees, minDegrees.toInt()).apply()
+            } else if (currentFloat > maxDegrees){
+                maxDegrees = currentFloat
+                shared.edit().putInt(Strings.maxDegrees, maxDegrees.toInt()).apply()
+            }
+
+
             list.add(buildRangeControl(
                 id = 1441,
                 title = currentRight!!,
@@ -112,8 +124,8 @@ class PowerControls : ControlsProviderService() {
                 state = currentFloat,
                 subTitle = currentFeels!!,
                 isWeather = true,
-                minValue = -50f,
-                maxValue = 50f
+                minValue = minDegrees,
+                maxValue = maxDegrees
             ))
 
             Controls.values().forEach { control ->

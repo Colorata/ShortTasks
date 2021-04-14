@@ -1,6 +1,8 @@
 package com.colorata.st.screens
 
+import android.content.Context
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -15,10 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.colorata.st.extensions.getBottomNavigationHeight
-import com.colorata.st.extensions.presets.SButton
-import com.colorata.st.extensions.presets.SText
-import com.colorata.st.extensions.presets.Screen
-import com.colorata.st.extensions.presets.TButtonDefault
+import com.colorata.st.extensions.presets.*
 import com.colorata.st.ui.theme.*
 
 @ExperimentalFoundationApi
@@ -39,30 +38,71 @@ fun FeatureScreen() {
     )
 }
 
+@ExperimentalAnimationApi
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, group = "Hidden Content")
 @Composable
 fun WeatherDirectorContent(){
+    val context = LocalContext.current
+    val shared = context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+
+    var showDegrees by remember { mutableStateOf(false) }
+    var showCity by remember { mutableStateOf(false) }
+
     Column(modifier = Modifier.padding(SDimens.largePadding)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-            SButton(modifier = Modifier.padding(end = SDimens.smallPadding), text = Strings.city) {
+            SButton(
+                modifier = Modifier.padding(end = SDimens.smallPadding),
+                text = Strings.city
+            ) { showCity = !showCity
+                showDegrees = false}
 
-                Log.d("Clicked", "City")
+            SButton(
+                modifier = Modifier,
+                text = Strings.degrees
+            ) { showDegrees = !showDegrees
+                showCity = false}
+        }
 
-            }
-
-            SButton(modifier = Modifier, text = Strings.help) {
-
-                Log.d("Clicked", "Help")
-
+        AnimatedVisibility(visible = showDegrees) {
+            Column {
+                MinDegrees()
+                MaxDegrees()
             }
         }
 
-        MinDegrees()
+        AnimatedVisibility(visible = showCity) {
+            Column(modifier = Modifier.padding(vertical = SDimens.normalPadding)) {
+                var state by remember {
+                    mutableStateOf("")
+                }
+                SField(label = Strings.city) {
+                    state = it.text
+                }
 
-        MaxDegrees()
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = SDimens.normalPadding),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    SButton(
+                        text = Strings.save,
+                        modifier = Modifier.padding(vertical = SDimens.normalPadding)
+                    ) {
+                        shared
+                            .edit()
+                            .putString(
+                                Strings.city,
+                                state
+                            )
+                            .apply()
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -112,7 +152,12 @@ private fun BubbleContent() {
 
 @Composable
 fun MinDegrees() {
-    var sliderState by remember { mutableStateOf(-50f) }
+    val context = LocalContext.current
+    val shared = context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+    var sliderState by remember { mutableStateOf(shared.getInt(
+        Strings.minDegrees,
+        -50
+    ).toFloat()) }
 
     val sliderColors = SliderDefaults.colors(
         thumbColor = buttonColor(LocalContext.current),
@@ -172,13 +217,38 @@ fun MinDegrees() {
                     colors = sliderColors
                 )
             }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = SDimens.normalPadding),
+                horizontalArrangement = Arrangement.End
+            ) {
+                SButton(
+                    text = Strings.save,
+                    modifier = Modifier.padding(SDimens.normalPadding)
+                ) {
+                    shared
+                        .edit()
+                        .putInt(
+                            Strings.minDegrees,
+                            sliderState.toInt()
+                        )
+                        .apply()
+                }
+            }
         }
     }
 }
 
 @Composable
 fun MaxDegrees() {
-    var sliderState by remember { mutableStateOf(50f) }
+    val context = LocalContext.current
+    val shared = context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+    var sliderState by remember { mutableStateOf(shared.getInt(
+        Strings.maxDegrees,
+        50
+    ).toFloat()) }
 
     val sliderColors = SliderDefaults.colors(
         thumbColor = buttonColor(LocalContext.current),
@@ -186,7 +256,7 @@ fun MaxDegrees() {
     )
 
     SText(
-        text = Strings.minDegrees,
+        text = Strings.maxDegrees,
         modifier = Modifier
             .fillMaxWidth()
             .padding(SDimens.normalPadding),
@@ -237,6 +307,26 @@ fun MaxDegrees() {
                     },
                     colors = sliderColors
                 )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = SDimens.normalPadding),
+                horizontalArrangement = Arrangement.End
+            ) {
+                SButton(
+                    text = Strings.save,
+                    modifier = Modifier.padding(SDimens.normalPadding)
+                ) {
+                    shared
+                        .edit()
+                        .putInt(
+                            Strings.maxDegrees,
+                            sliderState.toInt()
+                        )
+                        .apply()
+                }
             }
         }
     }
