@@ -3,6 +3,7 @@ package com.colorata.st.extensions.presets
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -19,7 +20,8 @@ fun SText(
     modifier: Modifier = Modifier,
     textAlign: TextAlign = TextAlign.Center,
     fontSize: TextUnit = SDimens.cardTitle,
-    fontWeight: FontWeight = FontWeight.Medium
+    fontWeight: FontWeight = FontWeight.Medium,
+    textColor: Color = buttonColor(LocalContext.current)
 ){
     Text(
         text = text,
@@ -27,7 +29,7 @@ fun SText(
         style = TextStyle(
             fontSize = fontSize,
             fontWeight = fontWeight,
-            color = buttonColor(LocalContext.current),
+            color = textColor,
             fontFamily = productFont
         ),
         textAlign = textAlign

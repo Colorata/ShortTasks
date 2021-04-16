@@ -7,6 +7,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.MaterialTheme
 import com.colorata.st.CurrentScreen
+import com.colorata.st.screens.secondary.AddAppSecondary
 import com.colorata.st.screens.secondary.PowerSecondary
 import com.colorata.st.ui.theme.Strings
 import com.colorata.st.ui.theme.backInt
@@ -21,6 +22,8 @@ class SecondaryActivity : AppCompatActivity() {
             MaterialTheme {
                 when(intent.getSerializableExtra(Strings.screen)){
                     CurrentScreen.POWER -> PowerSecondary()
+                    CurrentScreen.ADD_LINK -> PowerSecondary()
+                    CurrentScreen.ADD_APP -> AddAppSecondary()
                 }
             }
         }

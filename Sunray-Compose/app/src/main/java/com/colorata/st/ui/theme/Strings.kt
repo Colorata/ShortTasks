@@ -2,7 +2,6 @@ package com.colorata.st.ui.theme
 
 object Strings{
     const val shortTasks = "ShortTasks"
-    const val bubbleManager = "Bubble Manager"
     const val powerAssistant = "Power Assistant"
     const val next = "Next?"
     const val go = "Go!"
@@ -50,8 +49,16 @@ object Strings{
     const val maxDegrees = "Maximum Degrees"
     const val save = "Save"
     const val degrees = "Degrees"
+    const val add = "Add"
+    const val link = "Link"
+    const val app = "App"
+    const val addApp = "Add App"
+    const val addLink = "Add Link"
+    const val addAppSubTitle = "Add App Control"
+    const val addLinkSubTitle = "Add Link Control"
+    const val enabled = "Enabled"
+    const val disabled = "Disabled"
 
-    const val bubbleMainSubTitle = "You will learn how to use Bubble Manager"
     const val powerMainSubTitle = "You will learn how to use Power Assistant"
 
     const val powerHelpSubTitle = "How to use Power Assistant?"
@@ -72,5 +79,4 @@ object Strings{
     const val tasks = "Google Tasks"
     const val notify = "Notifications"
     const val button = "Button"
-
 }

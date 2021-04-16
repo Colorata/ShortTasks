@@ -5,6 +5,9 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.Icon
 import android.service.controls.Control
 import android.service.controls.ControlsProviderService
@@ -33,6 +36,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 import java.util.concurrent.Flow
 import java.util.function.Consumer
+
 
 class PowerControls : ControlsProviderService() {
     private val controlFlows =
@@ -163,6 +167,27 @@ class PowerControls : ControlsProviderService() {
                     ))
                 }
             }
+
+            /*val userCount = shared.getInt("AppCount", 0)
+            val userLabel = mutableListOf<String>()
+            val userPackage = mutableListOf<String>()
+            val userIcon = mutableListOf<Bitmap?>()
+            if (userCount != 0) {
+                for (i in 0..userCount) {
+                    userLabel.add(shared.getString("UserLabel $i", "A")!!)
+                    userPackage.add(shared.getString("UserPackage $i", "A")!!)
+                    userIcon.add(shared.getString("UserIcon $i", "1231313")!!.toBitmap())
+
+                    list.add(buildAppControl(
+                        id = i,
+                        title = userLabel[i],
+                        icon = userIcon[i],
+                        intent = Intent()
+                    )
+                    )
+                }
+            }
+*/
             return list
         }
 
@@ -322,9 +347,11 @@ class PowerControls : ControlsProviderService() {
         subTitle: String = "",
         type: Int,
         template: ControlTemplate,
-        icon: Int,
+        icon: Int? = null,
+        appIcon: Bitmap? = null,
         intent: Intent
     ): Control {
+
         val pi = PendingIntent.getActivity(
             this,
             0,
@@ -339,10 +366,12 @@ class PowerControls : ControlsProviderService() {
             .setStatus(Control.STATUS_OK)
             .setControlTemplate(template)
             .setCustomIcon(
-                Icon.createWithResource(
-                    this,
-                    icon
-                )
+                if (icon != null) {
+                    Icon.createWithResource(
+                        this,
+                        icon
+                    )
+                } else Icon.createWithBitmap(appIcon)
             )
             .setCustomColor(ColorStateList.valueOf(backIntControl(this)))
             .build()
@@ -399,4 +428,23 @@ class PowerControls : ControlsProviderService() {
         intent = intent
     )
 
+    private fun buildAppControl(
+        id: Int,
+        title: String,
+        icon: Bitmap?,
+        intent: Intent
+    ) = buildControl(
+        id = id,
+        titleRes = title,
+        appIcon = icon,
+        intent = intent,
+        template = ToggleTemplate(
+            id.toString(),
+            ControlButton(
+                false,
+                false.toString().toUpperCase(Locale.getDefault())
+            )
+        ),
+        type = DeviceTypes.TYPE_GENERIC_ON_OFF
+    )
 }

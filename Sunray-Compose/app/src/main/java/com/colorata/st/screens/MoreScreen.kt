@@ -1,10 +1,12 @@
 package com.colorata.st.screens
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.colorata.st.extensions.getBottomNavigationHeight
 import com.colorata.st.extensions.presets.SButton
@@ -35,6 +37,7 @@ fun MoreScreen() {
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, group = "Hidden Content")
 @Composable
 fun SettingsContent(){
+    val shared = LocalContext.current.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
     Row(
         modifier = Modifier
             .padding(SDimens.largePadding)
@@ -45,7 +48,7 @@ fun SettingsContent(){
             modifier = Modifier.padding(end = SDimens.smallPadding),
             text = Strings.erase
         ) {
-            Log.d("Clicked", "Erase")
+            shared.edit().clear().apply()
         }
 
         SButton(modifier = Modifier, text = Strings.theme) {

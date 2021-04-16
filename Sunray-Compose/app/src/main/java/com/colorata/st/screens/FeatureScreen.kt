@@ -16,7 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import com.colorata.st.CurrentScreen
 import com.colorata.st.extensions.getBottomNavigationHeight
+import com.colorata.st.extensions.goToSecondary
 import com.colorata.st.extensions.presets.*
 import com.colorata.st.ui.theme.*
 
@@ -106,25 +108,50 @@ fun WeatherDirectorContent(){
     }
 }
 
+@ExperimentalAnimationApi
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, group = "Hidden Content")
 @Composable
 fun PowerAssistantContent(){
-    Row(
-        modifier = Modifier
-            .padding(SDimens.largePadding)
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.End
-    ) {
-        SButton(modifier = Modifier.padding(end = SDimens.smallPadding), text = Strings.edit) {
+    val context = LocalContext.current
+    var showAdd by remember {
+        mutableStateOf(false)
+    }
 
-            Log.d("Clicked", "Edit")
+    Column(modifier = Modifier.padding(SDimens.largePadding)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
+        ) {
+            SButton(modifier = Modifier.padding(end = SDimens.smallPadding), text = Strings.add) {
 
+                showAdd = !showAdd
+            }
+
+            SButton(modifier = Modifier, text = Strings.help) {
+
+                Log.d("Clicked", "Help")
+
+            }
         }
 
-        SButton(modifier = Modifier, text = Strings.help) {
+        AnimatedVisibility(visible = showAdd) {
+            Row(
+                modifier = Modifier
+                    .padding(top = SDimens.largePadding)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                SButton(
+                    modifier = Modifier.padding(end = SDimens.smallPadding),
+                    text = Strings.app
+                ) { context.goToSecondary(CurrentScreen.ADD_APP) }
 
-            Log.d("Clicked", "Help")
-
+                SButton(
+                    modifier = Modifier,
+                    text = Strings.link
+                ) { context.goToSecondary(CurrentScreen.ADD_LINK) }
+            }
         }
     }
 }

@@ -5,8 +5,9 @@ enum class CurrentScreen {
     FEATURES,
     MORE,
     POWER,
+    ADD_APP,
+    ADD_LINK,
     POSITION,
-    ADD_BUTTON,
     CHANGE_CITY,
     EDIT_POWER
 }

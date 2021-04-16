@@ -5,23 +5,19 @@ import android.app.UiModeManager
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.hardware.camera2.CameraManager
 import android.media.AudioManager
 import android.provider.Settings
 import android.service.controls.ControlsProviderService
-import androidx.appcompat.app.AppCompatDelegate
 import com.colorata.st.CurrentScreen
-import com.colorata.st.R
 import com.colorata.st.activities.SecondaryActivity
 import com.colorata.st.ui.theme.Strings
 
 
-fun goToSecondary(context: Context, screen: CurrentScreen){
-    val intent = Intent(context, SecondaryActivity::class.java)
+fun Context.goToSecondary(screen: CurrentScreen){
+    val intent = Intent(this, SecondaryActivity::class.java)
     intent.putExtra(Strings.screen, screen)
-    context.startActivity(intent)
+    startActivity(intent)
 }
 
 fun changeBrightness(

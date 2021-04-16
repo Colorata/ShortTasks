@@ -21,7 +21,7 @@ object ScreenComponents{
             R.drawable.abc_vector_test,
             R.drawable.ic_outline_accessibility_24,
             R.drawable.ic_outline_power_settings_new_24,
-            R.drawable.ic_outline_check_circle_outline_24,
+            R.drawable.ic_outline_check_circle_24,
         )
     }
 

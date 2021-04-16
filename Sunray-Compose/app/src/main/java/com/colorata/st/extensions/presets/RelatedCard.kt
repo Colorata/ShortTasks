@@ -27,7 +27,14 @@ import com.colorata.st.ui.theme.buttonColor
 @SuppressLint("CoroutineCreationDuringComposition")
 @ExperimentalAnimationApi
 @Composable
-fun RelatedCard(titleFontSize: TextUnit = SDimens.cardTitle, subTitleFontSize: TextUnit = SDimens.subTitle, title: String, subTitle: String, icon: Int, hidden: @Composable () -> Unit){
+fun RelatedCard(
+    titleFontSize: TextUnit = SDimens.cardTitle,
+    subTitleFontSize: TextUnit = SDimens.subTitle,
+    title: String,
+    subTitle: String,
+    icon: Int,
+    hidden: @Composable () -> Unit
+){
 
     var show by remember {
         mutableStateOf(false)

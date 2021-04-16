@@ -15,6 +15,7 @@ fun color(context: Context): Int {
         android.R.style.Theme_DeviceDefault)
     contextThemeWrapper.theme.resolveAttribute(android.R.attr.colorAccent,
         typedValue, true)
+    Log.d("Theme", typedValue.data.toString())
     return typedValue.data
 }
 
@@ -36,11 +37,11 @@ fun backInt(context: Context): Int {
             -8076920 -> color = "3D523E"
             -14107177 -> color = "395458"
             -6705972 -> color = "374151"
-            -18727 -> color = "#03D46"
+            -18727 -> color = "503D46"
             -12722945 -> color = "2B4449"
             -1668371 -> color = "594B5A"
             -4871684 -> color = "3D3953"
-            else -> color = "22221A"
+            else -> color = "162A49"
         }
         false -> when (color(context)) {
             -5715974 -> color = "8AB4F8"
@@ -59,7 +60,7 @@ fun backInt(context: Context): Int {
             -12722945 -> color = "B8F2FF"
             -1668371 -> color = "EAC1ED"
             -4871684 -> color = "C5BBFE"
-            else -> color = "CDCDC5"
+            else -> color = "8AB4F8"
         }
     }
 
@@ -81,11 +82,11 @@ fun backIntControl(context: Context): Int{
         -8076920 -> color = "3D523E"
         -14107177 -> color = "395458"
         -6705972 -> color = "374151"
-        -18727 -> color = "#03D46"
+        -18727 -> color = "503D46"
         -12722945 -> color = "2B4449"
         -1668371 -> color = "594B5A"
         -4871684 -> color = "3D3953"
-        else -> color = "22221A"
+        else -> color = "162A49"
     }
 
     return android.graphics.Color.parseColor("#$color")
@@ -116,7 +117,7 @@ fun buttonInt(context: Context): Int {
                 -12722945 -> color = "B8F2FF"
                 -1668371 -> color = "EAC1ED"
                 -4871684 -> color = "C5BBFE"
-                else -> color = "B47C51"
+                else -> color = "8AB4F8"
             }
         }
         false -> {
@@ -137,7 +138,7 @@ fun buttonInt(context: Context): Int {
                 -12722945 -> color = "2B4449"
                 -1668371 -> color = "594B5A"
                 -4871684 -> color = "3D3953"
-                else -> color = "1f2023"
+                else -> color = "162A49"
             }
         }
     }

@@ -25,6 +25,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.Serializable
 import java.lang.reflect.Method
+import android.graphics.Bitmap
+import android.graphics.Canvas
+
+import android.graphics.drawable.Drawable
+import androidx.annotation.NonNull
+
 
 @Composable
 fun getBottomNavigationHeight(): Dp {
@@ -114,3 +120,4 @@ fun Context.isAirplaneEnabled(): Boolean {
         Settings.Global.AIRPLANE_MODE_ON, 0
     ) != 0
 }
+
