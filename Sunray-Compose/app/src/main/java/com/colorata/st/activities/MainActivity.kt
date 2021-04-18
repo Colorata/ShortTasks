@@ -13,11 +13,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import com.colorata.st.Navigation
-import com.colorata.st.ui.theme.Strings
-import com.colorata.st.ui.theme.backColor
-import com.colorata.st.ui.theme.backInt
+import com.colorata.st.screens.Navigation
+import com.colorata.st.ui.theme.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
-                Box(modifier = Modifier.background(color = backColor(LocalContext.current))) {
+                Box(modifier = Modifier.background(color = backgroundColor())) {
                     Navigation()
                 }
             }
@@ -47,7 +44,9 @@ class MainActivity : AppCompatActivity() {
         val shared: SharedPreferences = getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
         shared.edit().putBoolean(Strings.nightMode, nightMode).apply()
 
-        window.navigationBarColor = backInt(this)
+        setSystemColor()
+
+        window.navigationBarColor = backgroundInt()
         window.statusBarColor = Color.TRANSPARENT
         window.setDecorFitsSystemWindows(false)
     }

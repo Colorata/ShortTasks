@@ -9,12 +9,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import com.colorata.st.ui.theme.SDimens
 import com.colorata.st.ui.theme.ScreenComponents
-import com.colorata.st.ui.theme.backColor
+import com.colorata.st.ui.theme.backgroundColor
 
 @ExperimentalAnimationApi
 @Composable
@@ -29,7 +28,7 @@ fun Screen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(color = backColor(LocalContext.current))
+            .background(color = backgroundColor())
     ) {
 
         LazyColumn(

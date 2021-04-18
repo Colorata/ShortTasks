@@ -46,8 +46,8 @@ class SplashActivity : AppCompatActivity() {
 
         val shared: SharedPreferences = getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
         shared.edit().putBoolean(Strings.nightMode, nightMode).apply()
-        window.navigationBarColor = backInt(this)
-        window.statusBarColor = backInt(this)
+        window.navigationBarColor = backgroundInt()
+        window.statusBarColor = backgroundInt()
 
         Timer().schedule(2000){
             val intent = Intent(this@SplashActivity, MainActivity::class.java)
@@ -65,7 +65,7 @@ fun Splash() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = backColor(LocalContext.current)),
+            .background(color = backgroundColor()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

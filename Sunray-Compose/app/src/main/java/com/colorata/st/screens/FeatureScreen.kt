@@ -149,6 +149,7 @@ fun PowerAssistantContent(){
                 SField(label = Strings.link, modifier = Modifier.padding(top = SDimens.normalPadding)) {
 
                 }
+
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                     SButton(modifier = Modifier.padding(SDimens.normalPadding), text = Strings.save) {
 
@@ -190,8 +191,8 @@ fun MinDegrees() {
     ).toFloat()) }
 
     val sliderColors = SliderDefaults.colors(
-        thumbColor = buttonColor(LocalContext.current),
-        activeTrackColor = buttonColor(LocalContext.current)
+        thumbColor = foregroundColor(),
+        activeTrackColor = foregroundColor()
     )
 
     SText(
@@ -206,9 +207,9 @@ fun MinDegrees() {
         shape = RoundedCornerShape(SDimens.roundedCorner),
         border = BorderStroke(
             SDimens.borderWidth,
-            color = buttonColor(LocalContext.current),
+            color = foregroundColor(),
         ),
-        color = backColor(LocalContext.current)
+        color = backgroundColor()
     ) {
         Column {
             Row(
@@ -281,8 +282,8 @@ fun MaxDegrees() {
     ).toFloat()) }
 
     val sliderColors = SliderDefaults.colors(
-        thumbColor = buttonColor(LocalContext.current),
-        activeTrackColor = buttonColor(LocalContext.current)
+        thumbColor = foregroundColor(),
+        activeTrackColor = foregroundColor()
     )
 
     SText(
@@ -297,9 +298,9 @@ fun MaxDegrees() {
         shape = RoundedCornerShape(SDimens.roundedCorner),
         border = BorderStroke(
             SDimens.borderWidth,
-            color = buttonColor(LocalContext.current),
+            color = foregroundColor(),
         ),
-        color = backColor(LocalContext.current)
+        color = backgroundColor()
     ) {
         Column {
             Row(

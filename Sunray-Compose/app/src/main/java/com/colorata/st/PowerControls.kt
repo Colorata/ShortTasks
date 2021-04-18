@@ -22,7 +22,7 @@ import com.colorata.st.extensions.weather.WeatherResponse
 import com.colorata.st.extensions.weather.WeatherService
 import com.colorata.st.ui.theme.Controls
 import com.colorata.st.ui.theme.Strings
-import com.colorata.st.ui.theme.backIntControl
+import com.colorata.st.ui.theme.backgroundIntControl
 import io.reactivex.Flowable
 import io.reactivex.processors.ReplayProcessor
 import org.reactivestreams.FlowAdapters
@@ -348,7 +348,7 @@ class PowerControls : ControlsProviderService() {
                     )
                 } else Icon.createWithBitmap(appIcon)
             )
-            .setCustomColor(ColorStateList.valueOf(backIntControl(this)))
+            .setCustomColor(ColorStateList.valueOf(backgroundIntControl()))
             .build()
     }
 

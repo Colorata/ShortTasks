@@ -31,8 +31,8 @@ import com.colorata.st.extensions.presets.SToggle
 import com.colorata.st.extensions.presets.Title
 import com.colorata.st.ui.theme.SDimens
 import com.colorata.st.ui.theme.Strings
-import com.colorata.st.ui.theme.backColor
-import com.colorata.st.ui.theme.buttonColor
+import com.colorata.st.ui.theme.backgroundColor
+import com.colorata.st.ui.theme.foregroundColor
 
 @ExperimentalFoundationApi
 @ExperimentalAnimationApi
@@ -42,7 +42,7 @@ fun AddAppSecondary() {
     val state by remember { mutableStateOf(ScrollableState { 0f })}
     Column(modifier = Modifier
         .fillMaxSize()
-        .background(backColor(LocalContext.current))
+        .background(backgroundColor())
         .scrollable(state = state, orientation = Orientation.Vertical)) {
         AppsList()
     }
@@ -95,9 +95,9 @@ fun AppsList() {
                     shape = RoundedCornerShape(SDimens.roundedCorner),
                     border = BorderStroke(
                         width = SDimens.borderWidth,
-                        color = buttonColor(LocalContext.current)
+                        color = foregroundColor()
                     ),
-                    backgroundColor = backColor(LocalContext.current),
+                    backgroundColor = backgroundColor(),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(SDimens.cardPadding)
@@ -107,7 +107,9 @@ fun AppsList() {
                         Row(
                             horizontalArrangement = Arrangement.Start,
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(SDimens.normalPadding).fillMaxWidth()
+                            modifier = Modifier
+                                .padding(SDimens.normalPadding)
+                                .fillMaxWidth()
                         ) {
                             Image(
                                 bitmap = bitmap[index].asImageBitmap(),
@@ -122,7 +124,13 @@ fun AppsList() {
                         }
                         Row(horizontalArrangement = Arrangement.End,
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(end = SDimens.normalPadding, bottom = SDimens.normalPadding, top = SDimens.smallPadding).fillMaxWidth()) {
+                        modifier = Modifier
+                            .padding(
+                                end = SDimens.normalPadding,
+                                bottom = SDimens.normalPadding,
+                                top = SDimens.smallPadding
+                            )
+                            .fillMaxWidth()) {
                             SToggle(enabled = false, onDisable = { /*TODO*/ }) {
 
                             }

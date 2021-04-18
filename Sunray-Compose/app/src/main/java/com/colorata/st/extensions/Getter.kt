@@ -1,6 +1,5 @@
 package com.colorata.st.extensions
 
-import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
@@ -10,26 +9,11 @@ import android.media.AudioManager
 import android.net.wifi.WifiManager
 import android.os.PowerManager
 import android.provider.Settings
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.colorata.st.extensions.weather.WeatherResponse
-import com.colorata.st.extensions.weather.WeatherService
 import com.colorata.st.ui.theme.Strings
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.io.Serializable
-import java.lang.reflect.Method
-import android.graphics.Bitmap
-import android.graphics.Canvas
-
-import android.graphics.drawable.Drawable
-import androidx.annotation.NonNull
 
 
 @Composable
@@ -120,4 +104,3 @@ fun Context.isAirplaneEnabled(): Boolean {
         Settings.Global.AIRPLANE_MODE_ON, 0
     ) != 0
 }
-

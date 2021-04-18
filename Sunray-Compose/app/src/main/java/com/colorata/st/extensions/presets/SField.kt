@@ -11,10 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
-import com.colorata.st.ui.theme.SDimens
-import com.colorata.st.ui.theme.Strings
-import com.colorata.st.ui.theme.backColor
-import com.colorata.st.ui.theme.buttonColor
+import com.colorata.st.ui.theme.*
 
 @Composable
 fun SField(label: String, modifier: Modifier = Modifier, onValueChange: (TextFieldValue) -> Unit) {
@@ -22,8 +19,8 @@ fun SField(label: String, modifier: Modifier = Modifier, onValueChange: (TextFie
     var textValue by remember { mutableStateOf(TextFieldValue())}
 
     Card(shape = CircleShape,
-        border = BorderStroke(width = SDimens.borderWidth, color = buttonColor(LocalContext.current)),
-        backgroundColor = backColor(LocalContext.current),
+        border = BorderStroke(width = SDimens.borderWidth, color = foregroundColor()),
+        backgroundColor = backgroundColor(),
         modifier = modifier
     ) {
         TextField(
@@ -37,11 +34,11 @@ fun SField(label: String, modifier: Modifier = Modifier, onValueChange: (TextFie
                 SText(text = label, fontSize = SDimens.buttonText)
             },
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = backColor(LocalContext.current),
-                unfocusedBorderColor = backColor(LocalContext.current),
-                backgroundColor = backColor(LocalContext.current),
-                cursorColor = buttonColor(LocalContext.current),
-                textColor = buttonColor(LocalContext.current),
+                focusedBorderColor = backgroundColor(),
+                unfocusedBorderColor = backgroundColor(),
+                backgroundColor = backgroundColor(),
+                cursorColor = foregroundColor(),
+                textColor = foregroundColor(),
             ),
             modifier = Modifier.padding(horizontal = SDimens.smallPadding)
         )

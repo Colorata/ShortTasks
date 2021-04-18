@@ -41,7 +41,7 @@ fun SToggle(
             width = SDimens.borderWidth,
             color = BorderColor
         ),
-        backgroundColor = backColor(LocalContext.current),
+        backgroundColor = backgroundColor(),
         modifier = modifier
     ) {
         Row(
@@ -68,7 +68,7 @@ fun SToggle(
                         painter = painterResource(id = R.drawable.ic_outline_check_24),
                         contentDescription = "",
                         modifier = Modifier.padding(end = SDimens.smallPadding),
-                        colorFilter = ColorFilter.tint(buttonColor(LocalContext.current))
+                        colorFilter = ColorFilter.tint(foregroundColor())
                     )
                 }
             }
@@ -98,7 +98,7 @@ fun SToggle(
                         painter = painterResource(id = R.drawable.ic_outline_check_24),
                         contentDescription = "",
                         modifier = Modifier.padding(end = SDimens.smallPadding),
-                        colorFilter = ColorFilter.tint(buttonColor(LocalContext.current))
+                        colorFilter = ColorFilter.tint(foregroundColor())
                     )
                 }
             }

@@ -10,7 +10,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import com.colorata.st.ui.theme.SDimens
-import com.colorata.st.ui.theme.buttonColor
+import com.colorata.st.ui.theme.foregroundColor
 import com.colorata.st.ui.theme.productFont
 
 
@@ -21,7 +21,7 @@ fun SText(
     textAlign: TextAlign = TextAlign.Center,
     fontSize: TextUnit = SDimens.cardTitle,
     fontWeight: FontWeight = FontWeight.Medium,
-    textColor: Color = buttonColor(LocalContext.current)
+    textColor: Color = foregroundColor()
 ){
     Text(
         text = text,

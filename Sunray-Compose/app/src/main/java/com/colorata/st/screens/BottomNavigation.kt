@@ -1,41 +1,31 @@
-package com.colorata.st
+package com.colorata.st.screens
 
 
 import android.content.Context
-import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
-
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddCircle
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.compose.*
-import com.colorata.st.extensions.getBottomNavigationHeight
 import com.colorata.st.extensions.getNavBarHeight
-import com.colorata.st.extensions.presets.SText
 import com.colorata.st.extensions.pxToDp
-import com.colorata.st.screens.FeatureScreen
-import com.colorata.st.screens.MainScreen
-import com.colorata.st.screens.MoreScreen
-import com.colorata.st.ui.theme.SDimens
 import com.colorata.st.ui.theme.Strings
-import com.colorata.st.ui.theme.backColor
-import com.colorata.st.ui.theme.buttonColor
+import com.colorata.st.ui.theme.backgroundColor
+import com.colorata.st.ui.theme.foregroundColor
 
 /*@Composable
 fun BottomNav(state: MutableState<CurrentScreen>){
@@ -174,8 +164,8 @@ fun BottomNav(navController: NavController){
 */
 
     BottomNavigation(
-        contentColor = buttonColor(LocalContext.current),
-        backgroundColor = backColor(LocalContext.current),
+        contentColor = foregroundColor(),
+        backgroundColor = backgroundColor(),
         modifier = Modifier
             .padding(bottom = getNavBarHeight())
             .onGloballyPositioned {
@@ -283,18 +273,3 @@ fun Navigation(){
     }
 }
 
-@ExperimentalAnimationApi
-@Composable
-fun EnterAnimation(content: @Composable () -> Unit) {
-    AnimatedVisibility(
-        visible = true,
-        enter = slideInHorizontally(
-            initialOffsetX = { -2000 }
-        ) + expandHorizontally(
-            expandFrom = Alignment.Start
-        ) + fadeIn(initialAlpha = 0.3f),
-        exit = slideOutHorizontally() + shrinkHorizontally() + fadeOut(),
-        content = content,
-        initiallyVisible = false
-    )
-}

@@ -20,9 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.colorata.st.R
-import com.colorata.st.ui.theme.SDimens
-import com.colorata.st.ui.theme.backColor
-import com.colorata.st.ui.theme.buttonColor
+import com.colorata.st.ui.theme.*
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @ExperimentalAnimationApi
@@ -42,8 +40,8 @@ fun RelatedCard(
 
 
     Card(shape = RoundedCornerShape(SDimens.roundedCorner),
-        border = BorderStroke(width = SDimens.borderWidth, color = buttonColor(LocalContext.current)),
-        backgroundColor = backColor(LocalContext.current),
+        border = BorderStroke(width = SDimens.borderWidth, color = foregroundColor()),
+        backgroundColor = backgroundColor(),
         modifier = Modifier
             .fillMaxWidth()
             .padding(SDimens.cardPadding)
@@ -61,7 +59,7 @@ fun RelatedCard(
                         contentDescription = "",
                         modifier = Modifier
                             .size(SDimens.cardHeight),
-                        colorFilter = ColorFilter.tint(color = buttonColor(LocalContext.current))
+                        colorFilter = ColorFilter.tint(color = foregroundColor())
                     )
 
                     Image(
@@ -69,7 +67,7 @@ fun RelatedCard(
                         contentDescription = "",
                         modifier = Modifier
                             .size(SDimens.postImageSize),
-                        colorFilter = ColorFilter.tint(color = buttonColor(LocalContext.current))
+                        colorFilter = ColorFilter.tint(color = foregroundColor())
                     )
                 }
                 Column(

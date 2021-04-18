@@ -13,13 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.colorata.st.R
 import com.colorata.st.ui.theme.SDimens
 import com.colorata.st.ui.theme.Strings
-import com.colorata.st.ui.theme.buttonColor
+import com.colorata.st.ui.theme.foregroundColor
 
 @Composable
 fun SControl(title: String, icon: Int){
@@ -33,14 +32,14 @@ fun SControl(title: String, icon: Int){
             modifier = Modifier.size(SDimens.elementSize),
             border = BorderStroke(
                 width = SDimens.borderWidth,
-                color = buttonColor(LocalContext.current)
+                color = foregroundColor()
             ),
             colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Color.Transparent)
         ) {
             Icon(
                 painter = painterResource(id = icon),
                 contentDescription = "",
-                tint = buttonColor(LocalContext.current),
+                tint = foregroundColor(),
                 modifier = Modifier.size(SDimens.postImageSize)
             )
         }

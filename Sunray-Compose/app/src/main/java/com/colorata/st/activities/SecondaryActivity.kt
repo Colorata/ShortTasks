@@ -10,7 +10,7 @@ import com.colorata.st.CurrentScreen
 import com.colorata.st.screens.secondary.AddAppSecondary
 import com.colorata.st.screens.secondary.PowerSecondary
 import com.colorata.st.ui.theme.Strings
-import com.colorata.st.ui.theme.backInt
+import com.colorata.st.ui.theme.backgroundInt
 
 
 class SecondaryActivity : AppCompatActivity() {
@@ -27,8 +27,8 @@ class SecondaryActivity : AppCompatActivity() {
             }
         }
 
-        window.navigationBarColor = backInt(this)
-        window.statusBarColor = backInt(this)
+        window.navigationBarColor = backgroundInt()
+        window.statusBarColor = backgroundInt()
     }
 }
 
