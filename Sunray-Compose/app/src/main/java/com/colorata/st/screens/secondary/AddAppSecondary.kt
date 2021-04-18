@@ -27,6 +27,7 @@ import com.colorata.st.R
 import com.colorata.st.extensions.*
 import com.colorata.st.extensions.presets.SButton
 import com.colorata.st.extensions.presets.SText
+import com.colorata.st.extensions.presets.SToggle
 import com.colorata.st.extensions.presets.Title
 import com.colorata.st.ui.theme.SDimens
 import com.colorata.st.ui.theme.Strings
@@ -106,7 +107,7 @@ fun AppsList() {
                         Row(
                             horizontalArrangement = Arrangement.Start,
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(SDimens.normalPadding)
+                            modifier = Modifier.padding(SDimens.normalPadding).fillMaxWidth()
                         ) {
                             Image(
                                 bitmap = bitmap[index].asImageBitmap(),
@@ -118,6 +119,13 @@ fun AppsList() {
                                 fontSize = SDimens.subTitle,
                                 modifier = Modifier.padding(horizontal = SDimens.largePadding)
                             )
+                        }
+                        Row(horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(end = SDimens.normalPadding, bottom = SDimens.normalPadding, top = SDimens.smallPadding).fillMaxWidth()) {
+                            SToggle(enabled = false, onDisable = { /*TODO*/ }) {
+
+                            }
                         }
                         AnimatedVisibility(visible = show) {
                             Row(

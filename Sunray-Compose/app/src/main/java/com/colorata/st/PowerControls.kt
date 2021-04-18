@@ -6,8 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.graphics.drawable.Icon
 import android.service.controls.Control
 import android.service.controls.ControlsProviderService
@@ -43,153 +41,130 @@ class PowerControls : ControlsProviderService() {
         mutableMapOf<String, ReplayProcessor<Control>>()
     private var toggleState2 = false
     private var rangeState = 50f
-
     private val controls: MutableList<Control>
-        get() {
-            val list = mutableListOf<Control>()
+    get() {
+        val list = mutableListOf<Control>()
+        val shared = getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
 
-            val shared = getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+        var minDegrees = shared.getInt(Strings.minDegrees, -50).toFloat()
+        var maxDegrees = shared.getInt(Strings.maxDegrees, 50).toFloat()
 
-            var minDegrees = shared.getInt(Strings.minDegrees, -50).toFloat()
-            var maxDegrees = shared.getInt(Strings.maxDegrees, 50).toFloat()
+        var currentRight = shared.getString("CurrentRightWeather", "")
+        var currentFeels = shared.getString("CurrentFeelsWeather", "")
+        var currentFloat = shared.getFloat("CurrentFloatWeather", 0f)
 
-            var currentRight = shared.getString("CurrentRightWeather" , "")
-            var currentFeels = shared.getString("CurrentFeelsWeather", "")
-            var currentFloat = shared.getFloat("CurrentFloatWeather", 0f)
+        val city = shared.getString(Strings.city, "Moscow").toString()
 
-            val city = shared.getString(Strings.city, "Moscow").toString()
+        list.clear()
 
-            list.clear()
+        val retrofit = Retrofit.Builder()
+            .baseUrl(Strings.baseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
 
-            val retrofit = Retrofit.Builder()
-                .baseUrl(Strings.baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
+        val service = retrofit.create(WeatherService::class.java)
+        val call = service.getCurrentWeatherData(city, "metric", Strings.appId)
 
-            val service = retrofit.create(WeatherService::class.java)
-            val call = service.getCurrentWeatherData(city, "metric", Strings.appId)
+        //CALLING
+        call.enqueue(object : Callback<WeatherResponse> {
 
-            //CALLING
-            call.enqueue(object : Callback<WeatherResponse> {
+            //Fun if SUCCESS
+            override fun onResponse(
+                call: Call<WeatherResponse>,
+                response: Response<WeatherResponse>
+            ) {
+                if (response.code() == 200) {
+                    val weatherResponse = response.body()!!
 
-                //Fun if SUCCESS
-                override fun onResponse(
-                    call: Call<WeatherResponse>,
-                    response: Response<WeatherResponse>
-                ) {
-                    if (response.code() == 200) {
-                        val weatherResponse = response.body()!!
+                    //Configuring TEXT
+                    currentRight = weatherResponse.name?.replace("’", "")!!
+                    currentFeels = "Feels: " + weatherResponse.main!!.feels + " \u2103"
+                    currentFloat = weatherResponse.main!!.temp
 
-                        //Configuring TEXT
-                        currentRight = weatherResponse.name?.replace("’", "")!!
-                        currentFeels = "Feels: " + weatherResponse.main!!.feels + " \u2103"
-                        currentFloat = weatherResponse.main!!.temp
+                    val edit = shared.edit()
+                    edit.putString("CurrentRightWeather", currentRight)
+                    edit.putString("CurrentFeelsWeather", currentFeels)
+                    edit.putFloat("CurrentFloatWeather", currentFloat)
+                    edit.apply()
 
-                        val edit = shared.edit()
-                        edit.putString("CurrentRightWeather", currentRight)
-                        edit.putString("CurrentFeelsWeather", currentFeels)
-                        edit.putFloat("CurrentFloatWeather", currentFloat)
-                        edit.apply()
-
-                        list.add(buildRangeControl(
-                            id = 1441,
-                            title = currentRight!!,
-                            icon = R.drawable.ic_outline_cloud_24,
-                            state = currentFloat,
-                            subTitle = currentFeels!!,
-                            isWeather = true,
-                            minValue = -50f,
-                            maxValue = 50f
-                        ))
-                    }
-                }
-
-                //Fun if FAIL
-                @SuppressLint("SetTextI18n")
-                override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
-                    currentRight = "Error"
-                    currentFeels = "Error"
-                }
-            })
-
-            if (currentFloat < minDegrees) {
-                minDegrees = currentFloat
-                shared.edit().putInt(Strings.minDegrees, minDegrees.toInt()).apply()
-            } else if (currentFloat > maxDegrees){
-                maxDegrees = currentFloat
-                shared.edit().putInt(Strings.maxDegrees, maxDegrees.toInt()).apply()
-            }
-
-
-            list.add(buildRangeControl(
-                id = 1441,
-                title = currentRight!!,
-                icon = R.drawable.ic_outline_cloud_24,
-                state = currentFloat,
-                subTitle = currentFeels!!,
-                isWeather = true,
-                minValue = minDegrees,
-                maxValue = maxDegrees
-            ))
-
-            Controls.values().forEach { control ->
-                if (control.isRange){
                     list.add(buildRangeControl(
-                        id = control.id,
-                        title = control.title,
-                        icon = control.icon,
-                        state = when(control.id) {
-                            1514 -> (this.getBrightness()/2.55).toFloat()
-                            1513 -> this.getRingVolume()
-                            1512 -> this.getMediaVolume()
-                            else -> 50f
-                        },
-                        intent = control.intent
-                    ))
-                } else {
-                    list.add(buildToggleControl(
-                        id = control.id,
-                        title = control.title,
-                        icon = control.icon,
-                        enabled = when (control.id) {
-                            1502 -> this.isWifiEnabled()
-                            1504 -> isBluetoothEnabled()
-                            1505 -> this.isMobileDataEnabled()
-                            1507 -> this.isLocationEnabled()
-                            1509 -> this.isBatterySaverEnabled()
-                            1515 -> this.isAutoRotationEnabled()
-                            1516 -> this.isDNDEnabled()
-                            1517 -> this.isDarkThemeEnabled()
-                            1518 -> this.isAirplaneEnabled()
-                            else -> false
-                        },
-                        intent = control.intent
+                        id = 1441,
+                        title = currentRight!!,
+                        icon = R.drawable.ic_outline_cloud_24,
+                        state = currentFloat,
+                        subTitle = currentFeels!!,
+                        isWeather = true,
+                        minValue = -50f,
+                        maxValue = 50f
                     ))
                 }
             }
 
-            /*val userCount = shared.getInt("AppCount", 0)
-            val userLabel = mutableListOf<String>()
-            val userPackage = mutableListOf<String>()
-            val userIcon = mutableListOf<Bitmap?>()
-            if (userCount != 0) {
-                for (i in 0..userCount) {
-                    userLabel.add(shared.getString("UserLabel $i", "A")!!)
-                    userPackage.add(shared.getString("UserPackage $i", "A")!!)
-                    userIcon.add(shared.getString("UserIcon $i", "1231313")!!.toBitmap())
-
-                    list.add(buildAppControl(
-                        id = i,
-                        title = userLabel[i],
-                        icon = userIcon[i],
-                        intent = Intent()
-                    )
-                    )
-                }
+            //Fun if FAIL
+            @SuppressLint("SetTextI18n")
+            override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
+                currentRight = "Error"
+                currentFeels = "Error"
             }
-*/
-            return list
+        })
+
+        if (currentFloat < minDegrees) {
+            minDegrees = currentFloat
+            shared.edit().putInt(Strings.minDegrees, minDegrees.toInt()).apply()
+        } else if (currentFloat > maxDegrees){
+            maxDegrees = currentFloat
+            shared.edit().putInt(Strings.maxDegrees, maxDegrees.toInt()).apply()
         }
+
+
+        list.add(buildRangeControl(
+            id = 1441,
+            title = currentRight!!,
+            icon = R.drawable.ic_outline_cloud_24,
+            state = currentFloat,
+            subTitle = currentFeels!!,
+            isWeather = true,
+            minValue = minDegrees,
+            maxValue = maxDegrees
+        ))
+
+        Controls.values().forEach { control ->
+            if (control.isRange){
+                list.add(buildRangeControl(
+                    id = control.id,
+                    title = control.title,
+                    icon = control.icon,
+                    state = when(control.id) {
+                        1514 -> (this.getBrightness()/2.55).toFloat()
+                        1513 -> this.getRingVolume()
+                        1512 -> this.getMediaVolume()
+                        else -> 50f
+                    },
+                    intent = control.intent
+                ))
+            } else {
+                list.add(buildToggleControl(
+                    id = control.id,
+                    title = control.title,
+                    icon = control.icon,
+                    enabled = when (control.id) {
+                        1502 -> this.isWifiEnabled()
+                        1504 -> isBluetoothEnabled()
+                        1505 -> this.isMobileDataEnabled()
+                        1507 -> this.isLocationEnabled()
+                        1509 -> this.isBatterySaverEnabled()
+                        1515 -> this.isAutoRotationEnabled()
+                        1516 -> this.isDNDEnabled()
+                        1517 -> this.isDarkThemeEnabled()
+                        1518 -> this.isAirplaneEnabled()
+                        else -> false
+                    },
+                    intent = control.intent
+                ))
+            }
+        }
+        return list
+    }
 
     override fun createPublisherForAllAvailable(): Flow.Publisher<Control> =
         FlowAdapters.toFlowPublisher(

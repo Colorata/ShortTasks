@@ -22,7 +22,6 @@ class SecondaryActivity : AppCompatActivity() {
             MaterialTheme {
                 when(intent.getSerializableExtra(Strings.screen)){
                     CurrentScreen.POWER -> PowerSecondary()
-                    CurrentScreen.ADD_LINK -> PowerSecondary()
                     CurrentScreen.ADD_APP -> AddAppSecondary()
                 }
             }
@@ -30,8 +29,6 @@ class SecondaryActivity : AppCompatActivity() {
 
         window.navigationBarColor = backInt(this)
         window.statusBarColor = backInt(this)
-
-        
     }
 }
 

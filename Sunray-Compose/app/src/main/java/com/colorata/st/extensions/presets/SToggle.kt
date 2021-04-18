@@ -21,10 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.colorata.st.R
 import com.colorata.st.extensions.pxToDp
-import com.colorata.st.ui.theme.SDimens
-import com.colorata.st.ui.theme.Strings
-import com.colorata.st.ui.theme.backColor
-import com.colorata.st.ui.theme.buttonColor
+import com.colorata.st.ui.theme.*
 
 @ExperimentalAnimationApi
 @Composable
@@ -42,7 +39,7 @@ fun SToggle(
         shape = CircleShape,
         border = BorderStroke(
             width = SDimens.borderWidth,
-            color = buttonColor(LocalContext.current)
+            color = BorderColor
         ),
         backgroundColor = backColor(LocalContext.current),
         modifier = modifier
@@ -79,9 +76,7 @@ fun SToggle(
                 modifier = Modifier
                     .width(SDimens.borderWidth)
                     .background(
-                        buttonColor(
-                            LocalContext.current
-                        )
+                        BorderColor
                     )
                     .height(height.dp)
             )

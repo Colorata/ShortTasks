@@ -58,6 +58,7 @@ object Strings{
     const val addLinkSubTitle = "Add Link Control"
     const val enabled = "Enabled"
     const val disabled = "Disabled"
+    const val title = "Title"
 
     const val powerMainSubTitle = "You will learn how to use Power Assistant"
 

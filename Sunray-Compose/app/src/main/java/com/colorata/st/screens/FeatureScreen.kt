@@ -113,44 +113,47 @@ fun WeatherDirectorContent(){
 @Composable
 fun PowerAssistantContent(){
     val context = LocalContext.current
-    var showAdd by remember {
-        mutableStateOf(false)
-    }
 
+    var addLinkState by remember { mutableStateOf(false) }
     Column(modifier = Modifier.padding(SDimens.largePadding)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-            SButton(modifier = Modifier.padding(end = SDimens.smallPadding), text = Strings.add) {
-
-                showAdd = !showAdd
+            SButton(modifier = Modifier.padding(end = SDimens.smallPadding), text = Strings.addLink) {
+                addLinkState = !addLinkState
             }
 
-            SButton(modifier = Modifier, text = Strings.help) {
+            SButton(modifier = Modifier.padding(bottom = SDimens.smallPadding), text = Strings.addApp) {
+                context.goToSecondary(CurrentScreen.ADD_APP)
+            }
+        }
 
-                Log.d("Clicked", "Help")
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
+        ) {
+            SButton(modifier = Modifier, text = Strings.help) {
 
             }
         }
 
-        AnimatedVisibility(visible = showAdd) {
-            Row(
-                modifier = Modifier
-                    .padding(top = SDimens.largePadding)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            ) {
-                SButton(
-                    modifier = Modifier.padding(end = SDimens.smallPadding),
-                    text = Strings.app
-                ) { context.goToSecondary(CurrentScreen.ADD_APP) }
+        AnimatedVisibility(visible = addLinkState) {
+            Column {
+                SField(label = Strings.title, modifier = Modifier.padding(top = SDimens.normalPadding)) {
 
-                SButton(
-                    modifier = Modifier,
-                    text = Strings.link
-                ) { context.goToSecondary(CurrentScreen.ADD_LINK) }
+                }
+
+                SField(label = Strings.link, modifier = Modifier.padding(top = SDimens.normalPadding)) {
+
+                }
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                    SButton(modifier = Modifier.padding(SDimens.normalPadding), text = Strings.save) {
+
+                    }
+                }
             }
         }
     }

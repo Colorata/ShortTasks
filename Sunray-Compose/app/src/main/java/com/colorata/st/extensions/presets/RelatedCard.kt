@@ -48,10 +48,11 @@ fun RelatedCard(
             .fillMaxWidth()
             .padding(SDimens.cardPadding)
     ) {
-        Column(modifier = Modifier.clickable { show = !show }) {
+        Column {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
+                horizontalArrangement = Arrangement.Start,
+                modifier = Modifier.clickable { show = !show }
             ) {
                 Box(contentAlignment = Alignment.Center) {
 
