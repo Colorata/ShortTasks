@@ -42,129 +42,197 @@ class PowerControls : ControlsProviderService() {
     private var toggleState2 = false
     private var rangeState = 50f
     private val controls: MutableList<Control>
-    get() {
-        val list = mutableListOf<Control>()
-        val shared = getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+        get() {
+            val list = mutableListOf<Control>()
+            val shared = getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
 
-        var minDegrees = shared.getInt(Strings.minDegrees, -50).toFloat()
-        var maxDegrees = shared.getInt(Strings.maxDegrees, 50).toFloat()
+            var minDegrees = shared.getInt(Strings.minDegrees, -50).toFloat()
+            var maxDegrees = shared.getInt(Strings.maxDegrees, 50).toFloat()
 
-        var currentRight = shared.getString("CurrentRightWeather", "")
-        var currentFeels = shared.getString("CurrentFeelsWeather", "")
-        var currentFloat = shared.getFloat("CurrentFloatWeather", 0f)
+            var currentRight = shared.getString("CurrentRightWeather", "")
+            var currentFeels = shared.getString("CurrentFeelsWeather", "")
+            var currentFloat = shared.getFloat("CurrentFloatWeather", 0f)
 
-        val city = shared.getString(Strings.city, "Moscow").toString()
+            val city = shared.getString(Strings.city, "Moscow").toString()
 
-        list.clear()
+            list.clear()
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl(Strings.baseUrl)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+            val retrofit = Retrofit.Builder()
+                .baseUrl(Strings.baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
 
-        val service = retrofit.create(WeatherService::class.java)
-        val call = service.getCurrentWeatherData(city, "metric", Strings.appId)
+            val service = retrofit.create(WeatherService::class.java)
+            val call = service.getCurrentWeatherData(city, "metric", Strings.appId)
 
-        //CALLING
-        call.enqueue(object : Callback<WeatherResponse> {
+            //CALLING
+            call.enqueue(object : Callback<WeatherResponse> {
 
-            //Fun if SUCCESS
-            override fun onResponse(
-                call: Call<WeatherResponse>,
-                response: Response<WeatherResponse>
-            ) {
-                if (response.code() == 200) {
-                    val weatherResponse = response.body()!!
+                //Fun if SUCCESS
+                override fun onResponse(
+                    call: Call<WeatherResponse>,
+                    response: Response<WeatherResponse>
+                ) {
+                    if (response.code() == 200) {
+                        val weatherResponse = response.body()!!
 
-                    //Configuring TEXT
-                    currentRight = weatherResponse.name?.replace("’", "")!!
-                    currentFeels = "Feels: " + weatherResponse.main!!.feels + " \u2103"
-                    currentFloat = weatherResponse.main!!.temp
+                        //Configuring TEXT
+                        currentRight = weatherResponse.name?.replace("’", "")!!
+                        currentFeels = "Feels: " + weatherResponse.main!!.feels + " \u2103"
+                        currentFloat = weatherResponse.main!!.temp
 
-                    val edit = shared.edit()
-                    edit.putString("CurrentRightWeather", currentRight)
-                    edit.putString("CurrentFeelsWeather", currentFeels)
-                    edit.putFloat("CurrentFloatWeather", currentFloat)
-                    edit.apply()
+                        val edit = shared.edit()
+                        edit.putString("CurrentRightWeather", currentRight)
+                        edit.putString("CurrentFeelsWeather", currentFeels)
+                        edit.putFloat("CurrentFloatWeather", currentFloat)
+                        edit.apply()
 
-                    list.add(buildRangeControl(
-                        id = 1441,
-                        title = currentRight!!,
-                        icon = R.drawable.ic_outline_cloud_24,
-                        state = currentFloat,
-                        subTitle = currentFeels!!,
-                        isWeather = true,
-                        minValue = -50f,
-                        maxValue = 50f
-                    ))
+                        list.add(
+                            buildRangeControl(
+                                id = 1441,
+                                title = currentRight!!,
+                                icon = R.drawable.ic_outline_cloud_24,
+                                state = currentFloat,
+                                subTitle = currentFeels!!,
+                                isWeather = true,
+                                minValue = -50f,
+                                maxValue = 50f
+                            )
+                        )
+                    }
+                }
+
+                //Fun if FAIL
+                @SuppressLint("SetTextI18n")
+                override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
+                    currentRight = "Error"
+                    currentFeels = "Error"
+                }
+            })
+
+            if (currentFloat < minDegrees) {
+                minDegrees = currentFloat
+                shared.edit().putInt(Strings.minDegrees, minDegrees.toInt()).apply()
+            } else if (currentFloat > maxDegrees) {
+                maxDegrees = currentFloat
+                shared.edit().putInt(Strings.maxDegrees, maxDegrees.toInt()).apply()
+            }
+
+
+            list.add(
+                buildRangeControl(
+                    id = 1441,
+                    title = currentRight!!,
+                    icon = R.drawable.ic_outline_cloud_24,
+                    state = currentFloat,
+                    subTitle = currentFeels!!,
+                    isWeather = true,
+                    minValue = minDegrees,
+                    maxValue = maxDegrees
+                )
+            )
+
+            Controls.values().forEach { control ->
+                if (control.isRange) {
+                    list.add(
+                        buildRangeControl(
+                            id = control.id,
+                            title = control.title,
+                            subTitle = control.subTitle,
+                            icon = control.icon,
+                            state = when (control.id) {
+                                Controls.BRIGHTNESS.id -> (getBrightness() / 2.55).toFloat()
+                                Controls.RING_VOLUME.id -> getRingVolume()
+                                Controls.MEDIA_VOLUME.id -> getMediaVolume()
+                                else -> 50f
+                            },
+                            intent = control.intent
+                        )
+                    )
+                } else {
+                    when (control.id) {
+                        Controls.SEARCH.id -> {
+                            if (isPackageInstalled("com.google.android.googlequicksearchbox")) {
+                                list.add(
+                                    buildToggleControl(
+                                        id = control.id,
+                                        title = control.title,
+                                        subTitle = control.subTitle,
+                                        icon = control.icon,
+                                        intent = control.intent
+                                    )
+                                )
+                            }
+                        }
+                        Controls.NEARBY_SHARING.id -> {
+                            if (isPackageInstalled("com.google.android.gms")) {
+                                list.add(
+                                    buildToggleControl(
+                                        id = control.id,
+                                        title = control.title,
+                                        subTitle = control.subTitle,
+                                        icon = control.icon,
+                                        intent = control.intent
+                                    )
+                                )
+                            }
+                        }
+                        Controls.CALCULATOR.id -> {
+                            if (isPackageInstalled("com.google.android.calculator")) {
+                                list.add(
+                                    buildToggleControl(
+                                        id = control.id,
+                                        title = control.title,
+                                        subTitle = control.subTitle,
+                                        icon = control.icon,
+                                        intent = control.intent
+                                    )
+                                )
+                            }
+                        }
+                        Controls.GOOGLE_TASKS.id -> {
+                            if (isPackageInstalled("com.google.android.apps.tasks")) {
+                                list.add(
+                                    buildToggleControl(
+                                        id = control.id,
+                                        title = control.title,
+                                        subTitle = control.subTitle,
+                                        icon = control.icon,
+                                        intent = control.intent
+                                    )
+                                )
+                            }
+                        }
+                        else -> {
+                            list.add(
+                                buildToggleControl(
+                                    id = control.id,
+                                    title = control.title,
+                                    subTitle = control.subTitle,
+                                    icon = control.icon,
+                                    enabled = when (control.id) {
+                                        Controls.WIFI.id -> isWifiEnabled()
+                                        Controls.BLUETOOTH.id -> isBluetoothEnabled()
+                                        Controls.MOBILE_DATA.id -> isMobileDataEnabled()
+                                        Controls.LOCATION.id -> isLocationEnabled()
+                                        Controls.BATTERY_SAVER.id -> isBatterySaverEnabled()
+                                        Controls.AUTO_ROTATE.id -> isAutoRotationEnabled()
+                                        Controls.DND.id -> isDNDEnabled()
+                                        Controls.NIGHT_LIGHT.id -> isDarkThemeEnabled()
+                                        Controls.FLIGHT_MODE.id -> isAirplaneEnabled()
+                                        else -> false
+                                    },
+                                    intent = control.intent
+                                )
+                            )
+                        }
+                    }
                 }
             }
 
-            //Fun if FAIL
-            @SuppressLint("SetTextI18n")
-            override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
-                currentRight = "Error"
-                currentFeels = "Error"
-            }
-        })
 
-        if (currentFloat < minDegrees) {
-            minDegrees = currentFloat
-            shared.edit().putInt(Strings.minDegrees, minDegrees.toInt()).apply()
-        } else if (currentFloat > maxDegrees){
-            maxDegrees = currentFloat
-            shared.edit().putInt(Strings.maxDegrees, maxDegrees.toInt()).apply()
+            return list
         }
-
-
-        list.add(buildRangeControl(
-            id = 1441,
-            title = currentRight!!,
-            icon = R.drawable.ic_outline_cloud_24,
-            state = currentFloat,
-            subTitle = currentFeels!!,
-            isWeather = true,
-            minValue = minDegrees,
-            maxValue = maxDegrees
-        ))
-
-        Controls.values().forEach { control ->
-            if (control.isRange){
-                list.add(buildRangeControl(
-                    id = control.id,
-                    title = control.title,
-                    icon = control.icon,
-                    state = when(control.id) {
-                        1514 -> (this.getBrightness()/2.55).toFloat()
-                        1513 -> this.getRingVolume()
-                        1512 -> this.getMediaVolume()
-                        else -> 50f
-                    },
-                    intent = control.intent
-                ))
-            } else {
-                list.add(buildToggleControl(
-                    id = control.id,
-                    title = control.title,
-                    icon = control.icon,
-                    enabled = when (control.id) {
-                        1502 -> this.isWifiEnabled()
-                        1504 -> isBluetoothEnabled()
-                        1505 -> this.isMobileDataEnabled()
-                        1507 -> this.isLocationEnabled()
-                        1509 -> this.isBatterySaverEnabled()
-                        1515 -> this.isAutoRotationEnabled()
-                        1516 -> this.isDNDEnabled()
-                        1517 -> this.isDarkThemeEnabled()
-                        1518 -> this.isAirplaneEnabled()
-                        else -> false
-                    },
-                    intent = control.intent
-                ))
-            }
-        }
-        return list
-    }
 
     override fun createPublisherForAllAvailable(): Flow.Publisher<Control> =
         FlowAdapters.toFlowPublisher(
@@ -178,7 +246,7 @@ class PowerControls : ControlsProviderService() {
 
         controlIds.forEach { controlFlows[it] = flow }
 
-        for (i in controls){
+        for (i in controls) {
             flow.onNext(i)
         }
 
@@ -198,118 +266,144 @@ class PowerControls : ControlsProviderService() {
                     flow.onNext(controls[0])
                 }
 
-                1503.toString() -> {
+                Controls.SEARCH.id.toString() -> {
+                    val i = Intent()
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .setClassName(
+                            "com.google.android.googlequicksearchbox",
+                            "com.google.android.apps.gsa.search_gesture.GestureActivity"
+                        )
+                    startActivity(i)
+                    hidePowerMenu()
+                }
+
+                Controls.FLASHLIGHT.id.toString() -> {
                     consumer.accept(ControlAction.RESPONSE_OK)
                     if (action is BooleanAction) toggleState2 = action.newState
-                    this.enableFlashlight(toggleState2)
-                    flow.onNext(buildToggleControl(
-                        id = 1503,
-                        title = Controls.FLASHLIGHT.title,
-                        enabled = toggleState2,
-                        icon = Controls.FLASHLIGHT.icon,
-                        intent = Controls.FLASHLIGHT.intent
-                    ))
+                    enableFlashlight(toggleState2)
+                    Controls.FLASHLIGHT.also {
+                        flow.onNext(
+                            buildToggleControl(
+                                id = it.id,
+                                title = it.title,
+                                subTitle = it.subTitle,
+                                enabled = toggleState2,
+                                icon = it.icon,
+                                intent = it.intent
+                            )
+                        )
+                    }
+
                 }
-                1504.toString() -> {
+                Controls.BLUETOOTH.id.toString() -> {
                     consumer.accept(ControlAction.RESPONSE_OK)
                     if (action is BooleanAction) toggleState2 = action.newState
                     enableBluetooth(toggleState2)
-                    flow.onNext(buildToggleControl(
-                        id = 1504,
-                        title = Controls.BLUETOOTH.title,
-                        enabled = toggleState2,
-                        icon = Controls.BLUETOOTH.icon,
-                        intent = Controls.BLUETOOTH.intent
-                    ))
+                    Controls.BLUETOOTH.also {
+                        flow.onNext(
+                            buildToggleControl(
+                                id = it.id,
+                                title = it.title,
+                                subTitle = it.subTitle,
+                                enabled = toggleState2,
+                                icon = it.icon,
+                                intent = it.intent
+                            )
+                        )
+                    }
                 }
 
-                1512.toString() -> {
+                Controls.NOTIFICATIONS.id.toString() -> {
+                    showNotifications()
+                    hidePowerMenu()
+                }
+
+                Controls.MEDIA_VOLUME.id.toString() -> {
                     consumer.accept(ControlAction.RESPONSE_OK)
-                    if (action is FloatAction) rangeState = action.newValue
-                    changeMediaVolume(this, rangeState.toInt())
-                    flow.onNext(buildRangeControl(
-                        id = 1512,
-                        title = Controls.MEDIA_VOLUME.title,
-                        icon = Controls.MEDIA_VOLUME.icon,
-                        state = rangeState,
-                        intent = Controls.MEDIA_VOLUME.intent
-                    ))
+                    if (action is FloatAction) {
+                        rangeState = action.newValue
+                        changeMediaVolume(rangeState.toInt())
+                    } else if (action is BooleanAction) {
+                        toggleState2 = action.newState
+                        changeMediaVolume(0)
+                    }
+                    Controls.MEDIA_VOLUME.also {
+                        flow.onNext(
+                            buildRangeControl(
+                                id = it.id,
+                                title = it.title,
+                                subTitle = it.subTitle,
+                                icon = it.icon,
+                                state = rangeState,
+                                intent = it.intent
+                            )
+                        )
+                    }
+
                 }
 
-                1513.toString() -> {
+                Controls.RING_VOLUME.id.toString() -> {
                     consumer.accept(ControlAction.RESPONSE_OK)
-                    if (action is FloatAction) rangeState = action.newValue
-                    changeRingVolume(this, rangeState.toInt())
-                    flow.onNext(buildRangeControl(
-                        id = 1513,
-                        title = Controls.RING_VOLUME.title,
-                        icon = Controls.RING_VOLUME.icon,
-                        state = rangeState,
-                        intent = Controls.RING_VOLUME.intent
-                    ))
+                    if (action is FloatAction) {
+                        rangeState = action.newValue
+                        changeRingVolume(rangeState.toInt())
+                    } else if (action is BooleanAction) {
+                        toggleState2 = action.newState
+                        changeRingVolume(0)
+                    }
+                    Controls.RING_VOLUME.also {
+                        flow.onNext(
+                            buildRangeControl(
+                                id = it.id,
+                                title = it.title,
+                                subTitle = it.subTitle,
+                                icon = it.icon,
+                                state = rangeState,
+                                intent = it.intent
+                            )
+                        )
+                    }
                 }
 
-                1514.toString() -> {
+                Controls.BRIGHTNESS.id.toString() -> {
                     consumer.accept(ControlAction.RESPONSE_OK)
-                    if (action is FloatAction) rangeState = action.newValue
-                    changeBrightness(applicationContext, (rangeState*2.55).toInt())
-                    flow.onNext(buildRangeControl(
-                        id = 1514,
-                        title = Controls.BRIGHTNESS.title,
-                        icon = Controls.BRIGHTNESS.icon,
-                        state = rangeState,
-                        intent = Controls.BRIGHTNESS.intent
-                    ))
+                    if (action is FloatAction) {
+                        rangeState = action.newValue
+                        changeBrightness(applicationContext, (rangeState * 2.55).toInt())
+                    } else if (action is BooleanAction) {
+                        toggleState2 = action.newState
+                        changeBrightness(applicationContext, 0)
+                    }
+                    Controls.BRIGHTNESS.also {
+                        flow.onNext(
+                            buildRangeControl(
+                                id = it.id,
+                                title = it.title,
+                                subTitle = it.subTitle,
+                                icon = it.icon,
+                                state = rangeState,
+                                intent = it.intent
+                            )
+                        )
+                    }
                 }
 
-                1515.toString() -> {
+                Controls.AUTO_ROTATE.id.toString() -> {
                     consumer.accept(ControlAction.RESPONSE_OK)
                     if (action is BooleanAction) toggleState2 = action.newState
-                    enableAutoRotate(this, toggleState2)
-                    flow.onNext(buildToggleControl(
-                        id = 1515,
-                        title = Controls.AUTO_ROTATE.title,
-                        enabled = toggleState2,
-                        icon = Controls.AUTO_ROTATE.icon,
-                        intent = Controls.AUTO_ROTATE.intent
-                    ))
-                }
-
-                1516.toString() -> {
-                    consumer.accept(ControlAction.RESPONSE_OK)
-                    if (action is BooleanAction) toggleState2 = action.newState
-                    enableDND(this, toggleState2)
-                    flow.onNext(buildToggleControl(
-                        id = 1516,
-                        title = Controls.DND.title,
-                        enabled = toggleState2,
-                        icon = Controls.DND.icon,
-                        intent = Controls.DND.intent
-                    ))
-                }
-
-                1517.toString() -> {
-                    consumer.accept(ControlAction.RESPONSE_OK)
-                    if (action is BooleanAction) toggleState2 = action.newState
-                    enableDarkMode(this, toggleState2)
-                    flow.onNext(buildToggleControl(
-                        id = 1517,
-                        title = Controls.NIGHT_LIGHT.title,
-                        enabled = toggleState2,
-                        icon = Controls.NIGHT_LIGHT.icon,
-                        intent = Controls.NIGHT_LIGHT.intent
-                    ))
-                }
-
-                1518.toString() -> {
-                    consumer.accept(ControlAction.RESPONSE_OK)
-                    if (action is BooleanAction) toggleState2 = action.newState
-                    flow.onNext(buildToggleControl(
-                        id = 1518,
-                        title = Controls.FLIGHT_MODE.title,
-                        enabled = toggleState2,
-                        icon = Controls.FLIGHT_MODE.icon
-                    ))
+                    enableAutoRotate(toggleState2)
+                    Controls.AUTO_ROTATE.also {
+                        flow.onNext(
+                            buildToggleControl(
+                                id = it.id,
+                                title = it.title,
+                                subTitle = it.subTitle,
+                                enabled = toggleState2,
+                                icon = it.icon,
+                                intent = it.intent
+                            )
+                        )
+                    }
                 }
                 else -> consumer.accept(ControlAction.RESPONSE_OK)
             }
@@ -369,9 +463,9 @@ class PowerControls : ControlsProviderService() {
             )
         ),
         titleRes = title,
+        subTitle = subTitle,
         type = DeviceTypes.TYPE_GENERIC_ON_OFF,
         icon = icon,
-        subTitle = subTitle,
         intent = intent
     )
 
@@ -380,7 +474,7 @@ class PowerControls : ControlsProviderService() {
         title: String,
         minValue: Float = 0f,
         maxValue: Float = 100f,
-        state: Float = (minValue + maxValue)/2,
+        state: Float = (minValue + maxValue) / 2,
         step: Float = 1f,
         icon: Int,
         subTitle: String = "",
@@ -393,8 +487,8 @@ class PowerControls : ControlsProviderService() {
             minValue,
             maxValue,
             state,
-            if(isWeather) 0.01f else step,
-            if(isWeather) "%1.2f " + "℃" else "%1.0f%%"
+            if (isWeather) 0.01f else step,
+            if (isWeather) "%1.1f " + "℃" else "%1.0f%%"
         ),
         titleRes = title,
         subTitle = subTitle,

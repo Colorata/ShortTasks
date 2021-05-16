@@ -39,11 +39,13 @@ import com.colorata.st.ui.theme.foregroundColor
 @Preview(showSystemUi = true)
 @Composable
 fun AddAppSecondary() {
-    val state by remember { mutableStateOf(ScrollableState { 0f })}
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(backgroundColor())
-        .scrollable(state = state, orientation = Orientation.Vertical)) {
+    val state by remember { mutableStateOf(ScrollableState { 0f }) }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(backgroundColor())
+            .scrollable(state = state, orientation = Orientation.Vertical)
+    ) {
         AppsList()
     }
 
@@ -55,16 +57,16 @@ fun AddAppSecondary() {
 fun AppsList() {
     val context = LocalContext.current
     val shared = context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
-
-    Log.d("Label", shared.getString("UserLabel 1", "A")!!)
-    Log.d("Package", shared.getString("UserPackage 1", "A")!!)
-    Log.d("Icon", shared.getString("UserIcon 1", "")!!)
+    
     val labels = mutableListOf("Title")
     labels.addAll(context.getAppsLabel())
 
     val packages = mutableListOf("Title")
     packages.addAll(context.getAppsPackage())
 
+    val enabled = mutableListOf<Boolean>()
+    val checkedAppPackages = setOf<String>()
+    val checkedAppNames = setOf<String>()
     val icons = mutableListOf(
         ContextCompat.getDrawable(
             context,
@@ -78,6 +80,7 @@ fun AppsList() {
 
     for (i in 0..icons.lastIndex) {
         bitmap.add(icons[i]!!.toBitmap())
+        enabled.add(false)
     }
 
     LazyColumn(modifier = Modifier.fillMaxHeight()) {
@@ -88,9 +91,6 @@ fun AppsList() {
                     subTitle = Strings.addAppSubTitle
                 )
             } else {
-                var show by remember {
-                    mutableStateOf(false)
-                }
                 Card(
                     shape = RoundedCornerShape(SDimens.roundedCorner),
                     border = BorderStroke(
@@ -103,7 +103,7 @@ fun AppsList() {
                         .padding(SDimens.cardPadding)
                 ) {
 
-                    Column(modifier = Modifier.clickable { show = !show }) {
+                    Column {
                         Row(
                             horizontalArrangement = Arrangement.Start,
                             verticalAlignment = Alignment.CenterVertically,
@@ -122,37 +122,26 @@ fun AppsList() {
                                 modifier = Modifier.padding(horizontal = SDimens.largePadding)
                             )
                         }
-                        Row(horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .padding(
-                                end = SDimens.normalPadding,
-                                bottom = SDimens.normalPadding,
-                                top = SDimens.smallPadding
-                            )
-                            .fillMaxWidth()) {
-                            SToggle(enabled = false, onDisable = { /*TODO*/ }) {
+                        Row(
+                            horizontalArrangement = Arrangement.End,
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .padding(
+                                    end = SDimens.normalPadding,
+                                    bottom = SDimens.normalPadding,
+                                    top = SDimens.smallPadding
+                                )
+                                .fillMaxWidth()
+                        ) {
+                            SToggle(
+                                enabled = enabled[index],
+                                onDisable = {
+                                    enabled[index] = false
+                                    checkedAppPackages.minus(packages[index])
+                                    checkedAppNames.minus(labels[index])
+                                }) {
+                                enabled[index] = true
 
-                            }
-                        }
-                        AnimatedVisibility(visible = show) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                horizontalArrangement = Arrangement.End
-                            ) {
-                                SButton(modifier = Modifier.padding(
-                                    end = SDimens.largePadding,
-                                    bottom = SDimens.largePadding
-                                ), text = Strings.add) {
-                                    val edit = shared.edit()
-                                    val count = shared.getInt("AppCount", 0) + 1
-                                    edit.putInt("AppCount", count)
-                                    edit.putString("UserLabel $count", labels[index])
-                                    edit.putString("UserPackage $count", packages[index])
-                                    edit.putString("UserIcon $count", bitmap[index].toSharingString())
-                                    edit.apply()
-                                }
                             }
                         }
                     }

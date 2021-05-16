@@ -14,6 +14,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.colorata.st.ui.theme.Strings
+import android.content.pm.PackageManager
+
+
+
 
 
 @Composable
@@ -103,4 +107,13 @@ fun Context.isAirplaneEnabled(): Boolean {
         contentResolver,
         Settings.Global.AIRPLANE_MODE_ON, 0
     ) != 0
+}
+
+fun Context.isPackageInstalled(name: String): Boolean {
+    return try {
+        packageManager.getPackageInfo(name, 0)
+        true
+    } catch (e: PackageManager.NameNotFoundException) {
+        false
+    }
 }

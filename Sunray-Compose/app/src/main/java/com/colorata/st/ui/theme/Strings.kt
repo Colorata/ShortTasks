@@ -81,4 +81,7 @@ object Strings{
     const val tasks = "Google Tasks"
     const val notify = "Notifications"
     const val button = "Button"
+    const val hold = "Hold"
+    const val tap = "Tap"
+    const val slideOrTap = "Slide or Tap"
 }
