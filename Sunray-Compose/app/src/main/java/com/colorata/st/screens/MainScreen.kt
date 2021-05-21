@@ -1,6 +1,8 @@
 package com.colorata.st.screens
 
 import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -29,7 +31,7 @@ fun MainScreen() {
         subTitles = ScreenComponents.MainScreen.subTitles,
         icons = ScreenComponents.MainScreen.icons,
         modifier = Modifier.padding(bottom = getBottomNavigationHeight()),
-        hidden = listOf({ TButtonDefault() }, { PowerMainScreenContent()})
+        hidden = listOf({ TButtonDefault() }, { GetStartedCardContent()}, { PowerMainScreenContent()})
     )
 }
 
@@ -47,6 +49,25 @@ fun PowerMainScreenContent(){
         SButton(modifier = Modifier, text = Strings.show) {
             val intent = Intent(context, SecondaryActivity::class.java)
             intent.putExtra(Strings.screen, CurrentScreen.POWER)
+            context.startActivity(intent)
+        }
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, group = "Hidden Content")
+@Composable
+fun GetStartedCardContent(){
+    val context = LocalContext.current
+    Row(
+        modifier = Modifier
+            .padding(SDimens.largePadding)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.End
+    ) {
+        SButton(modifier = Modifier, text = Strings.modifySettings) {
+            val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
+            val uri = Uri.fromParts("package", context.packageName, null)
+            intent.data = uri
             context.startActivity(intent)
         }
     }

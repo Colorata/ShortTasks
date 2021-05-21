@@ -14,7 +14,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.Modifier
 import com.colorata.st.screens.Navigation
-import com.colorata.st.ui.theme.*
+import com.colorata.st.ui.theme.Strings
+import com.colorata.st.ui.theme.backgroundColor
+import com.colorata.st.ui.theme.backgroundInt
+import com.colorata.st.ui.theme.setSystemColor
 
 class MainActivity : AppCompatActivity() {
 

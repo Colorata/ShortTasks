@@ -30,9 +30,7 @@ fun String.toHSV(): Triple<Float, Float, Float> {
     val r: Float = Integer.parseInt("${this[1]}${this[2]}", 16).toFloat()/255
     val g: Float = Integer.parseInt("${this[3]}${this[4]}", 16).toFloat()/255
     val b: Float = Integer.parseInt("${this[5]}${this[6]}", 16).toFloat()/255
-    println(r)
-    println(g)
-    println(b)
+
     val min = r.coerceAtMost(g).coerceAtMost(b)
     val max = r.coerceAtLeast(g).coerceAtLeast(b)
 
@@ -60,9 +58,6 @@ fun String.toHSV(): Triple<Float, Float, Float> {
     val s = if (max == 0f) {
         0f
     } else (dif / max) * 100
-
-    println(min)
-    println(max)
 
     return Triple(h, s, v)
 }

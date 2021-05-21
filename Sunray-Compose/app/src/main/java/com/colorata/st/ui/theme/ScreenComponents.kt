@@ -28,16 +28,19 @@ object ScreenComponents{
     object MainScreen {
         val titles = mutableListOf(
             Strings.main,
+            Strings.getStarted,
             Strings.powerAssistant
         )
 
         val subTitles = mutableListOf(
             Strings.relatedPosts,
+            Strings.getStartedSubTitle,
             Strings.powerMainSubTitle
         )
 
         val icons = mutableListOf(
             R.drawable.abc_vector_test,
+            R.drawable.ic_outline_play_circle_outline_24,
             R.drawable.ic_outline_power_settings_new_24
         )
     }

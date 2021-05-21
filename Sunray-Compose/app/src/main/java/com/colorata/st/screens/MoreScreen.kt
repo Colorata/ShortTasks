@@ -1,7 +1,6 @@
 package com.colorata.st.screens
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
@@ -52,7 +51,7 @@ fun SettingsContent(){
         }
 
         SButton(modifier = Modifier, text = Strings.theme) {
-            Log.d("Clicked", "Erase")
+
         }
     }
 }
@@ -66,11 +65,11 @@ fun HelpContent(){
             horizontalArrangement = Arrangement.End
         ) {
             SButton(modifier = Modifier.padding(end = SDimens.smallPadding), text = Strings.power) {
-                Log.d("Clicked", "Power")
+
             }
 
             SButton(modifier = Modifier, text = Strings.weather) {
-                Log.d("Clicked", "Weather")
+
             }
         }
     }
@@ -88,11 +87,11 @@ fun AboutContent(){
                 end = SDimens.smallPadding,
                 bottom = SDimens.smallPadding
             ), text = Strings.feedback) {
-                Log.d("Clicked", "Feedback")
+
             }
 
             SButton(modifier = Modifier, text = Strings.donation) {
-                Log.d("Clicked", "Donation")
+
             }
         }
 
@@ -101,7 +100,7 @@ fun AboutContent(){
             horizontalArrangement = Arrangement.End
         ) {
             SButton(modifier = Modifier, text = Strings.version) {
-                Log.d("Clicked", "Weather")
+
             }
         }
     }

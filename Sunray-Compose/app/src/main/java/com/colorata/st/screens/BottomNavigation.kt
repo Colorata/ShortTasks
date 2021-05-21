@@ -1,6 +1,5 @@
 package com.colorata.st.screens
 
-
 import android.content.Context
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -29,7 +28,6 @@ import com.colorata.st.ui.theme.foregroundColor
 
 /*@Composable
 fun BottomNav(state: MutableState<CurrentScreen>){
-
     val shared = LocalContext.current.getSharedPreferences("Shared", Context.MODE_PRIVATE)
     BottomNavigation(
         contentColor = buttonColor(LocalContext.current),
@@ -38,7 +36,6 @@ fun BottomNav(state: MutableState<CurrentScreen>){
             shared.edit().putInt("bottomSize", pxToDp(it.size.component2())).apply()
         }
     ) {
-
         BottomNavigationItem(
             selected = state.value == CurrentScreen.MAIN,
             onClick = { state.value = CurrentScreen.MAIN},
@@ -51,7 +48,6 @@ fun BottomNav(state: MutableState<CurrentScreen>){
             label = { Text(text = Strings.main)},
             alwaysShowLabel = false,
         )
-
         BottomNavigationItem(
             selected = state.value == CurrentScreen.FEATURES,
             onClick = { state.value = CurrentScreen.FEATURES},
@@ -63,9 +59,7 @@ fun BottomNav(state: MutableState<CurrentScreen>){
             },
             label = { Text(text = Strings.features)},
             alwaysShowLabel = false,
-
         )
-
         BottomNavigationItem(
             selected = state.value == CurrentScreen.MORE,
             onClick = { state.value = CurrentScreen.MORE },
@@ -90,15 +84,12 @@ fun BottomNav(navController: NavController){
     /*var showMain by remember {
         mutableStateOf(true)
     }
-
     var showFeatures by remember {
         mutableStateOf(false)
     }
-
     var showMore by remember {
         mutableStateOf(false)
     }
-
     Row(
         modifier = Modifier.padding(SDimens.smallPadding, bottom = 50.dp).fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -122,7 +113,6 @@ fun BottomNav(navController: NavController){
                 Text(text = Strings.main)
             }
         }
-
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -141,7 +131,6 @@ fun BottomNav(navController: NavController){
                 Text(text = Strings.features)
             }
         }
-
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -176,7 +165,7 @@ fun BottomNav(navController: NavController){
             }
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.arguments?.getString(KEY_ROUTE)
+        val currentRoute = navBackStackEntry?.destination?.route
         BottomNavigationItem(
             selected = currentRoute == Strings.main,
             onClick = { navController.navigate(Strings.main){ launchSingleTop = true } },
@@ -201,7 +190,7 @@ fun BottomNav(navController: NavController){
             },
             label = { Text(text = Strings.features)},
             alwaysShowLabel = false
-            )
+        )
 
         BottomNavigationItem(
             selected = currentRoute == Strings.more,
@@ -223,7 +212,7 @@ fun BottomNav(navController: NavController){
 @Composable
 fun Current(route: NavBackStackEntry){
     Crossfade(targetState = route) {
-        when (it.arguments?.getString(KEY_ROUTE)) {
+        when (it.destination.route) {
             Strings.main -> MainScreen()
             Strings.features -> FeatureScreen()
             Strings.more -> MoreScreen()
@@ -236,8 +225,6 @@ fun Current(route: NavBackStackEntry){
 @Preview
 @Composable
 fun MainUI(){
-
-
     val state = rememberSaveable { mutableStateOf(CurrentScreen.MAIN)}
     Column {
         Current(state = state.value, modifier = Modifier.weight(1f))
@@ -256,20 +243,19 @@ fun Navigation(){
         bottomBar = { BottomNav(navController = navController) },
         backgroundColor = Color.Transparent
     ) {
-            NavHost(
-                navController = navController,
-                startDestination = Strings.main
-            ) {
-                composable(Strings.main) {
-                    Current(route = navBackStackEntry!!)
-                }
-                composable(Strings.features) {
-                    Current(route = navBackStackEntry!!)
-                }
-                composable(Strings.more) {
-                    Current(route = navBackStackEntry!!)
-                }
+        NavHost(
+            navController = navController,
+            startDestination = Strings.main
+        ) {
+            composable(Strings.main) {
+                Current(route = navBackStackEntry!!)
             }
+            composable(Strings.features) {
+                Current(route = navBackStackEntry!!)
+            }
+            composable(Strings.more) {
+                Current(route = navBackStackEntry!!)
+            }
+        }
     }
 }
-

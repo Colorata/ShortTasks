@@ -60,6 +60,9 @@ object Strings{
     const val primaryInt = "primary int"
     const val secondaryInt = "secondary int"
     const val controlColor = "control color"
+    const val getStarted = "Get Started"
+    const val getStartedSubTitle = "Get Started with STasks"
+    const val modifySettings = "Modify Settings"
 
     const val powerMainSubTitle = "You will learn how to use Power Assistant"
 

@@ -2,10 +2,11 @@ package com.colorata.st.screens.secondary
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.util.Log
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.gestures.scrollable
@@ -14,7 +15,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
@@ -24,8 +28,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.colorata.st.R
-import com.colorata.st.extensions.*
-import com.colorata.st.extensions.presets.SButton
+import com.colorata.st.extensions.getAppsIcon
+import com.colorata.st.extensions.getAppsLabel
+import com.colorata.st.extensions.getAppsPackage
 import com.colorata.st.extensions.presets.SText
 import com.colorata.st.extensions.presets.SToggle
 import com.colorata.st.extensions.presets.Title

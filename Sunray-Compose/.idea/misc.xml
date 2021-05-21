@@ -159,6 +159,11 @@
         <entry key="../../../../layout/compose-model-1618663009670.xml" value="0.3037037037037037" />
         <entry key="../../../../layout/compose-model-1618663451560.xml" value="0.4620123203285421" />
         <entry key="../../../../layout/compose-model-1621010991969.xml" value="0.20277777777777778" />
+        <entry key="../../../../layout/compose-model-1621405505179.xml" value="0.20270270270270271" />
+        <entry key="../../../../layout/compose-model-1621406090554.xml" value="1.0" />
+        <entry key="../../../../layout/compose-model-1621427575366.xml" value="0.2022804054054054" />
+        <entry key="../../../../layout/compose-model-1621525935983.xml" value="0.20833333333333334" />
+        <entry key="../../../../layout/compose-model-1621583736952.xml" value="0.20277777777777778" />
         <entry key="app/src/main/res/drawable/background.xml" value="0.20989583333333334" />
         <entry key="app/src/main/res/drawable/ic_outline_flash_on_24.xml" value="0.2675925925925926" />
         <entry key="app/src/main/res/drawable/ic_outline_search_24.xml" value="0.18888888888888888" />
@@ -174,5 +179,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="SuppressABINotification">
+    <option name="modulesWithSuppressedNotConfigured">
+      <set>
+        <option value="ShortTasks.app" />
+      </set>
+    </option>
   </component>
 </project>
