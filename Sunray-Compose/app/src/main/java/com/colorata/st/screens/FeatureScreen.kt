@@ -159,27 +159,6 @@ fun PowerAssistantContent(){
     }
 }
 
-//TODO: fix bug with LazyList in LazyList crush
-/*
-@ExperimentalFoundationApi
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
-@Composable
-private fun BubbleContent() {
-    val context = LocalContext.current
-
-    val interactions = mutableListOf(
-        "Position", "Add", "Enable", "More"
-    )
-    LazyVerticalGrid(cells = GridCells.Fixed(2)) {
-        items(interactions){ item ->
-            SButton(modifier = Modifier.padding(10.dp), text = item) {
-                Toast.makeText(context, "$item clicked", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-}*/
-
-
 @Composable
 fun MinDegrees() {
     val context = LocalContext.current

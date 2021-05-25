@@ -1,7 +1,6 @@
 package com.colorata.st.ui.theme
 
 object Strings{
-    const val shortTasks = "ShortTasks"
     const val powerAssistant = "Power Assistant"
     const val next = "Next?"
     const val go = "Go!"
@@ -63,6 +62,14 @@ object Strings{
     const val getStarted = "Get Started"
     const val getStartedSubTitle = "Get Started with STasks"
     const val modifySettings = "Modify Settings"
+    const val permissions = "Permissions"
+    const val accessibility = "Accessibility"
+    const val whyLocation = "STasks uses location for switch Location with tiles"
+    const val whyAccessibility = "STasks uses accessibility for the best experience"
+    const val whyModifySettings = "STasks modifies settings to control device by you"
+    const val other = "Other"
+    const val alreadyGranted = "Already granted"
+    const val ok = "Ok"
 
     const val powerMainSubTitle = "You will learn how to use Power Assistant"
 

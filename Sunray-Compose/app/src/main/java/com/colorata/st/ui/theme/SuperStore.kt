@@ -1,34 +1,89 @@
 package com.colorata.st.ui.theme
 
 import android.content.Context
-import android.content.Context.MODE_PRIVATE
-import android.database.sqlite.SQLiteDatabase
-import androidx.core.database.getStringOrNull
+import androidx.room.*
 
-val Context.database: SQLiteDatabase
-    get() = openOrCreateDatabase("SKeys.db", MODE_PRIVATE, null)
+/*AppDb.getInstance(this)?.appDao()*/
 
-fun Context.getApp(packageName: String): Pair<String, String> {
-    val base = openOrCreateDatabase("SKeys.db", MODE_PRIVATE, null)
-    base.execSQL("CREATE TABLE IF NOT EXISTS appKeys (keys TEXT, return INTEGER)")
-    val query = base.rawQuery("SELECT * FROM appKeys WHERE keys = '%$packageName%'", null)
-    val output = Pair(query.getStringOrNull(1) ?: "com.colorata.st", query.getStringOrNull(2) ?: "STasks")
-    query.close()
-    base.close()
-    return output
+fun Context.updateApp(id: String, name: String) {
+    val list = AppDb.getInstance(this)?.appDao()?.getAll()
+    if (list != null) {
+        for (i in list) {
+            if (i.id == id) {
+                AppDb.getInstance(this)?.appDao()?.update(App(id, name))
+                return
+            }
+        }
+    }
+    AppDb.getInstance(this)?.appDao()?.insert(App(id, name))
 }
 
-/*
-
-
-fun Context.getAllApps(packageName: String): MutableList<Pair<String, String>> {
-    val base = openOrCreateDatabase("SKeys.db", MODE_PRIVATE, null)
-    base.execSQL("CREATE TABLE IF NOT EXISTS appKeys (keys TEXT, return INTEGER)")
-    val query = base.rawQuery("SELECT * FROM appKeys WHERE xColumn LIKE '%$packageName%'", null)
-    val output = Pair(query.getStringOrNull(1) ?: "com.colorata.st", query.getStringOrNull(2) ?: "STasks")
-    query.moveToFirst()
-    query.close()
-    base.close()
-    return output
+fun Context.deleteApp(id: String, name: String) {
+    val list = AppDb.getInstance(this)?.appDao()?.getAll()
+    if (list != null) {
+        for (i in list) {
+            if (i.id == id) {
+                AppDb.getInstance(this)?.appDao()?.delete(App(id, name))
+                return
+            }
+        }
+    }
 }
-*/
+
+
+fun Context.getApps(): MutableList<App> = AppDb.getInstance(this)?.appDao()?.getAll() ?: mutableListOf()
+
+@Entity
+data class App(
+    @PrimaryKey val id: String,
+    @ColumnInfo(name = "name") val name: String
+)
+
+@Dao
+interface AppDao {
+    @Query("SELECT * FROM app")
+    fun getAll(): MutableList<App>
+
+    @Query("DELETE FROM app")
+    fun nukeTable()
+
+    @Insert
+    fun insert(app: App)
+
+    @Insert
+    fun insert(appList: List<App>)
+
+    @Update
+    fun update(app: App)
+
+    @Delete
+    fun delete(app: App)
+}
+
+@Database(entities = [App::class], version = 1)
+abstract class AppDb : RoomDatabase() {
+    abstract fun appDao(): AppDao
+
+    companion object {
+        private var INSTANCE: AppDb? = null
+
+        fun getInstance(context: Context): AppDb? {
+            if (INSTANCE == null) {
+                synchronized(AppDb::class) {
+                    INSTANCE = Room.databaseBuilder(
+                        context.applicationContext,
+                        AppDb::class.java, "SKeys.db"
+                    )
+                        .fallbackToDestructiveMigration()
+                        .build()
+                }
+            }
+            return INSTANCE
+        }
+
+        fun destroyInstance() {
+            INSTANCE = null
+        }
+    }
+}
+

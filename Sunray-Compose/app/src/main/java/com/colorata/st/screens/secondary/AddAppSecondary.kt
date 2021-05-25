@@ -1,6 +1,5 @@
 package com.colorata.st.screens.secondary
 
-import android.content.Context
 import android.graphics.Bitmap
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.BorderStroke
@@ -34,10 +33,7 @@ import com.colorata.st.extensions.getAppsPackage
 import com.colorata.st.extensions.presets.SText
 import com.colorata.st.extensions.presets.SToggle
 import com.colorata.st.extensions.presets.Title
-import com.colorata.st.ui.theme.SDimens
-import com.colorata.st.ui.theme.Strings
-import com.colorata.st.ui.theme.backgroundColor
-import com.colorata.st.ui.theme.foregroundColor
+import com.colorata.st.ui.theme.*
 
 @ExperimentalFoundationApi
 @ExperimentalAnimationApi
@@ -61,8 +57,7 @@ fun AddAppSecondary() {
 @Composable
 fun AppsList() {
     val context = LocalContext.current
-    val shared = context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
-    
+    val checkedApps = context.getApps()
     val labels = mutableListOf("Title")
     labels.addAll(context.getAppsLabel())
 
@@ -70,8 +65,6 @@ fun AppsList() {
     packages.addAll(context.getAppsPackage())
 
     val enabled = mutableListOf<Boolean>()
-    val checkedAppPackages = setOf<String>()
-    val checkedAppNames = setOf<String>()
     val icons = mutableListOf(
         ContextCompat.getDrawable(
             context,
@@ -85,7 +78,15 @@ fun AppsList() {
 
     for (i in 0..icons.lastIndex) {
         bitmap.add(icons[i]!!.toBitmap())
-        enabled.add(false)
+        var checked = false
+        for (j in checkedApps) {
+            if (packages[i] == j.id) {
+                enabled.add(true)
+                checked = true
+                break
+            }
+        }
+        if (!checked) enabled.add(false)
     }
 
     LazyColumn(modifier = Modifier.fillMaxHeight()) {
@@ -142,11 +143,10 @@ fun AppsList() {
                                 enabled = enabled[index],
                                 onDisable = {
                                     enabled[index] = false
-                                    checkedAppPackages.minus(packages[index])
-                                    checkedAppNames.minus(labels[index])
+                                    context.deleteApp(packages[index], labels[index])
                                 }) {
                                 enabled[index] = true
-
+                                context.updateApp(packages[index], labels[index])
                             }
                         }
                     }

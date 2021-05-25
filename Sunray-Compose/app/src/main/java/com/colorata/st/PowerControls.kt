@@ -23,6 +23,7 @@ import com.colorata.st.extensions.weather.WeatherService
 import com.colorata.st.ui.theme.Controls
 import com.colorata.st.ui.theme.Strings
 import com.colorata.st.ui.theme.backgroundIntControl
+import com.colorata.st.ui.theme.getApps
 import io.reactivex.Flowable
 import io.reactivex.processors.ReplayProcessor
 import org.reactivestreams.FlowAdapters
@@ -230,7 +231,17 @@ class PowerControls : ControlsProviderService() {
                 }
             }
 
-
+            /*val apps = getApps()
+            getApps().forEach {
+                buildToggleControl(
+                    id = apps.indexOf(it),
+                    title = it.name,
+                    subTitle = Strings.tap,
+                    icon = R.drawable.ic_android_black_24dp,
+                    enabled = false
+                )
+            }
+*/
             return list
         }
 
@@ -405,7 +416,10 @@ class PowerControls : ControlsProviderService() {
                         )
                     }
                 }
-                else -> consumer.accept(ControlAction.RESPONSE_OK)
+                else -> if (controlId.toInt() < 1400) {
+                    consumer.accept(ControlAction.RESPONSE_OK)
+                    packageManager.getLaunchIntentForPackage(getApps()[controlId.toInt()].id)
+                } else consumer.accept(ControlAction.RESPONSE_OK)
             }
         }
     }
