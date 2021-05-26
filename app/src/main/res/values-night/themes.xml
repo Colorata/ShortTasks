@@ -1,54 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-
-    <style name="Theme.ShortTasks" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <!-- Base application theme. -->
+    <style name="Theme.ShortTasks" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#b47c51</item>
-        <item name="colorPrimaryVariant">#e8ab7e</item>
+        <item name="colorPrimary">@color/purple_200</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/black</item>
-
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">#b47c51</item>
-        <item name="colorSecondaryVariant">#e8ab7e</item>
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
-
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@android:color/transparent</item>
-
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="android:fontFamily">@font/font</item>
-        <item name="materialButtonStyle">@style/ButtonStyle</item>
-        <item name="android:windowBackground">@color/dark_background</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <!-- working wrong with snackbar <item name="android:windowBackground">#22221A</item>-->
-        <item name="android:textColor">#ffffff</item>
-        <item name="android:colorEdgeEffect">#22221A</item>
-        <!--<item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>-->
     </style>
-
-    <!-- Outlined Button Style -->
-    <style name="ButtonStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
-        <item name="materialButtonStyle">?attr/materialButtonOutlinedStyle</item>
-        <item name="android:insetTop">@dimen/margin_button</item>
-        <item name="android:insetBottom">@dimen/margin_button</item>
-        <item name="android:insetRight">@dimen/margin_button</item>
-        <item name="android:insetLeft">@dimen/margin_button</item>
-        <item name="android:padding">@dimen/padding_button</item>
-        <item name="cornerRadius">20dp</item>
-    </style>
-
-
-    <!--TODO: fix bad animation -->
-    <!--
-    <style name="BaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:windowLightNavigationBar">true</item>
-        <item name="cornerSizeTopLeft">30dp</item>
-        <item name="cornerSizeTopRight">30dp</item>
-        <item name="android:paddingTop">30dp</item>
-        <item name="cornerFamily">rounded</item>
-    </style>
-
-    <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog" />-->
 </resources>
