@@ -12,6 +12,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.MaterialTheme
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import com.colorata.st.screens.Navigation
 import com.colorata.st.ui.theme.Strings
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     private var nightMode = true
 
+    @ExperimentalComposeUiApi
     @ExperimentalAnimationApi
     @ExperimentalFoundationApi
     override fun onCreate(savedInstanceState: Bundle?) {

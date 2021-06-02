@@ -14,7 +14,7 @@ import com.colorata.st.ui.theme.SDimens
 import java.util.*
 
 @Composable
-fun SButton(text: String = "", modifier: Modifier, onClick: () -> Unit){
+fun SButton(modifier: Modifier = Modifier, text: String = "", onClick: () -> Unit) {
     OutlinedButton(
         onClick = onClick,
         shape = CircleShape,
@@ -36,7 +36,7 @@ fun SButton(text: String = "", modifier: Modifier, onClick: () -> Unit){
 
 @Preview(name = "SButton", showBackground = true, backgroundColor = 0xFFFFFFFF)
 @Composable
-fun TButtonDefault(){
+fun TButtonDefault() {
     SButton(text = "OutLined Button", modifier = Modifier) {
 
     }

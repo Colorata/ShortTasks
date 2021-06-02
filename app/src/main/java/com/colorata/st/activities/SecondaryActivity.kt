@@ -9,6 +9,7 @@ import androidx.compose.material.MaterialTheme
 import com.colorata.st.CurrentScreen
 import com.colorata.st.screens.secondary.AddAppSecondary
 import com.colorata.st.screens.secondary.PowerSecondary
+import com.colorata.st.screens.secondary.ThemePickerSecondary
 import com.colorata.st.ui.theme.Strings
 import com.colorata.st.ui.theme.backgroundInt
 
@@ -23,6 +24,7 @@ class SecondaryActivity : AppCompatActivity() {
                 when(intent.getSerializableExtra(Strings.screen)){
                     CurrentScreen.POWER -> PowerSecondary()
                     CurrentScreen.ADD_APP -> AddAppSecondary()
+                    CurrentScreen.THEME_PICKER -> ThemePickerSecondary()
                 }
             }
         }

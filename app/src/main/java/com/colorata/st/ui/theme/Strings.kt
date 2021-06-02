@@ -72,6 +72,9 @@ object Strings{
     const val ok = "Ok"
     const val linkTitle = "Link Title"
     const val linkLink = "Link Link"
+    const val themePicker = "Theme Picker"
+    const val themePickerSubTitle = "Create your own ShortTasks"
+    const val clearSubTitle = "You'll lose all your data (like City)"
 
     const val powerMainSubTitle = "You will learn how to use Power Assistant"
 
@@ -96,4 +99,14 @@ object Strings{
     const val hold = "Hold"
     const val tap = "Tap"
     const val slideOrTap = "Slide or Tap"
+
+    const val red = "Maybe Red"
+    const val orange = "Peachy Orange"
+    const val yellow = "Yellow Marshmallow"
+    const val green = "Green Lime"
+    const val turquoise = "Turquoise Sea"
+    const val blue = "Natural Blue"
+    const val purple = "Very Purple"
+    const val white = "Boring White"
+    const val autoDetect = "Personal Designer"
 }

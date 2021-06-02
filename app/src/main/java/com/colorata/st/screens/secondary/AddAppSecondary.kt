@@ -57,7 +57,7 @@ fun AddAppSecondary() {
 @Composable
 fun AppsList() {
     val context = LocalContext.current
-    val checkedApps = context.getApps()
+    //val checkedApps = context.getApps()
     val labels = mutableListOf("Title")
     labels.addAll(context.getAppsLabel())
 
@@ -78,7 +78,7 @@ fun AppsList() {
 
     for (i in 0..icons.lastIndex) {
         bitmap.add(icons[i]!!.toBitmap())
-        var checked = false
+        /*var checked = false
         for (j in checkedApps) {
             if (packages[i] == j.id) {
                 enabled.add(true)
@@ -86,7 +86,7 @@ fun AppsList() {
                 break
             }
         }
-        if (!checked) enabled.add(false)
+        if (!checked) enabled.add(false)*/
     }
 
     LazyColumn(modifier = Modifier.fillMaxHeight()) {
@@ -143,10 +143,10 @@ fun AppsList() {
                                 enabled = enabled[index],
                                 onDisable = {
                                     enabled[index] = false
-                                    context.deleteApp(packages[index], labels[index])
+                                    //context.deleteApp(packages[index], labels[index])
                                 }) {
                                 enabled[index] = true
-                                context.updateApp(packages[index], labels[index])
+                                //context.updateApp(packages[index], labels[index])
                             }
                         }
                     }

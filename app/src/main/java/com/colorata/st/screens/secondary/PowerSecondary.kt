@@ -44,7 +44,7 @@ private fun Help1(){
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.End
     ) {
-        SButton(modifier = Modifier, text = Strings.go) {
+        SButton(text = Strings.go) {
 
         }
     }

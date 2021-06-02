@@ -149,7 +149,7 @@ fun PowerAssistantContent() {
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-            SButton(modifier = Modifier, text = Strings.help) {
+            SButton(text = Strings.help) {
 
             }
         }

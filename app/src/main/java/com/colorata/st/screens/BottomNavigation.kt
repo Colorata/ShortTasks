@@ -12,6 +12,7 @@ import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -207,7 +208,7 @@ fun BottomNav(navController: NavController){
     }
 }
 
-@ExperimentalFoundationApi
+@ExperimentalComposeUiApi
 @ExperimentalAnimationApi
 @Composable
 fun Current(route: NavBackStackEntry){
@@ -232,6 +233,7 @@ fun MainUI(){
     }
 }*/
 
+@ExperimentalComposeUiApi
 @Preview
 @ExperimentalFoundationApi
 @ExperimentalAnimationApi

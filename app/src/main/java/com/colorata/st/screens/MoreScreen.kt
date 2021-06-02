@@ -3,12 +3,15 @@ package com.colorata.st.screens
 import android.content.Context
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import com.colorata.st.CurrentScreen
 import com.colorata.st.extensions.getBottomNavigationHeight
+import com.colorata.st.extensions.goToSecondary
 import com.colorata.st.extensions.presets.SButton
+import com.colorata.st.extensions.presets.SMessage
 import com.colorata.st.extensions.presets.Screen
 import com.colorata.st.extensions.presets.TButtonDefault
 import com.colorata.st.ui.theme.SDimens
@@ -33,32 +36,39 @@ fun MoreScreen() {
     )
 }
 
+@ExperimentalAnimationApi
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, group = "Hidden Content")
 @Composable
-fun SettingsContent(){
+fun SettingsContent() {
+    val context = LocalContext.current
     val shared = LocalContext.current.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
-    Row(
-        modifier = Modifier
-            .padding(SDimens.largePadding)
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.End
-    ) {
-        SButton(
-            modifier = Modifier.padding(end = SDimens.smallPadding),
-            text = Strings.erase
+    var isClearVisible by remember { mutableStateOf(false) }
+    Column(modifier = Modifier.padding(SDimens.largePadding)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
         ) {
-            shared.edit().clear().apply()
+            SButton(
+                modifier = Modifier.padding(end = SDimens.smallPadding),
+                text = Strings.erase
+            ) {
+                isClearVisible = !isClearVisible
+            }
+
+            SButton(text = Strings.theme) {
+                context.goToSecondary(CurrentScreen.THEME_PICKER)
+            }
         }
-
-        SButton(modifier = Modifier, text = Strings.theme) {
-
+        SMessage(visible = isClearVisible, text = Strings.clearSubTitle) {
+            shared.edit().clear().apply()
         }
     }
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, group = "Hidden Content")
 @Composable
-fun HelpContent(){
+fun HelpContent() {
     Column(modifier = Modifier.padding(SDimens.largePadding)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -68,7 +78,7 @@ fun HelpContent(){
 
             }
 
-            SButton(modifier = Modifier, text = Strings.weather) {
+            SButton(text = Strings.weather) {
 
             }
         }
@@ -77,20 +87,22 @@ fun HelpContent(){
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, group = "Hidden Content")
 @Composable
-fun AboutContent(){
+fun AboutContent() {
     Column(modifier = Modifier.padding(SDimens.largePadding)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-            SButton(modifier = Modifier.padding(
-                end = SDimens.smallPadding,
-                bottom = SDimens.smallPadding
-            ), text = Strings.feedback) {
+            SButton(
+                modifier = Modifier.padding(
+                    end = SDimens.smallPadding,
+                    bottom = SDimens.smallPadding
+                ), text = Strings.feedback
+            ) {
 
             }
 
-            SButton(modifier = Modifier, text = Strings.donation) {
+            SButton(text = Strings.donation) {
 
             }
         }
@@ -99,7 +111,7 @@ fun AboutContent(){
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-            SButton(modifier = Modifier, text = Strings.version) {
+            SButton(text = Strings.version) {
 
             }
         }

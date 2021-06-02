@@ -6,6 +6,7 @@ enum class CurrentScreen {
     MORE,
     POWER,
     ADD_APP,
+    THEME_PICKER,
     ADD_LINK,
     POSITION,
     CHANGE_CITY,

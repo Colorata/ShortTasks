@@ -1,7 +1,6 @@
 package com.colorata.st.ui.theme
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.util.TypedValue
 import android.view.ContextThemeWrapper
 import androidx.compose.runtime.Composable
@@ -30,17 +29,27 @@ fun color(context: Context): Int {
 enum class SystemColor(
     val id: Int,
     val primaryHex: String,
-    val secondaryHex: String
+    val secondaryHex: String,
+    val title: String
 ) {
-    RED(id = 0, primaryHex = "#FFD6E9", secondaryHex = "#503D46"),
-    ORANGE(id = 1, primaryHex = "#E3AF9A", secondaryHex = "#4D3830"),
-    YELLOW(id = 2, primaryHex = "#C8AC94", secondaryHex = "#34271C"),
-    GREEN(id = 3, primaryHex = "#95D4C6", secondaryHex = "#2C4F47"),
-    TURQUOISE(id = 4, primaryHex = "#B8F2FF", secondaryHex = "#2B4449"),
-    BLUE(id = 5, primaryHex = "#8AB4F8", secondaryHex = "#162A49"),
-    PURPLE(id = 6, primaryHex = "#C5BBFE", secondaryHex = "#3D3953"),
-    WHITE(id = 7, primaryHex = "#DADCE0", secondaryHex = "#242527"),
-    BLACK(id = 8, primaryHex = "#DADCE0", secondaryHex = "#242527")
+    RED(id = 0, primaryHex = "#FFD6E9", secondaryHex = "#503D46", title = Strings.red),
+    ORANGE(id = 1, primaryHex = "#E3AF9A", secondaryHex = "#4D3830", title = Strings.orange),
+    YELLOW(id = 2, primaryHex = "#C8AC94", secondaryHex = "#34271C", title = Strings.yellow),
+    GREEN(id = 3, primaryHex = "#95D4C6", secondaryHex = "#2C4F47", title = Strings.green),
+    TURQUOISE(id = 4, primaryHex = "#B8F2FF", secondaryHex = "#2B4449", title = Strings.turquoise),
+    BLUE(id = 5, primaryHex = "#8AB4F8", secondaryHex = "#162A49", title = Strings.blue),
+    PURPLE(id = 6, primaryHex = "#C5BBFE", secondaryHex = "#3D3953", title = Strings.purple),
+    WHITE(id = 7, primaryHex = "#DADCE0", secondaryHex = "#242527", title = Strings.white),
+    BLACK(id = 8, primaryHex = "#DADCE0", secondaryHex = "#242527", title = Strings.autoDetect)
+}
+
+@Composable
+fun getAllColors(): MutableList<Pair<Color, Color>> {
+    val final = mutableListOf<Pair<Color, Color>>()
+    SystemColor.values().forEach {
+        final.add(Pair(Color(it.primaryHex.toIntColor()), Color(it.secondaryHex.toIntColor())))
+    }
+    return final
 }
 
 fun Context.setSystemColor() {
@@ -93,7 +102,10 @@ fun Context.setSystemColor() {
 }
 
 fun Context.backgroundInt(): Int {
-    return getSharedPreferences(Strings.shared, Context.MODE_PRIVATE).getInt(Strings.secondaryInt, 0)
+    return getSharedPreferences(Strings.shared, Context.MODE_PRIVATE).getInt(
+        Strings.secondaryInt,
+        0
+    )
 }
 
 fun Context.foregroundInt(): Int {

@@ -54,7 +54,7 @@ fun PowerMainScreenContent() {
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.End
     ) {
-        SButton(modifier = Modifier, text = Strings.show) {
+        SButton(text = Strings.show) {
             val intent = Intent(context, SecondaryActivity::class.java)
             intent.putExtra(Strings.screen, CurrentScreen.POWER)
             context.startActivity(intent)
@@ -88,7 +88,7 @@ fun GetStartedCardContent() {
                 visibleLocation = false
             }
 
-            SButton(modifier = Modifier, text = Strings.other) {
+            SButton(text = Strings.other) {
                 visibleLocation = !visibleLocation
                 visibleModifySettings = false
                 visibleAccessibility = false
@@ -185,7 +185,7 @@ fun GetStartedCardContent() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 SText(
-                    text = if (Settings.System.canWrite(context)) Strings.whyModifySettings
+                    text = if (!Settings.System.canWrite(context)) Strings.whyModifySettings
                     else Strings.alreadyGranted,
                     fontSize = SDimens.subTitle,
                     modifier = Modifier
