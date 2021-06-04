@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.colorata.st.extensions.presets.SText
 import com.colorata.st.extensions.presets.Title
+import com.colorata.st.extensions.restartApp
 import com.colorata.st.ui.theme.*
 
 @ExperimentalMaterialApi
@@ -79,7 +80,7 @@ fun ThemePickerSecondary() {
                             .fillMaxWidth()
                             .padding(SDimens.cardPadding),
                         onClick = {
-                            currentTheme = SystemColor.values().find { it.title == labels[index]}!!
+                            currentTheme = SystemColor.values().find { it.title == labels[index] }!!
 
                             if (currentTheme == SystemColor.BLACK) SuperStore(context).drop(
                                 Strings.autoDetect,
@@ -112,8 +113,6 @@ fun ThemePickerSecondary() {
                                 )
                                 context.setSystemColor()
                             }
-
-
                         }
                     ) {
                         Row(

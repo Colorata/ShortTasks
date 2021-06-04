@@ -1,6 +1,5 @@
 package com.colorata.st.screens
 
-import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.BorderStroke
@@ -46,7 +45,6 @@ fun FeatureScreen() {
 @Composable
 fun WeatherDirectorContent() {
     val context = LocalContext.current
-    val shared = context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
 
     var showDegrees by remember { mutableStateOf(false) }
     var showCity by remember { mutableStateOf(false) }
@@ -99,13 +97,7 @@ fun WeatherDirectorContent() {
                         text = Strings.save,
                         modifier = Modifier.padding(vertical = SDimens.normalPadding)
                     ) {
-                        shared
-                            .edit()
-                            .putString(
-                                Strings.city,
-                                state
-                            )
-                            .apply()
+                        SuperStore(context).drop(Strings.city, state)
                     }
                 }
             }
@@ -121,7 +113,7 @@ fun PowerAssistantContent() {
     val context = LocalContext.current
     var title by remember { mutableStateOf("") }
     var link by remember { mutableStateOf("") }
-    val shared = context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+
     var addLinkState by remember { mutableStateOf(false) }
     Column(modifier = Modifier.padding(SDimens.largePadding)) {
         Row(
@@ -176,9 +168,10 @@ fun PowerAssistantContent() {
                         modifier = Modifier.padding(SDimens.normalPadding),
                         text = Strings.save
                     ) {
-                        if (!link.startsWith("http://") or !link.startsWith("https://")) link = "https://$link"
-                        shared.edit().putString(Strings.linkTitle, title)
-                            .putString(Strings.linkLink, link).apply()
+                        if (!link.startsWith("http://") or !link.startsWith("https://")) link =
+                            "https://$link"
+                        SuperStore(context).drop(Strings.linkTitle, title)
+                        SuperStore(context).drop(Strings.linkLink, link)
                     }
                 }
             }
@@ -189,13 +182,9 @@ fun PowerAssistantContent() {
 @Composable
 fun MinDegrees() {
     val context = LocalContext.current
-    val shared = context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
     var sliderState by remember {
         mutableStateOf(
-            shared.getInt(
-                Strings.minDegrees,
-                -50
-            ).toFloat()
+            SuperStore(context).catchInt(Strings.minDegrees, -50).toFloat()
         )
     }
 
@@ -268,13 +257,7 @@ fun MinDegrees() {
                     text = Strings.save,
                     modifier = Modifier.padding(SDimens.normalPadding)
                 ) {
-                    shared
-                        .edit()
-                        .putInt(
-                            Strings.minDegrees,
-                            sliderState.toInt()
-                        )
-                        .apply()
+                    SuperStore(context).drop(Strings.minDegrees, sliderState.toInt())
                 }
             }
         }
@@ -284,13 +267,9 @@ fun MinDegrees() {
 @Composable
 fun MaxDegrees() {
     val context = LocalContext.current
-    val shared = context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
     var sliderState by remember {
         mutableStateOf(
-            shared.getInt(
-                Strings.maxDegrees,
-                50
-            ).toFloat()
+            SuperStore(context).catchInt(Strings.maxDegrees, 50).toFloat()
         )
     }
 
@@ -363,13 +342,7 @@ fun MaxDegrees() {
                     text = Strings.save,
                     modifier = Modifier.padding(SDimens.normalPadding)
                 ) {
-                    shared
-                        .edit()
-                        .putInt(
-                            Strings.maxDegrees,
-                            sliderState.toInt()
-                        )
-                        .apply()
+                    SuperStore(context).drop(Strings.maxDegrees, sliderState.toInt())
                 }
             }
         }

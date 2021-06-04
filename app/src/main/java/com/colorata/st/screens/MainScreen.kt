@@ -16,8 +16,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import com.colorata.st.CurrentScreen
-import com.colorata.st.activities.SecondaryActivity
 import com.colorata.st.extensions.getBottomNavigationHeight
+import com.colorata.st.extensions.goToSecondary
 import com.colorata.st.extensions.presets.SButton
 import com.colorata.st.extensions.presets.SText
 import com.colorata.st.extensions.presets.Screen
@@ -55,9 +55,7 @@ fun PowerMainScreenContent() {
         horizontalArrangement = Arrangement.End
     ) {
         SButton(text = Strings.show) {
-            val intent = Intent(context, SecondaryActivity::class.java)
-            intent.putExtra(Strings.screen, CurrentScreen.POWER)
-            context.startActivity(intent)
+            context.goToSecondary(CurrentScreen.POWER)
         }
     }
 }

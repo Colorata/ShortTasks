@@ -15,15 +15,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.colorata.st.ui.theme.Strings
 import android.content.pm.PackageManager
-
-
-
+import com.colorata.st.ui.theme.SuperStore
 
 
 @Composable
 fun getBottomNavigationHeight(): Dp {
-    val shared = LocalContext.current.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
-    return shared.getInt(Strings.bottomSize, 30).dp + getNavBarHeight()
+    return SuperStore(LocalContext.current).catchInt(Strings.bottomSize, 30).dp
 }
 
 @Composable
@@ -53,7 +50,8 @@ fun isBluetoothEnabled(): Boolean {
 fun Context.isLocationEnabled(): Boolean {
     val lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
     return lm.isProviderEnabled(LocationManager.GPS_PROVIDER) || lm.isProviderEnabled(
-        LocationManager.NETWORK_PROVIDER)
+        LocationManager.NETWORK_PROVIDER
+    )
 }
 
 fun Context.isMobileDataEnabled(): Boolean =
@@ -77,13 +75,13 @@ fun Context.getBrightness(): Int {
 fun Context.getMediaVolume(): Float {
     val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager?
     val max = audioManager!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
-    return audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)/(max/100)
+    return audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) / (max / 100)
 }
 
 fun Context.getRingVolume(): Float {
     val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager?
     val max = audioManager!!.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION).toFloat()
-    return audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION)/(max/100)
+    return audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION) / (max / 100)
 }
 
 fun Context.isAutoRotationEnabled(): Boolean {

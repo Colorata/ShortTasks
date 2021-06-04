@@ -1,6 +1,5 @@
 package com.colorata.st.screens
 
-import android.content.Context
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
@@ -17,6 +16,7 @@ import com.colorata.st.extensions.presets.TButtonDefault
 import com.colorata.st.ui.theme.SDimens
 import com.colorata.st.ui.theme.ScreenComponents
 import com.colorata.st.ui.theme.Strings
+import com.colorata.st.ui.theme.SuperStore
 
 @ExperimentalAnimationApi
 @Preview(showBackground = true, showSystemUi = true)
@@ -41,7 +41,7 @@ fun MoreScreen() {
 @Composable
 fun SettingsContent() {
     val context = LocalContext.current
-    val shared = LocalContext.current.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+
     var isClearVisible by remember { mutableStateOf(false) }
     Column(modifier = Modifier.padding(SDimens.largePadding)) {
         Row(
@@ -61,7 +61,7 @@ fun SettingsContent() {
             }
         }
         SMessage(visible = isClearVisible, text = Strings.clearSubTitle) {
-            shared.edit().clear().apply()
+            SuperStore(context).empty()
         }
     }
 }

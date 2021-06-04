@@ -13,10 +13,10 @@ fun String.toIntColor(): Int = android.graphics.Color.parseColor(this)
 
 
 //Fun for get Phone THEME
-fun color(context: Context): Int {
+fun Context.color(): Int {
     val typedValue = TypedValue()
     val contextThemeWrapper = ContextThemeWrapper(
-        context,
+        this,
         android.R.style.Theme_DeviceDefault
     )
     contextThemeWrapper.theme.resolveAttribute(
@@ -54,11 +54,9 @@ fun getAllColors(): MutableList<Pair<Color, Color>> {
 
 fun Context.setSystemColor() {
     if (SuperStore(this).catchBoolean(Strings.autoDetect)) {
-        val h = color(this).toHex().toHSV().first.toInt()
-        val s = color(this).toHex().toHSV().second.toInt()
-        val v = color(this).toHex().toHSV().third.toInt()
-
-        val shared = getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+        val h = color().toHex().toHSV().first.toInt()
+        val s = color().toHex().toHSV().second.toInt()
+        val v = color().toHex().toHSV().third.toInt()
 
         val color = if (v <= 30) {
             SystemColor.BLACK
@@ -82,52 +80,47 @@ fun Context.setSystemColor() {
             SystemColor.WHITE
         } else SystemColor.BLACK
 
-        val edit = shared.edit()
-
-        when (shared.getBoolean(Strings.nightMode, false)) {
-            true -> {
-                edit.putInt(Strings.systemColor, color.id)
-                edit.putInt(Strings.primaryInt, color.primaryHex.toIntColor())
-                edit.putInt(Strings.secondaryInt, color.secondaryHex.toIntColor())
-                edit.putInt(Strings.controlColor, color.secondaryHex.toIntColor())
-                edit.apply()
-            }
-            false -> {
-                edit.putInt(Strings.systemColor, color.id)
-                edit.putInt(Strings.primaryInt, color.secondaryHex.toIntColor())
-                edit.putInt(Strings.secondaryInt, color.primaryHex.toIntColor())
-                edit.putInt(Strings.controlColor, color.secondaryHex.toIntColor())
-                edit.apply()
-            }
-        }
+        SuperStore(this).drop(
+            mutableListOf(
+                Pair(
+                    Strings.systemColor,
+                    color.id
+                ),
+                Pair(
+                    Strings.primaryInt,
+                    if (!SuperStore(this).catchBoolean(Strings.nightMode)) color.secondaryHex.toIntColor()
+                    else color.primaryHex.toIntColor()
+                ),
+                Pair(
+                    Strings.secondaryInt,
+                    if (!SuperStore(this).catchBoolean(Strings.nightMode)) color.primaryHex.toIntColor()
+                    else color.secondaryHex.toIntColor()
+                ),
+                Pair(
+                    Strings.controlColor,
+                    color.secondaryHex.toIntColor()
+                )
+            )
+        )
     }
 
 }
 
-fun Context.backgroundInt(): Int {
-    return getSharedPreferences(Strings.shared, Context.MODE_PRIVATE).getInt(
-        Strings.secondaryInt,
-        0
-    )
-}
+fun Context.backgroundInt(): Int =
+    SuperStore(this).catchInt(Strings.secondaryInt)
 
-fun Context.foregroundInt(): Int {
-    return getSharedPreferences(Strings.shared, Context.MODE_PRIVATE).getInt(Strings.primaryInt, 0)
-}
 
-fun Context.backgroundIntControl(): Int {
-    return getSharedPreferences(Strings.shared, Context.MODE_PRIVATE).getInt(
-        Strings.controlColor,
-        0
-    )
-}
+fun Context.foregroundInt(): Int =
+    SuperStore(this).catchInt(Strings.primaryInt)
+
+fun Context.backgroundIntControl(): Int =
+    SuperStore(this).catchInt(Strings.controlColor)
 
 @Composable
-fun backgroundColor(): Color {
-    return Color(LocalContext.current.backgroundInt())
-}
+fun backgroundColor(): Color =
+    Color(LocalContext.current.backgroundInt())
+
 
 @Composable
-fun foregroundColor(): Color {
-    return Color(LocalContext.current.foregroundInt())
-}
+fun foregroundColor(): Color =
+    Color(LocalContext.current.foregroundInt())

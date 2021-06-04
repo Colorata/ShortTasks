@@ -14,9 +14,14 @@ import com.colorata.st.CurrentScreen
 import com.colorata.st.activities.SecondaryActivity
 import com.colorata.st.ui.theme.Strings
 import java.lang.reflect.Method
+import android.app.AlarmManager
+
+import android.app.PendingIntent
+import com.colorata.st.activities.MainActivity
+import kotlin.system.exitProcess
 
 
-fun Context.goToSecondary(screen: CurrentScreen){
+fun Context.goToSecondary(screen: CurrentScreen) {
     val intent = Intent(this, SecondaryActivity::class.java)
     intent.putExtra(Strings.screen, screen)
     startActivity(intent)
@@ -36,25 +41,30 @@ fun changeBrightness(
     )
 }
 
-fun Context.changeMediaVolume(percents: Int){
+fun Context.changeMediaVolume(percents: Int) {
 
     val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager?
     val max = audioManager!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
-    val value = (max/100)*percents
+    val value = (max / 100) * percents
     audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, value.toInt(), 0)
 }
 
-fun Context.changeRingVolume(percents: Int){
+fun Context.changeRingVolume(percents: Int) {
 
     val audioManagerRing = getSystemService(Context.AUDIO_SERVICE) as AudioManager?
     val maxRing = audioManagerRing!!.getStreamMaxVolume(AudioManager.STREAM_RING).toFloat()
-    val valueRing = (maxRing/100)*percents
+    val valueRing = (maxRing / 100) * percents
     audioManagerRing.setStreamVolume(AudioManager.STREAM_RING, valueRing.toInt(), 0)
 
     val audioManagerNotification = getSystemService(Context.AUDIO_SERVICE) as AudioManager?
-    val maxNotification = audioManagerNotification!!.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION).toFloat()
-    val valueNotification = (maxNotification/100)*percents
-    audioManagerNotification.setStreamVolume(AudioManager.STREAM_NOTIFICATION, valueNotification.toInt(), 0)
+    val maxNotification =
+        audioManagerNotification!!.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION).toFloat()
+    val valueNotification = (maxNotification / 100) * percents
+    audioManagerNotification.setStreamVolume(
+        AudioManager.STREAM_NOTIFICATION,
+        valueNotification.toInt(),
+        0
+    )
 }
 
 fun Context.enableAutoRotate(enabled: Boolean) {
@@ -66,6 +76,7 @@ fun enableBluetooth(enabled: Boolean) {
     val adapter = BluetoothAdapter.getDefaultAdapter()
     if (enabled) adapter.enable() else adapter.disable()
 }
+
 fun Context.enableFlashlight(enabled: Boolean) {
     val cameraManager = getSystemService(ControlsProviderService.CAMERA_SERVICE) as CameraManager
     val cameraId = cameraManager.cameraIdList[0]
@@ -84,4 +95,18 @@ fun Context.hidePowerMenu() {
     val intent = Intent("com.colorata.st.ACCESSIBILITY_ACTION")
     intent.putExtra("action", AccessibilityService.GLOBAL_ACTION_POWER_DIALOG)
     LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
+}
+
+fun Context.restartApp() {
+    val mStartActivity = Intent(this, MainActivity::class.java)
+    val mPendingIntentId = 123456
+    val mPendingIntent = PendingIntent.getActivity(
+        this,
+        mPendingIntentId,
+        mStartActivity,
+        PendingIntent.FLAG_IMMUTABLE
+    )
+    val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    manager.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
+    exitProcess(0)
 }

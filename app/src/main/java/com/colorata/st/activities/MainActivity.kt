@@ -15,10 +15,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import com.colorata.st.screens.Navigation
-import com.colorata.st.ui.theme.Strings
-import com.colorata.st.ui.theme.backgroundColor
-import com.colorata.st.ui.theme.backgroundInt
-import com.colorata.st.ui.theme.setSystemColor
+import com.colorata.st.ui.theme.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,8 +43,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val shared: SharedPreferences = getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
-        shared.edit().putBoolean(Strings.nightMode, nightMode).apply()
+        SuperStore(this).drop(Strings.nightMode, nightMode)
 
         setSystemColor()
 

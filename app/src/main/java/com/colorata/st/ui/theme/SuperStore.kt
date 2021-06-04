@@ -89,26 +89,6 @@ abstract class AppDb : RoomDatabase() {
     }
 }
 
-fun Context.put(key: String, value: Int) {
-    val shared = getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
-    shared.edit().putInt(key, value).apply()
-}
-
-fun Context.put(key: String, value: String) {
-    val shared = getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
-    shared.edit().putString(key, value).apply()
-}
-
-fun Context.put(key: String, value: Float) {
-    val shared = getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
-    shared.edit().putFloat(key, value).apply()
-}
-
-fun Context.put(key: String, value: Boolean) {
-    val shared = getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
-    shared.edit().putBoolean(key, value).apply()
-}
-
 class SuperStore(forThis: Context) {
 
     val context = forThis
@@ -158,27 +138,33 @@ class SuperStore(forThis: Context) {
         return true
     }
 
-    fun catchInt(key: String): Int {
+    fun catchInt(key: String, default: Int = 0): Int {
         val shared: SharedPreferences =
             context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
-        return shared.getInt(key, 0)
+        return shared.getInt(key, default)
     }
 
-    fun catchString(key: String): String {
+    fun catchString(key: String, default: String = ""): String {
         val shared: SharedPreferences =
             context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
-        return shared.getString(key, "") ?: ""
+        return shared.getString(key, default) ?: default
     }
 
-    fun catchFloat(key: String): Float {
+    fun catchFloat(key: String, default: Float = 0f): Float {
         val shared: SharedPreferences =
             context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
-        return shared.getFloat(key, 0f)
+        return shared.getFloat(key, default)
     }
 
-    fun catchBoolean(key: String): Boolean {
+    fun catchBoolean(key: String, default: Boolean = false): Boolean {
         val shared: SharedPreferences =
             context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
-        return shared.getBoolean(key, false)
+        return shared.getBoolean(key, default)
+    }
+
+    fun empty() {
+        val shared: SharedPreferences =
+            context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+        shared.edit().clear().apply()
     }
 }

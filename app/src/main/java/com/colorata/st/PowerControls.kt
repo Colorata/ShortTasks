@@ -23,6 +23,7 @@ import com.colorata.st.extensions.weather.WeatherResponse
 import com.colorata.st.extensions.weather.WeatherService
 import com.colorata.st.ui.theme.Controls
 import com.colorata.st.ui.theme.Strings
+import com.colorata.st.ui.theme.SuperStore
 import com.colorata.st.ui.theme.backgroundIntControl
 import io.reactivex.Flowable
 import io.reactivex.processors.ReplayProcessor
@@ -45,17 +46,15 @@ class PowerControls : ControlsProviderService() {
     private val controls: MutableList<Control>
         get() {
             val list = mutableListOf<Control>()
-            val shared = getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
 
-            var minDegrees = shared.getInt(Strings.minDegrees, -50).toFloat()
-            var maxDegrees = shared.getInt(Strings.maxDegrees, 50).toFloat()
+            var minDegrees = SuperStore(this).catchInt(Strings.minDegrees, -50).toFloat()
+            var maxDegrees = SuperStore(this).catchInt(Strings.maxDegrees, 50).toFloat()
 
-            var currentRight = shared.getString("CurrentRightWeather", "")
-            var currentFeels = shared.getString("CurrentFeelsWeather", "")
-            var currentFloat = shared.getFloat("CurrentFloatWeather", 0f)
+            var currentRight = SuperStore(this).catchString("CurrentRightWeather")
+            var currentFeels = SuperStore(this).catchString("CurrentFeelsWeather")
+            var currentFloat = SuperStore(this).catchFloat("CurrentFloatWeather")
 
-            val city = shared.getString(Strings.city, "Moscow").toString()
-
+            val city = SuperStore(this).catchString(Strings.city, "Moscow")
             list.clear()
 
             val retrofit = Retrofit.Builder()
@@ -82,19 +81,23 @@ class PowerControls : ControlsProviderService() {
                         currentFeels = "Feels: " + weatherResponse.main!!.feels + " \u2103"
                         currentFloat = weatherResponse.main!!.temp
 
-                        val edit = shared.edit()
-                        edit.putString("CurrentRightWeather", currentRight)
-                        edit.putString("CurrentFeelsWeather", currentFeels)
-                        edit.putFloat("CurrentFloatWeather", currentFloat)
-                        edit.apply()
+                        mutableListOf(Pair(false, 0), Pair(0, ""))
+                        SuperStore(this@PowerControls).drop(
+                            mutableListOf(
+                                Pair("CurrentRightWeather", currentRight as Any),
+                                Pair("CurrentFeelsWeather", currentFeels as Any),
+                                Pair("CurrentFloatWeather", currentFloat as Any)
+                            )
+                        )
+
 
                         list.add(
                             buildRangeControl(
                                 id = 1441,
-                                title = currentRight!!,
+                                title = currentRight,
                                 icon = R.drawable.ic_outline_cloud_24,
                                 state = currentFloat,
-                                subTitle = currentFeels!!,
+                                subTitle = currentFeels,
                                 isWeather = true,
                                 minValue = -50f,
                                 maxValue = 50f
@@ -113,20 +116,20 @@ class PowerControls : ControlsProviderService() {
 
             if (currentFloat < minDegrees) {
                 minDegrees = currentFloat
-                shared.edit().putInt(Strings.minDegrees, minDegrees.toInt()).apply()
+                SuperStore(this).drop(Strings.minDegrees, minDegrees.toInt())
             } else if (currentFloat > maxDegrees) {
                 maxDegrees = currentFloat
-                shared.edit().putInt(Strings.maxDegrees, maxDegrees.toInt()).apply()
+                SuperStore(this).drop(Strings.maxDegrees, maxDegrees.toInt())
             }
 
 
             list.add(
                 buildRangeControl(
                     id = 1441,
-                    title = currentRight!!,
+                    title = currentRight,
                     icon = R.drawable.ic_outline_cloud_24,
                     state = currentFloat,
-                    subTitle = currentFeels!!,
+                    subTitle = currentFeels,
                     isWeather = true,
                     minValue = minDegrees,
                     maxValue = maxDegrees
@@ -231,9 +234,9 @@ class PowerControls : ControlsProviderService() {
                 }
             }
 
-            val title = shared.getString(Strings.linkTitle, "Google") ?: "Google"
-            val link =
-                shared.getString(Strings.linkLink, "https://google.com") ?: "https://google.com"
+            val title = SuperStore(this).catchString(Strings.linkTitle, "Google")
+            val link = SuperStore(this).catchString(Strings.linkLink, "https://google.com")
+
             list.add(
                 buildToggleControl(
                     id = 0,
@@ -285,14 +288,14 @@ class PowerControls : ControlsProviderService() {
         action: ControlAction,
         consumer: Consumer<Int>
     ) {
-        val shared = getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
         controlFlows[controlId]?.let { flow ->
             when (controlId) {
 
                 0.toString() -> {
                     consumer.accept(ControlAction.RESPONSE_OK)
-                    val link = shared.getString(Strings.linkLink, "https://google.com")
-                        ?: "https://google.com"
+
+                    val link = SuperStore(this).catchString(Strings.linkLink, "https://google.com")
+
                     startActivity(
                         Intent(
                             Intent.ACTION_VIEW,
