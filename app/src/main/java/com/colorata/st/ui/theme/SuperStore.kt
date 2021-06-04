@@ -1,6 +1,7 @@
 package com.colorata.st.ui.theme
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.room.*
 
 /*AppDb.getInstance(this)?.appDao()*/
@@ -31,7 +32,8 @@ fun Context.deleteApp(id: String, name: String) {
 }
 
 
-fun Context.getApps(): MutableList<App> = AppDb.getInstance(this)?.appDao()?.getAll() ?: mutableListOf()
+fun Context.getApps(): MutableList<App> =
+    AppDb.getInstance(this)?.appDao()?.getAll() ?: mutableListOf()
 
 @Entity
 data class App(
@@ -87,3 +89,96 @@ abstract class AppDb : RoomDatabase() {
     }
 }
 
+fun Context.put(key: String, value: Int) {
+    val shared = getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+    shared.edit().putInt(key, value).apply()
+}
+
+fun Context.put(key: String, value: String) {
+    val shared = getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+    shared.edit().putString(key, value).apply()
+}
+
+fun Context.put(key: String, value: Float) {
+    val shared = getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+    shared.edit().putFloat(key, value).apply()
+}
+
+fun Context.put(key: String, value: Boolean) {
+    val shared = getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+    shared.edit().putBoolean(key, value).apply()
+}
+
+class SuperStore(forThis: Context) {
+
+    val context = forThis
+
+    fun drop(key: String, value: Int) {
+        val shared: SharedPreferences =
+            context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+        shared.edit().putInt(key, value).apply()
+    }
+
+    fun drop(key: String, value: String) {
+        val shared: SharedPreferences =
+            context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+        shared.edit().putString(key, value).apply()
+    }
+
+    fun drop(key: String, value: Float) {
+        val shared: SharedPreferences =
+            context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+        shared.edit().putFloat(key, value).apply()
+    }
+
+    fun drop(key: String, value: Boolean) {
+        val shared: SharedPreferences =
+            context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+        shared.edit().putBoolean(key, value).apply()
+    }
+
+    fun drop(pair: MutableList<Pair<String, Any>>): Boolean {
+        pair.forEach {
+            when (val buffer = it.second) {
+                is Boolean -> {
+                    drop(it.first, buffer)
+                }
+                is String -> {
+                    drop(it.first, buffer)
+                }
+                is Float -> {
+                    drop(it.first, buffer)
+                }
+                is Int -> {
+                    drop(it.first, buffer)
+                }
+                else -> return false
+            }
+        }
+        return true
+    }
+
+    fun catchInt(key: String): Int {
+        val shared: SharedPreferences =
+            context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+        return shared.getInt(key, 0)
+    }
+
+    fun catchString(key: String): String {
+        val shared: SharedPreferences =
+            context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+        return shared.getString(key, "") ?: ""
+    }
+
+    fun catchFloat(key: String): Float {
+        val shared: SharedPreferences =
+            context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+        return shared.getFloat(key, 0f)
+    }
+
+    fun catchBoolean(key: String): Boolean {
+        val shared: SharedPreferences =
+            context.getSharedPreferences(Strings.shared, Context.MODE_PRIVATE)
+        return shared.getBoolean(key, false)
+    }
+}

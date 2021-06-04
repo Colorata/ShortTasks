@@ -26,7 +26,7 @@ fun SButton(modifier: Modifier = Modifier, text: String = "", onClick: () -> Uni
         colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Color.Transparent)
     ) {
         SText(
-            text = text.toUpperCase(Locale.ROOT),
+            text = text.uppercase(Locale.ROOT),
             fontSize = SDimens.buttonText,
             fontWeight = FontWeight.SemiBold,
         )

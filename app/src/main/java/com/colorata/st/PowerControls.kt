@@ -24,7 +24,6 @@ import com.colorata.st.extensions.weather.WeatherService
 import com.colorata.st.ui.theme.Controls
 import com.colorata.st.ui.theme.Strings
 import com.colorata.st.ui.theme.backgroundIntControl
-import com.colorata.st.ui.theme.getApps
 import io.reactivex.Flowable
 import io.reactivex.processors.ReplayProcessor
 import org.reactivestreams.FlowAdapters
@@ -500,7 +499,7 @@ class PowerControls : ControlsProviderService() {
             id.toString(),
             ControlButton(
                 enabled,
-                enabled.toString().toUpperCase(Locale.getDefault())
+                enabled.toString().uppercase(Locale.getDefault())
             )
         ),
         titleRes = title,
@@ -552,7 +551,7 @@ class PowerControls : ControlsProviderService() {
             id.toString(),
             ControlButton(
                 false,
-                false.toString().toUpperCase(Locale.getDefault())
+                false.toString().uppercase(Locale.getDefault())
             )
         ),
         type = DeviceTypes.TYPE_GENERIC_ON_OFF

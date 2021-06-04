@@ -75,6 +75,7 @@ object Strings{
     const val themePicker = "Theme Picker"
     const val themePickerSubTitle = "Create your own ShortTasks"
     const val clearSubTitle = "You'll lose all your data (like City)"
+    const val currentTheme = "Current Theme is"
 
     const val powerMainSubTitle = "You will learn how to use Power Assistant"
 
