@@ -3,6 +3,9 @@ package com.colorata.st.extensions.presets
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -32,88 +35,99 @@ fun RelatedCard(
     subTitle: String,
     icon: Int,
     hidden: @Composable () -> Unit
-){
+) {
 
     var show by remember {
         mutableStateOf(false)
     }
 
 
-    Card(shape = RoundedCornerShape(SDimens.roundedCorner),
-        border = BorderStroke(width = SDimens.borderWidth, color = foregroundColor()),
-        backgroundColor = backgroundColor(),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(SDimens.cardPadding)
+    var isVisible by remember {
+        mutableStateOf(false)
+    }
+    LaunchedEffect(key1 = true) {
+        isVisible = true
+    }
+    AnimatedVisibility(
+        visible = isVisible,
+        enter = fadeIn(animationSpec = tween(700)) + expandVertically(animationSpec = tween(700))
     ) {
-        Column {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start,
-                modifier = Modifier.clickable { show = !show }
-            ) {
-                Box(contentAlignment = Alignment.Center) {
-
-                    Image(
-                        painter = painterResource(id = R.drawable.background),
-                        contentDescription = "",
-                        modifier = Modifier
-                            .size(SDimens.cardHeight),
-                        colorFilter = ColorFilter.tint(color = foregroundColor())
-                    )
-
-                    Image(
-                        painter = painterResource(icon),
-                        contentDescription = "",
-                        modifier = Modifier
-                            .size(SDimens.postImageSize),
-                        colorFilter = ColorFilter.tint(color = foregroundColor())
-                    )
-                }
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.Top
+        Card(
+            shape = RoundedCornerShape(SDimens.roundedCorner),
+            border = BorderStroke(width = SDimens.borderWidth, color = foregroundColor()),
+            backgroundColor = backgroundColor(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(SDimens.cardPadding)
+        ) {
+            Column {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier.clickable { show = !show }
                 ) {
+                    Box(contentAlignment = Alignment.Center) {
 
-                    SText(
-                        text = title,
-                        fontSize = titleFontSize,
-                        modifier = Modifier
-                            .padding(SDimens.normalPadding)
-                            .fillMaxWidth(),
-                        textAlign = TextAlign.Start
-                    )
+                        Image(
+                            painter = painterResource(id = R.drawable.background),
+                            contentDescription = "",
+                            modifier = Modifier
+                                .size(SDimens.cardHeight),
+                            colorFilter = ColorFilter.tint(color = foregroundColor())
+                        )
 
-                    SText(
-                        text = subTitle,
-                        fontSize = subTitleFontSize,
-                        modifier = Modifier
-                            .padding(
-                                bottom = SDimens.normalPadding,
-                                end = SDimens.normalPadding,
-                                start = SDimens.normalPadding
-                            )
-                            .fillMaxWidth(),
-                        textAlign = TextAlign.Start
-                    )
+                        Image(
+                            painter = painterResource(icon),
+                            contentDescription = "",
+                            modifier = Modifier
+                                .size(SDimens.postImageSize),
+                            colorFilter = ColorFilter.tint(color = foregroundColor())
+                        )
+                    }
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.Start,
+                        verticalArrangement = Arrangement.Top
+                    ) {
+
+                        SText(
+                            text = title,
+                            fontSize = titleFontSize,
+                            modifier = Modifier
+                                .padding(SDimens.normalPadding)
+                                .fillMaxWidth(),
+                            textAlign = TextAlign.Start
+                        )
+
+                        SText(
+                            text = subTitle,
+                            fontSize = subTitleFontSize,
+                            modifier = Modifier
+                                .padding(
+                                    bottom = SDimens.normalPadding,
+                                    end = SDimens.normalPadding,
+                                    start = SDimens.normalPadding
+                                )
+                                .fillMaxWidth(),
+                            textAlign = TextAlign.Start
+                        )
+                    }
                 }
-            }
-            AnimatedVisibility(
-                visible = show
-            ) {
-                hidden()
+                AnimatedVisibility(
+                    visible = show
+                ) {
+                    hidden()
+                }
             }
         }
     }
 }
 
 
-
 @ExperimentalAnimationApi
 @Preview(name = "Related Card")
 @Composable
-private fun RelatedCardPreview(){
+private fun RelatedCardPreview() {
     RelatedCard(
         title = "Card Title",
         subTitle = "Card SubTitle",

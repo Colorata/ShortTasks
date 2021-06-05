@@ -20,7 +20,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.colorata.st.extensions.presets.SText
 import com.colorata.st.extensions.presets.Title
-import com.colorata.st.extensions.restartApp
 import com.colorata.st.ui.theme.*
 
 @ExperimentalMaterialApi

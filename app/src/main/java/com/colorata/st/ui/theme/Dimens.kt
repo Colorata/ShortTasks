@@ -8,12 +8,10 @@ object SDimens{
     val screenTitle = 60.sp
     val cardTitle = 24.sp
     val buttonText = 14.sp
-    val splashTitle = 18.sp
 
-    val logoPadding = 90.dp
     val roundedCorner = 30.dp
-    val smallRoundedCorner = 15.dp
     val borderWidth = 2.dp
+    val buttonBorderWidth = 1.dp
     val cardPadding = 10.dp
     val cardHeight = 200.dp
     val postImageSize = 50.dp

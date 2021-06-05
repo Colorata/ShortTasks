@@ -1,10 +1,14 @@
 package com.colorata.st.extensions.presets
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -14,42 +18,54 @@ import com.colorata.st.ui.theme.SDimens
 import com.colorata.st.ui.theme.Strings
 import com.colorata.st.ui.theme.SuperStore
 
+@ExperimentalAnimationApi
 @Composable
 fun Title(title: String, subTitle: String) {
     val context = LocalContext.current
 
-    val mainPadding = (SuperStore(context).catchInt(Strings.bottomSize, 30) * 1.5).dp
-    Column {
-        SText(
-            text = title, modifier = Modifier
-                .padding(
-                    top = mainPadding,
-                    start = SDimens.normalPadding,
-                    end = SDimens.largePadding
-                )
-                .fillMaxWidth(),
-            fontSize = SDimens.screenTitle,
-            fontWeight = FontWeight.Medium,
-            textAlign = TextAlign.Start
-        )
+    var isVisible by remember { mutableStateOf(false) }
 
-        SText(
-            text = subTitle, modifier = Modifier
-                .padding(
-                    top = SDimens.largePadding,
-                    start = SDimens.largePadding,
-                    end = SDimens.largePadding,
-                    bottom = SDimens.smallPadding
-                )
-                .fillMaxWidth(),
-            fontSize = SDimens.subTitle,
-            fontWeight = FontWeight.Light,
-            textAlign = TextAlign.Start
-        )
+    val mainPadding = (SuperStore(context).catchInt(Strings.bottomSize, 30) * 1.5).dp
+    LaunchedEffect(key1 = true) {
+        isVisible = true
+    }
+    AnimatedVisibility(
+        visible = isVisible,
+        enter = fadeIn(animationSpec = tween(700)) + expandVertically(animationSpec = tween(700))
+    ) {
+        Column {
+            SText(
+                text = title, modifier = Modifier
+                    .padding(
+                        top = mainPadding,
+                        start = SDimens.normalPadding,
+                        end = SDimens.largePadding
+                    )
+                    .fillMaxWidth(),
+                fontSize = SDimens.screenTitle,
+                fontWeight = FontWeight.Medium,
+                textAlign = TextAlign.Start
+            )
+
+            SText(
+                text = subTitle, modifier = Modifier
+                    .padding(
+                        top = SDimens.largePadding,
+                        start = SDimens.largePadding,
+                        end = SDimens.largePadding,
+                        bottom = SDimens.smallPadding
+                    )
+                    .fillMaxWidth(),
+                fontSize = SDimens.subTitle,
+                fontWeight = FontWeight.Light,
+                textAlign = TextAlign.Start
+            )
+        }
     }
 }
 
 
+@ExperimentalAnimationApi
 @Preview(showBackground = true, name = "Title")
 @Composable
 fun TitleDefault() {
