@@ -16,24 +16,27 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.dp
 import com.colorata.st.R
-import com.colorata.st.ui.theme.*
+import com.colorata.st.ui.theme.SDimens
+import com.colorata.st.ui.theme.backgroundColor
+import com.colorata.st.ui.theme.foregroundColor
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @ExperimentalAnimationApi
 @Composable
 fun RelatedCard(
+    modifier: Modifier = Modifier,
     titleFontSize: TextUnit = SDimens.cardTitle,
     subTitleFontSize: TextUnit = SDimens.subTitle,
     title: String,
     subTitle: String,
+    scope: () -> Unit = { },
     icon: Int,
+
     hidden: @Composable () -> Unit
 ) {
 
@@ -48,9 +51,11 @@ fun RelatedCard(
     LaunchedEffect(key1 = true) {
         isVisible = true
     }
+
     AnimatedVisibility(
         visible = isVisible,
-        enter = fadeIn(animationSpec = tween(700)) + expandVertically(animationSpec = tween(700))
+        enter = fadeIn(animationSpec = tween(700)) + expandVertically(animationSpec = tween(700)),
+        modifier = modifier
     ) {
         Card(
             shape = RoundedCornerShape(SDimens.roundedCorner),
@@ -64,7 +69,10 @@ fun RelatedCard(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Start,
-                    modifier = Modifier.clickable { show = !show }
+                    modifier = Modifier.clickable {
+                        show = !show
+                        scope()
+                    }
                 ) {
                     Box(contentAlignment = Alignment.Center) {
 

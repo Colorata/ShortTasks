@@ -53,7 +53,7 @@ fun getAllColors(): MutableList<Pair<Color, Color>> {
 }
 
 fun Context.setSystemColor() {
-    if (SuperStore(this).catchBoolean(Strings.autoDetect)) {
+    if (SuperStore(this).catchBoolean(Strings.autoDetect, true)) {
         val h = color().toHex().toHSV().first.toInt()
         val s = color().toHex().toHSV().second.toInt()
         val v = color().toHex().toHSV().third.toInt()

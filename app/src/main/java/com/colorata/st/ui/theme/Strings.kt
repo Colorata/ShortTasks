@@ -76,6 +76,13 @@ object Strings{
     const val themePickerSubTitle = "Create your own ShortTasks"
     const val clearSubTitle = "You'll lose all your data (like City)"
     const val currentTheme = "Current Theme is"
+    const val egg1 = "Do you really think you can overplay me?"
+    const val egg2 = "Good try, good try..."
+    const val egg3 = "Your screen have been destroyed!"
+    const val egg4 = "Prompt - where apps are recording your actions?"
+    const val currentVersion = "Version: Sunray Compose"
+    const val developer = "Developer"
+    const val currentDeveloper = "Developer: Colorata"
 
     const val powerMainSubTitle = "You will learn how to use Power Assistant"
 

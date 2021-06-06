@@ -69,25 +69,27 @@ fun SettingsContent() {
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, group = "Hidden Content")
 @Composable
 fun HelpContent() {
+    val context = LocalContext.current
     Column(modifier = Modifier.padding(SDimens.largePadding)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
             SButton(modifier = Modifier.padding(end = SDimens.smallPadding), text = Strings.power) {
-
-            }
-
-            SButton(text = Strings.weather) {
-
+                context.goToSecondary(CurrentScreen.POWER)
             }
         }
     }
 }
 
+@ExperimentalAnimationApi
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, group = "Hidden Content")
 @Composable
 fun AboutContent() {
+    var isVisible by remember { mutableStateOf(false) }
+    var counter by remember { mutableStateOf(0) }
+    var text by remember { mutableStateOf("") }
+
     Column(modifier = Modifier.padding(SDimens.largePadding)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -111,9 +113,44 @@ fun AboutContent() {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-            SButton(text = Strings.version) {
+            SButton(
+                text = Strings.version,
+                modifier = Modifier.padding(end = SDimens.smallPadding)
+            ) {
+                counter += 1
+                when (counter) {
+                    10 -> {
+                        isVisible = true
+                        text = Strings.egg1
+                    }
+                    100 -> {
+                        isVisible = true
+                        text = Strings.egg2
+                    }
+                    1000 -> {
+                        isVisible = true
+                        text = Strings.egg3
+                    }
+                    10000 -> {
+                        isVisible = true
+                        text = Strings.egg4
+                    }
+                    else -> {
+                        text = Strings.currentVersion
+                        isVisible = true
+                    }
+                }
+            }
 
+            SButton(text = Strings.developer) {
+                text = Strings.currentDeveloper
+                isVisible = true
             }
         }
+
+        SMessage(visible = isVisible, text = text) {
+            isVisible = false
+        }
+
     }
 }
