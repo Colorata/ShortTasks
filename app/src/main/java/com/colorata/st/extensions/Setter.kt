@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
 import android.hardware.camera2.CameraManager
+import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.provider.Settings
 import android.service.controls.ControlsProviderService
@@ -91,4 +92,3 @@ fun Context.hidePowerMenu() {
     intent.putExtra("action", AccessibilityService.GLOBAL_ACTION_POWER_DIALOG)
     LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
 }
-

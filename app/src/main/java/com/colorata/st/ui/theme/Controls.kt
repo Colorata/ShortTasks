@@ -29,6 +29,7 @@ enum class Controls(
             "com.android.settings",
             "com.android.settings.TetherSettings"
         ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
     ),
     WIFI(
         id = 1502,
@@ -37,6 +38,7 @@ enum class Controls(
         subTitle = Strings.hold,
         isRange = false,
         intent = Intent(Settings.ACTION_WIFI_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
     ),
     FLASHLIGHT(
         id = 1503,
@@ -52,6 +54,7 @@ enum class Controls(
         subTitle = Strings.tap,
         isRange = false,
         intent = Intent(Settings.ACTION_BLUETOOTH_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
     ),
     MOBILE_DATA(
         id = 1505,
@@ -60,6 +63,7 @@ enum class Controls(
         subTitle = Strings.hold,
         isRange = false,
         intent = Intent(Settings.ACTION_DATA_USAGE_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
     ),
     NEARBY_SHARING(
         id = 1506,
@@ -71,6 +75,7 @@ enum class Controls(
             "com.google.android.gms",
             "com.google.android.gms.nearby.sharing.ReceiveSurfaceActivity"
         ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
     ),
     LOCATION(
         id = 1507,
@@ -79,6 +84,7 @@ enum class Controls(
         subTitle = Strings.tap,
         isRange = false,
         intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
     ),
     CALCULATOR(
         id = 1508,
@@ -90,6 +96,7 @@ enum class Controls(
             "com.google.android.calculator",
             "com.android.calculator2.Calculator"
         ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
     ),
     BATTERY_SAVER(
         id = 1509,
@@ -98,6 +105,7 @@ enum class Controls(
         subTitle = Strings.hold,
         isRange = false,
         intent = Intent(Settings.ACTION_BATTERY_SAVER_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
     ),
     GOOGLE_TASKS(
         id = 1510,
@@ -109,6 +117,7 @@ enum class Controls(
             "com.google.android.apps.tasks",
             "com.google.android.apps.tasks.ui.TaskListsActivity"
         ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
     ),
     NOTIFICATIONS(
         id = 1511,
@@ -124,6 +133,7 @@ enum class Controls(
         subTitle = Strings.slideOrTap,
         isRange = true,
         intent = Intent(Settings.ACTION_SOUND_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
     ),
     RING_VOLUME(
         id = 1513,
@@ -132,6 +142,7 @@ enum class Controls(
         subTitle = Strings.slideOrTap,
         isRange = true,
         intent = Intent(Settings.ACTION_SOUND_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
     ),
     BRIGHTNESS(
         id = 1514,
@@ -140,6 +151,7 @@ enum class Controls(
         subTitle = Strings.slideOrTap,
         isRange = true,
         intent = Intent(Settings.ACTION_DISPLAY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
     ),
     AUTO_ROTATE(
         id = 1515,
@@ -148,6 +160,7 @@ enum class Controls(
         subTitle = Strings.tap,
         isRange = false,
         intent = Intent(Settings.ACTION_DISPLAY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
     ),
     DND(
         id = 1516,
@@ -156,6 +169,7 @@ enum class Controls(
         subTitle = Strings.hold,
         isRange = false,
         intent = Intent(Settings.ACTION_CONDITION_PROVIDER_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
     ),
     NIGHT_LIGHT(
         id = 1517,
@@ -164,6 +178,7 @@ enum class Controls(
         subTitle = Strings.hold,
         isRange = false,
         intent = Intent(Settings.ACTION_ZEN_MODE_PRIORITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
     ),
     FLIGHT_MODE(
         id = 1518,
@@ -172,5 +187,24 @@ enum class Controls(
         subTitle = Strings.hold,
         isRange = false,
         intent = Intent(Settings.ACTION_AIRPLANE_MODE_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+    ),
+    BATTERY_INFO(
+        id = 1519,
+        title = Strings.battery,
+        icon = R.drawable.ic_outline_battery_full_24,
+        subTitle = Strings.hold,
+        isRange = true,
+        intent = Intent(Settings.ACTION_BATTERY_SAVER_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+    ),
+    TIME(
+        id = 1520,
+        title = Strings.time,
+        subTitle = Strings.hold,
+        icon = R.drawable.ic_outline_access_time_24,
+        isRange = true,
+        intent = Intent(Settings.ACTION_DATE_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
     )
 }

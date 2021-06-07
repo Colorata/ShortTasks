@@ -3,19 +3,22 @@ package com.colorata.st.extensions
 import android.app.NotificationManager
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.location.LocationManager
 import android.media.AudioManager
 import android.net.wifi.WifiManager
+import android.os.BatteryManager
 import android.os.PowerManager
 import android.provider.Settings
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.colorata.st.ui.theme.Strings
-import android.content.pm.PackageManager
 import com.colorata.st.ui.theme.SuperStore
+import java.util.*
 
 
 @Composable
@@ -114,4 +117,24 @@ fun Context.isPackageInstalled(name: String): Boolean {
     } catch (e: PackageManager.NameNotFoundException) {
         false
     }
+}
+
+fun Context.getBatteryPercentage(): Int {
+    val manager = getSystemService(Context.BATTERY_SERVICE) as BatteryManager
+    return manager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
+}
+
+fun getTime(): Pair<String, String> {
+    val time = Calendar.getInstance().time.toString()
+    val first = "${time[11]}${time[12]}"
+    val second = "${time[14]}${time[15]}"
+    return Pair(first, second)
+}
+
+fun getDate(): String {
+    val time = Calendar.getInstance().time.toString()
+    Log.d("Time", time)
+    val day = time.substring(0..2)
+    val date = time.substring(4..9)
+    return "$day, $date"
 }

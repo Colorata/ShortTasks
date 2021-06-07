@@ -17,27 +17,7 @@ import android.service.controls.templates.ControlButton
 import android.service.controls.templates.ControlTemplate
 import android.service.controls.templates.RangeTemplate
 import android.service.controls.templates.ToggleTemplate
-import com.colorata.st.extensions.getBrightness
-import com.colorata.st.extensions.getRingVolume
-import com.colorata.st.extensions.getMediaVolume
-import com.colorata.st.extensions.isPackageInstalled
-import com.colorata.st.extensions.isAirplaneEnabled
-import com.colorata.st.extensions.isAutoRotationEnabled
-import com.colorata.st.extensions.isBatterySaverEnabled
-import com.colorata.st.extensions.isBluetoothEnabled
-import com.colorata.st.extensions.isDNDEnabled
-import com.colorata.st.extensions.isDarkThemeEnabled
-import com.colorata.st.extensions.isLocationEnabled
-import com.colorata.st.extensions.isMobileDataEnabled
-import com.colorata.st.extensions.isWifiEnabled
-import com.colorata.st.extensions.hidePowerMenu
-import com.colorata.st.extensions.enableFlashlight
-import com.colorata.st.extensions.enableAutoRotate
-import com.colorata.st.extensions.enableBluetooth
-import com.colorata.st.extensions.changeBrightness
-import com.colorata.st.extensions.changeMediaVolume
-import com.colorata.st.extensions.changeRingVolume
-import com.colorata.st.extensions.showNotifications
+import com.colorata.st.extensions.*
 import com.colorata.st.extensions.weather.WeatherResponse
 import com.colorata.st.extensions.weather.WeatherService
 import com.colorata.st.ui.theme.Controls
@@ -97,10 +77,9 @@ class PowerControls : ControlsProviderService() {
 
                         //Configuring TEXT
                         currentRight = weatherResponse.name?.replace("’", "")!!
-                        currentFeels = "Feels: " + weatherResponse.main!!.feels + " \u2103"
+                        currentFeels = "Feels: " + weatherResponse.main!!.feels.toInt() + " \u2103"
                         currentFloat = weatherResponse.main!!.temp
 
-                        mutableListOf(Pair(false, 0), Pair(0, ""))
                         SuperStore(this@PowerControls).drop(
                             mutableListOf(
                                 Pair("CurrentRightWeather", currentRight as Any),
@@ -142,6 +121,7 @@ class PowerControls : ControlsProviderService() {
             }
 
 
+
             list.add(
                 buildRangeControl(
                     id = 1441,
@@ -160,16 +140,18 @@ class PowerControls : ControlsProviderService() {
                     list.add(
                         buildRangeControl(
                             id = control.id,
-                            title = control.title,
+                            title = if (control.id == Controls.TIME.id) getDate() else control.title,
                             subTitle = control.subTitle,
                             icon = control.icon,
                             state = when (control.id) {
                                 Controls.BRIGHTNESS.id -> (getBrightness() / 2.55).toFloat()
                                 Controls.RING_VOLUME.id -> getRingVolume()
                                 Controls.MEDIA_VOLUME.id -> getMediaVolume()
+                                Controls.BATTERY_INFO.id -> getBatteryPercentage().toFloat()
                                 else -> 50f
                             },
-                            intent = control.intent
+                            intent = control.intent,
+                            time = if (control.id == Controls.TIME.id) getTime() else null
                         )
                     )
                 } else {
@@ -314,7 +296,6 @@ class PowerControls : ControlsProviderService() {
                     consumer.accept(ControlAction.RESPONSE_OK)
 
                     val link = SuperStore(this).catchString(Strings.linkLink, "https://google.com")
-
                     startActivity(
                         Intent(
                             Intent.ACTION_VIEW,
@@ -467,6 +448,37 @@ class PowerControls : ControlsProviderService() {
                         )
                     }
                 }
+                Controls.BATTERY_INFO.id.toString() -> {
+                    consumer.accept(ControlAction.RESPONSE_OK)
+                    Controls.BATTERY_INFO.also {
+                        flow.onNext(
+                            buildRangeControl(
+                                id = it.id,
+                                title = it.title,
+                                subTitle = it.subTitle,
+                                state = getBatteryPercentage().toFloat(),
+                                icon = it.icon,
+                                intent = it.intent
+                            )
+                        )
+                    }
+
+                }
+                Controls.TIME.id.toString() -> {
+                    consumer.accept(ControlAction.RESPONSE_OK)
+                    Controls.TIME.also {
+                        flow.onNext(
+                            buildRangeControl(
+                                id = it.id,
+                                title = getDate(),
+                                subTitle = it.subTitle,
+                                time = getTime(),
+                                icon = it.icon,
+                                intent = it.intent
+                            )
+                        )
+                    }
+                }
                 else -> consumer.accept(ControlAction.RESPONSE_OK)
             }
         }
@@ -541,16 +553,17 @@ class PowerControls : ControlsProviderService() {
         icon: Int,
         subTitle: String = "",
         isWeather: Boolean = false,
+        time: Pair<String, String>? = null,
         intent: Intent = Intent()
     ) = buildControl(
         id = id,
         template = RangeTemplate(
             id.toString(),
             minValue,
-            maxValue,
-            state,
+            if (time != null) (24 * 60).toFloat() else maxValue,
+            if (time != null) (time.first.toInt() * 60 + time.second.toInt()).toFloat() else state,
             if (isWeather) 0.01f else step,
-            if (isWeather) "%1.1f " + "℃" else "%1.0f%%"
+            if (isWeather) "%1.0f " + "℃" else if (time != null) "${time.first}:${time.second}" else "%1.0f%%"
         ),
         titleRes = title,
         subTitle = subTitle,

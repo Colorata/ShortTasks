@@ -281,6 +281,7 @@ fun MinDegrees() {
     }
 }
 
+@Preview(backgroundColor = 0x00000000)
 @Composable
 fun MaxDegrees() {
     val context = LocalContext.current
@@ -345,6 +346,7 @@ fun MaxDegrees() {
                     onValueChange = { newValue ->
                         sliderState = newValue
                     },
+                    onValueChangeFinished = { },
                     colors = sliderColors
                 )
             }

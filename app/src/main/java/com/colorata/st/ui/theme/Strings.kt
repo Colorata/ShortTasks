@@ -108,6 +108,8 @@ object Strings{
     const val hold = "Hold"
     const val tap = "Tap"
     const val slideOrTap = "Slide or Tap"
+    const val battery = "Battery"
+    const val time = "Time"
 
     const val red = "Maybe Red"
     const val orange = "Peachy Orange"

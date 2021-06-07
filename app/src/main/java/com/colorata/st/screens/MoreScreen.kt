@@ -1,5 +1,7 @@
 package com.colorata.st.screens
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Column
@@ -83,7 +85,7 @@ fun HelpContent() {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-            SButton(modifier = Modifier.padding(end = SDimens.smallPadding), text = Strings.power) {
+            SButton(text = Strings.power) {
                 context.goToSecondary(CurrentScreen.POWER)
             }
         }
@@ -94,6 +96,7 @@ fun HelpContent() {
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, group = "Hidden Content")
 @Composable
 fun AboutContent() {
+    val context = LocalContext.current
     var isVisible by remember { mutableStateOf(false) }
     var counter by remember { mutableStateOf(0) }
     var text by remember { mutableStateOf("") }
@@ -109,11 +112,21 @@ fun AboutContent() {
                     bottom = SDimens.smallPadding
                 ), text = Strings.feedback
             ) {
-
+                context.startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://github.com/Colorata/ShortTasks/issues")
+                    ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                )
             }
 
             SButton(text = Strings.donation) {
-
+                context.startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://qiwi.com/n/COLORATA")
+                    ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                )
             }
         }
 
