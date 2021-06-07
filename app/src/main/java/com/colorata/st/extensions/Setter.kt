@@ -14,11 +14,6 @@ import com.colorata.st.CurrentScreen
 import com.colorata.st.activities.SecondaryActivity
 import com.colorata.st.ui.theme.Strings
 import java.lang.reflect.Method
-import android.app.AlarmManager
-
-import android.app.PendingIntent
-import com.colorata.st.activities.MainActivity
-import kotlin.system.exitProcess
 
 
 fun Context.goToSecondary(screen: CurrentScreen) {
@@ -97,16 +92,3 @@ fun Context.hidePowerMenu() {
     LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
 }
 
-fun Context.restartApp() {
-    val mStartActivity = Intent(this, MainActivity::class.java)
-    val mPendingIntentId = 123456
-    val mPendingIntent = PendingIntent.getActivity(
-        this,
-        mPendingIntentId,
-        mStartActivity,
-        PendingIntent.FLAG_IMMUTABLE
-    )
-    val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    manager.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
-    exitProcess(0)
-}

@@ -4,7 +4,11 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddCircle
 import androidx.compose.material.icons.outlined.KeyboardArrowDown

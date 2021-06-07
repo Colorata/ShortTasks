@@ -2,7 +2,17 @@ package com.colorata.st.ui.theme
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.room.*
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.Dao
+import androidx.room.ColumnInfo
+import androidx.room.Query
+import androidx.room.Insert
+import androidx.room.Update
+import androidx.room.Delete
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import androidx.room.Room
 
 /*AppDb.getInstance(this)?.appDao()*/
 

@@ -7,13 +7,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.colorata.st.extensions.presets.SButton
 import com.colorata.st.extensions.presets.SText
 import com.colorata.st.extensions.presets.Screen
 import com.colorata.st.extensions.presets.TButtonDefault
-import com.colorata.st.ui.theme.*
+import com.colorata.st.ui.theme.SDimens
+import com.colorata.st.ui.theme.ScreenComponents
+import com.colorata.st.ui.theme.Strings
 
 @ExperimentalAnimationApi
 @Preview(showSystemUi = true)

@@ -3,12 +3,20 @@ package com.colorata.st.screens
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Slider
 import androidx.compose.material.SliderDefaults
 import androidx.compose.material.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -18,8 +26,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.colorata.st.CurrentScreen
 import com.colorata.st.extensions.getBottomNavigationHeight
 import com.colorata.st.extensions.goToSecondary
-import com.colorata.st.extensions.presets.*
-import com.colorata.st.ui.theme.*
+import com.colorata.st.extensions.presets.Screen
+import com.colorata.st.extensions.presets.TButtonDefault
+import com.colorata.st.extensions.presets.SButton
+import com.colorata.st.extensions.presets.SField
+import com.colorata.st.extensions.presets.SText
+import com.colorata.st.ui.theme.Strings
+import com.colorata.st.ui.theme.ScreenComponents
+import com.colorata.st.ui.theme.SDimens
+import com.colorata.st.ui.theme.SuperStore
+import com.colorata.st.ui.theme.foregroundColor
+import com.colorata.st.ui.theme.backgroundColor
 
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi

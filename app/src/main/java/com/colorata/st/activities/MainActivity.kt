@@ -1,7 +1,5 @@
 package com.colorata.st.activities
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
@@ -15,7 +13,11 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import com.colorata.st.screens.Navigation
-import com.colorata.st.ui.theme.*
+import com.colorata.st.ui.theme.Strings
+import com.colorata.st.ui.theme.SuperStore
+import com.colorata.st.ui.theme.backgroundColor
+import com.colorata.st.ui.theme.backgroundInt
+import com.colorata.st.ui.theme.setSystemColor
 
 class MainActivity : AppCompatActivity() {
 

@@ -2,7 +2,6 @@ package com.colorata.st
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
@@ -18,7 +17,27 @@ import android.service.controls.templates.ControlButton
 import android.service.controls.templates.ControlTemplate
 import android.service.controls.templates.RangeTemplate
 import android.service.controls.templates.ToggleTemplate
-import com.colorata.st.extensions.*
+import com.colorata.st.extensions.getBrightness
+import com.colorata.st.extensions.getRingVolume
+import com.colorata.st.extensions.getMediaVolume
+import com.colorata.st.extensions.isPackageInstalled
+import com.colorata.st.extensions.isAirplaneEnabled
+import com.colorata.st.extensions.isAutoRotationEnabled
+import com.colorata.st.extensions.isBatterySaverEnabled
+import com.colorata.st.extensions.isBluetoothEnabled
+import com.colorata.st.extensions.isDNDEnabled
+import com.colorata.st.extensions.isDarkThemeEnabled
+import com.colorata.st.extensions.isLocationEnabled
+import com.colorata.st.extensions.isMobileDataEnabled
+import com.colorata.st.extensions.isWifiEnabled
+import com.colorata.st.extensions.hidePowerMenu
+import com.colorata.st.extensions.enableFlashlight
+import com.colorata.st.extensions.enableAutoRotate
+import com.colorata.st.extensions.enableBluetooth
+import com.colorata.st.extensions.changeBrightness
+import com.colorata.st.extensions.changeMediaVolume
+import com.colorata.st.extensions.changeRingVolume
+import com.colorata.st.extensions.showNotifications
 import com.colorata.st.extensions.weather.WeatherResponse
 import com.colorata.st.extensions.weather.WeatherService
 import com.colorata.st.ui.theme.Controls
@@ -33,7 +52,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.*
+import java.util.Locale
 import java.util.concurrent.Flow
 import java.util.function.Consumer
 

@@ -83,6 +83,7 @@ object Strings{
     const val currentVersion = "Version: Sunray Compose"
     const val developer = "Developer"
     const val currentDeveloper = "Developer: Colorata"
+    const val end = "There is nothing further"
 
     const val powerMainSubTitle = "You will learn how to use Power Assistant"
 

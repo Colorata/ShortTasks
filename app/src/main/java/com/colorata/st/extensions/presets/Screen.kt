@@ -3,19 +3,32 @@ package com.colorata.st.extensions.presets
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.animateScrollBy
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import com.colorata.st.ui.theme.*
+import com.colorata.st.ui.theme.SDimens
+import com.colorata.st.ui.theme.backgroundColor
+import com.colorata.st.ui.theme.Strings
+import com.colorata.st.ui.theme.SuperStore
+import com.colorata.st.ui.theme.ScreenComponents
 import kotlinx.coroutines.launch
 
 @ExperimentalAnimationApi
@@ -44,7 +57,7 @@ fun Screen(
                 when (item) {
                     titles[0] -> Title(title = item, subTitle = subTitles[titles.indexOf(item)])
                     titles[titles.lastIndex] -> {
-                        var isVisible by remember { mutableStateOf(false)}
+                        var isVisible by remember { mutableStateOf(false) }
                         LaunchedEffect(key1 = true) {
                             isVisible = true
                         }
@@ -59,7 +72,7 @@ fun Screen(
                                 titleFontSize = titleFontSize,
                                 scope = {
                                     scope.launch {
-                                        state.animateScrollToItem(index)
+                                        state.animateScrollToItem(index - 1)
                                     }
                                 }
                             ) {
@@ -67,15 +80,14 @@ fun Screen(
                             }
 
                             AnimatedVisibility(visible = isVisible) {
-
                                 SText(
-                                    text = "You're on the end", modifier = Modifier
+                                    text = Strings.end, modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(
                                             bottom = (SuperStore(context).catchInt(
                                                 Strings.bottomSize,
                                                 30
-                                            ) * 4).dp
+                                            ) * 5).dp
                                         )
                                 )
                             }
@@ -86,12 +98,7 @@ fun Screen(
                             title = item,
                             subTitle = subTitles[titles.indexOf(item)],
                             icon = icons[titles.indexOf(item)],
-                            titleFontSize = titleFontSize,
-                            scope = {
-                                scope.launch {
-                                    state.animateScrollToItem(index)
-                                }
-                            }
+                            titleFontSize = titleFontSize
                         ) {
                             hidden[titles.indexOf(item)]()
                         }
@@ -99,7 +106,6 @@ fun Screen(
                 }
             })
         }
-
     }
 }
 
@@ -113,7 +119,7 @@ fun Screen(
 )
 @Composable
 fun ScreenDefault() {
-    val hidden = listOf<@androidx.compose.runtime.Composable () -> Unit>({ TButtonDefault() },
+    val hidden = listOf<@Composable () -> Unit>({ TButtonDefault() },
         { TButtonDefault() },
         { TButtonDefault() },
         { TButtonDefault() })

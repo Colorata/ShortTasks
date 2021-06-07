@@ -9,11 +9,19 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,8 +41,12 @@ import com.colorata.st.extensions.getAppsPackage
 import com.colorata.st.extensions.presets.SText
 import com.colorata.st.extensions.presets.SToggle
 import com.colorata.st.extensions.presets.Title
-import com.colorata.st.ui.theme.*
+import com.colorata.st.ui.theme.backgroundColor
+import com.colorata.st.ui.theme.Strings
+import com.colorata.st.ui.theme.SDimens
+import com.colorata.st.ui.theme.foregroundColor
 
+@ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @ExperimentalAnimationApi
 @Preview(showSystemUi = true)
@@ -52,6 +64,7 @@ fun AddAppSecondary() {
 
 }
 
+@ExperimentalMaterialApi
 @ExperimentalAnimationApi
 @ExperimentalFoundationApi
 @Composable

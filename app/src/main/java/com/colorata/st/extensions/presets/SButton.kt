@@ -1,21 +1,18 @@
 package com.colorata.st.extensions.presets
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.OutlinedButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.colorata.st.ui.theme.BorderColor
 import com.colorata.st.ui.theme.SDimens
-import com.colorata.st.ui.theme.backgroundColor
 import com.colorata.st.ui.theme.foregroundColor
-import java.util.*
+import java.util.Locale
 
 @Composable
 fun SButton(modifier: Modifier = Modifier, text: String = "", onClick: () -> Unit) {

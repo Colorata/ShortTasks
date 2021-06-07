@@ -1,6 +1,7 @@
 package com.colorata.st.extensions.presets
 
-import androidx.compose.animation.*
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
