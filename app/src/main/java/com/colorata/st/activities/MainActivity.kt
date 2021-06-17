@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import com.colorata.st.extensions.getTime
+import com.colorata.st.extensions.enableFlashlight
 import com.colorata.st.screens.Navigation
 import com.colorata.st.ui.theme.Strings
 import com.colorata.st.ui.theme.SuperStore
@@ -46,6 +46,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        if (SuperStore(this).catchBoolean(Strings.isFirst, true)) {
+            SuperStore(this).drop(Strings.isFirst, true)
+            enableFlashlight(false)
+        }
         SuperStore(this).drop(Strings.nightMode, nightMode)
 
         setSystemColor()

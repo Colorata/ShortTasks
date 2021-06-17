@@ -6,13 +6,13 @@ import android.content.res.Resources
 fun pxToDp(px: Int) = (px / Resources.getSystem().displayMetrics.density).toInt()
 
 fun Int.toHex(): String {
-    return String.format("#%06X", (0xFFFFFF and  this))
+    return String.format("#%06X", (0xFFFFFF and this))
 }
 
 fun String.toHSV(): Triple<Float, Float, Float> {
-    val r: Float = Integer.parseInt("${this[1]}${this[2]}", 16).toFloat()/255
-    val g: Float = Integer.parseInt("${this[3]}${this[4]}", 16).toFloat()/255
-    val b: Float = Integer.parseInt("${this[5]}${this[6]}", 16).toFloat()/255
+    val r: Float = Integer.parseInt("${this[1]}${this[2]}", 16).toFloat() / 255
+    val g: Float = Integer.parseInt("${this[3]}${this[4]}", 16).toFloat() / 255
+    val b: Float = Integer.parseInt("${this[5]}${this[6]}", 16).toFloat() / 255
 
     val min = r.coerceAtMost(g).coerceAtMost(b)
     val max = r.coerceAtLeast(g).coerceAtLeast(b)

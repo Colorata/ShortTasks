@@ -98,12 +98,12 @@ enum class Controls(
         ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
     ),
-    BATTERY_SAVER(
+    BATTERY_INFO(
         id = 1509,
-        title = Strings.batSave,
-        icon = R.drawable.ic_outline_power_settings_new_24,
+        title = Strings.battery,
+        icon = R.drawable.ic_outline_battery_full_24,
         subTitle = Strings.hold,
-        isRange = false,
+        isRange = true,
         intent = Intent(Settings.ACTION_BATTERY_SAVER_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
     ),
@@ -187,15 +187,6 @@ enum class Controls(
         subTitle = Strings.hold,
         isRange = false,
         intent = Intent(Settings.ACTION_AIRPLANE_MODE_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
-    ),
-    BATTERY_INFO(
-        id = 1519,
-        title = Strings.battery,
-        icon = R.drawable.ic_outline_battery_full_24,
-        subTitle = Strings.hold,
-        isRange = true,
-        intent = Intent(Settings.ACTION_BATTERY_SAVER_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
     ),
     TIME(

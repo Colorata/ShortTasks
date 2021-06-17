@@ -3,6 +3,8 @@ package com.colorata.st.extensions
 import android.app.NotificationManager
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.location.LocationManager
@@ -11,14 +13,15 @@ import android.net.wifi.WifiManager
 import android.os.BatteryManager
 import android.os.PowerManager
 import android.provider.Settings
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.colorata.st.R
 import com.colorata.st.ui.theme.Strings
 import com.colorata.st.ui.theme.SuperStore
-import java.util.*
+import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
 
 @Composable
@@ -110,6 +113,10 @@ fun Context.isAirplaneEnabled(): Boolean {
     ) != 0
 }
 
+fun Context.isAutoBrightnessEnabled(): Boolean {
+    return Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS_MODE) == 1
+}
+
 fun Context.isPackageInstalled(name: String): Boolean {
     return try {
         packageManager.getPackageInfo(name, 0)
@@ -121,6 +128,7 @@ fun Context.isPackageInstalled(name: String): Boolean {
 
 fun Context.getBatteryPercentage(): Int {
     val manager = getSystemService(Context.BATTERY_SERVICE) as BatteryManager
+
     return manager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
 }
 
@@ -133,8 +141,84 @@ fun getTime(): Pair<String, String> {
 
 fun getDate(): String {
     val time = Calendar.getInstance().time.toString()
-    Log.d("Time", time)
     val day = time.substring(0..2)
     val date = time.substring(4..9)
     return "$day, $date"
 }
+
+fun Context.getChargingTimeRemaining(): Pair<String, String> {
+    val manager = getSystemService(Context.BATTERY_SERVICE) as BatteryManager
+    val duration = manager.computeChargeTimeRemaining()
+    val hoursRemaining = TimeUnit.MILLISECONDS.toHours(duration)
+    val minutesRemaining = TimeUnit.MILLISECONDS.toMinutes(duration) - hoursRemaining * 60
+    val currentTime = getTime()
+    var estimatedHour = 0L
+    val estimatedMinute: Long
+    if (currentTime.second.toInt() + minutesRemaining > 60) {
+        estimatedMinute = currentTime.second.toInt() + minutesRemaining - 60
+        estimatedHour = 1L
+    } else {
+        estimatedMinute = currentTime.second.toInt() + minutesRemaining
+    }
+    estimatedHour +=
+        if (currentTime.first.toInt() + hoursRemaining >= 24) currentTime.first.toInt() + hoursRemaining - 24
+        else currentTime.first.toInt() + hoursRemaining
+    val finalMinute =
+        if (estimatedMinute == 0L) "00" else if (estimatedMinute < 10) "0$estimatedMinute" else estimatedMinute.toString()
+    return Pair(estimatedHour.toString(), finalMinute)
+}
+
+fun Context.getCurrentBatteryIcon(): Int {
+    val batteryStatus: Intent? = IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { ifilter ->
+        applicationContext.registerReceiver(null, ifilter)
+    }
+    val status: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
+    val isCharging: Boolean = status == BatteryManager.BATTERY_STATUS_CHARGING
+            || status == BatteryManager.BATTERY_STATUS_FULL
+
+    return when {
+        isCharging -> R.drawable.ic_outline_battery_charging_full_24
+        isBatterySaverEnabled() -> R.drawable.ic_outline_battery_saver_24
+        getBatteryPercentage() < 20 -> R.drawable.ic_outline_battery_alert_24
+        else -> R.drawable.ic_outline_battery_full_24
+    }
+}
+
+fun Context.getBatteryFormat(): String {
+    val batteryStatus: Intent? = IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { ifilter ->
+        applicationContext.registerReceiver(null, ifilter)
+    }
+    val status: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
+    val isCharging: Boolean = status == BatteryManager.BATTERY_STATUS_CHARGING
+            || status == BatteryManager.BATTERY_STATUS_FULL
+
+    return if (isCharging && getChargingTimeRemaining() == getTime()) "${Strings.percentFormat} ${Strings.dotIcon} Charging"
+    else if (isCharging) "${Strings.percentFormat} ${Strings.dotIcon} Full in " +
+            "${getChargingTimeRemaining().first}:${getChargingTimeRemaining().second}"
+    else if (!isCharging && getBatteryPercentage() > 20) "${Strings.percentFormat} ${Strings.dotIcon} Discharging"
+    else if (!isCharging && getBatteryPercentage() <= 20) "${Strings.percentFormat} ${Strings.dotIcon} Low battery"
+    else Strings.percentFormat
+}
+
+fun getCurrentBluetoothIcon(): Int =
+    if (isBluetoothEnabled()) R.drawable.ic_outline_bluetooth_24
+    else R.drawable.ic_outline_bluetooth_disabled_24
+
+fun Context.getCurrentWifiIcon(): Int =
+    if (isWifiEnabled()) R.drawable.ic_outline_network_wifi_24
+    else R.drawable.ic_outline_signal_wifi_off_24
+
+fun Context.getCurrentFlashlightIcon(): Int =
+    if (isFlashlightEnabled()) R.drawable.ic_outline_flash_on_24
+    else R.drawable.ic_outline_flash_off_24
+
+fun Context.getCurrentBrightnessIcon(): Int =
+    when {
+        isAutoBrightnessEnabled() -> R.drawable.ic_outline_brightness_auto_24
+        getBrightness() > 75 -> R.drawable.ic_outline_brightness_7_24
+        getBrightness() in 26..75 -> R.drawable.ic_outline_brightness_medium_24
+        getBrightness() <= 25 -> R.drawable.ic_outline_brightness_low_24
+        else -> R.drawable.ic_outline_brightness_7_24
+    }
+
+fun Context.isFlashlightEnabled(): Boolean = SuperStore(this).catchBoolean(Strings.flashlight)

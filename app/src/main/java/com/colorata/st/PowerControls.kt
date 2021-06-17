@@ -142,16 +142,21 @@ class PowerControls : ControlsProviderService() {
                             id = control.id,
                             title = if (control.id == Controls.TIME.id) getDate() else control.title,
                             subTitle = control.subTitle,
-                            icon = control.icon,
+                            icon = when (control.id) {
+                                Controls.BATTERY_INFO.id -> getCurrentBatteryIcon()
+                                Controls.BRIGHTNESS.id -> getCurrentBrightnessIcon()
+                                else -> control.icon
+                            },
                             state = when (control.id) {
-                                Controls.BRIGHTNESS.id -> (getBrightness() / 2.55).toFloat()
+                                Controls.BRIGHTNESS.id -> (getBrightness()).toFloat()
                                 Controls.RING_VOLUME.id -> getRingVolume()
                                 Controls.MEDIA_VOLUME.id -> getMediaVolume()
                                 Controls.BATTERY_INFO.id -> getBatteryPercentage().toFloat()
                                 else -> 50f
                             },
                             intent = control.intent,
-                            time = if (control.id == Controls.TIME.id) getTime() else null
+                            time = if (control.id == Controls.TIME.id) getTime() else null,
+                            format = if (control.id == Controls.BATTERY_INFO.id) getBatteryFormat() else Strings.percentFormat
                         )
                     )
                 } else {
@@ -214,17 +219,22 @@ class PowerControls : ControlsProviderService() {
                                     id = control.id,
                                     title = control.title,
                                     subTitle = control.subTitle,
-                                    icon = control.icon,
+                                    icon = when (control.id) {
+                                        Controls.BLUETOOTH.id -> getCurrentBluetoothIcon()
+                                        Controls.WIFI.id -> getCurrentWifiIcon()
+                                        Controls.FLASHLIGHT.id -> getCurrentFlashlightIcon()
+                                        else -> control.icon
+                                    },
                                     enabled = when (control.id) {
                                         Controls.WIFI.id -> isWifiEnabled()
                                         Controls.BLUETOOTH.id -> isBluetoothEnabled()
                                         Controls.MOBILE_DATA.id -> isMobileDataEnabled()
                                         Controls.LOCATION.id -> isLocationEnabled()
-                                        Controls.BATTERY_SAVER.id -> isBatterySaverEnabled()
                                         Controls.AUTO_ROTATE.id -> isAutoRotationEnabled()
                                         Controls.DND.id -> isDNDEnabled()
                                         Controls.NIGHT_LIGHT.id -> isDarkThemeEnabled()
                                         Controls.FLIGHT_MODE.id -> isAirplaneEnabled()
+                                        Controls.FLASHLIGHT.id -> isFlashlightEnabled()
                                         else -> false
                                     },
                                     intent = control.intent
@@ -349,7 +359,7 @@ class PowerControls : ControlsProviderService() {
                                 title = it.title,
                                 subTitle = it.subTitle,
                                 enabled = toggleState2,
-                                icon = it.icon,
+                                icon = if (toggleState2) R.drawable.ic_outline_bluetooth_24 else R.drawable.ic_outline_bluetooth_disabled_24,
                                 intent = it.intent
                             )
                         )
@@ -412,7 +422,7 @@ class PowerControls : ControlsProviderService() {
                     consumer.accept(ControlAction.RESPONSE_OK)
                     if (action is FloatAction) {
                         rangeState = action.newValue
-                        changeBrightness(applicationContext, (rangeState * 2.55).toInt())
+                        changeBrightness(applicationContext, (rangeState).toInt())
                     } else if (action is BooleanAction) {
                         toggleState2 = action.newState
                         changeBrightness(applicationContext, 0)
@@ -423,7 +433,7 @@ class PowerControls : ControlsProviderService() {
                                 id = it.id,
                                 title = it.title,
                                 subTitle = it.subTitle,
-                                icon = it.icon,
+                                icon = getCurrentBrightnessIcon(),
                                 state = rangeState,
                                 intent = it.intent
                             )
@@ -457,8 +467,10 @@ class PowerControls : ControlsProviderService() {
                                 title = it.title,
                                 subTitle = it.subTitle,
                                 state = getBatteryPercentage().toFloat(),
-                                icon = it.icon,
-                                intent = it.intent
+                                icon = getCurrentBatteryIcon(),
+                                intent = it.intent,
+                                format = "${Strings.percentFormat} ${Strings.dotIcon} Full In " +
+                                        "${getChargingTimeRemaining().first}:${getChargingTimeRemaining().second}"
                             )
                         )
                     }
@@ -554,6 +566,7 @@ class PowerControls : ControlsProviderService() {
         subTitle: String = "",
         isWeather: Boolean = false,
         time: Pair<String, String>? = null,
+        format: String = "%1.0f%%",
         intent: Intent = Intent()
     ) = buildControl(
         id = id,
@@ -563,7 +576,7 @@ class PowerControls : ControlsProviderService() {
             if (time != null) (24 * 60).toFloat() else maxValue,
             if (time != null) (time.first.toInt() * 60 + time.second.toInt()).toFloat() else state,
             if (isWeather) 0.01f else step,
-            if (isWeather) "%1.0f " + "℃" else if (time != null) "${time.first}:${time.second}" else "%1.0f%%"
+            if (isWeather) "%1.0f " + "℃" else if (time != null) "${time.first}:${time.second}" else format
         ),
         titleRes = title,
         subTitle = subTitle,

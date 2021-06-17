@@ -84,6 +84,7 @@ object Strings{
     const val developer = "Developer"
     const val currentDeveloper = "Developer: Colorata"
     const val end = "There is nothing further"
+    const val isFirst = "is First"
 
     const val powerMainSubTitle = "You will learn how to use Power Assistant"
 
@@ -120,4 +121,7 @@ object Strings{
     const val purple = "Very Purple"
     const val white = "Boring White"
     const val autoDetect = "Personal Designer"
+
+    const val dotIcon = "•"
+    const val percentFormat = "%1.0f%%"
 }

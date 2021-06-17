@@ -6,7 +6,6 @@ import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
 import android.hardware.camera2.CameraManager
-import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.provider.Settings
 import android.service.controls.ControlsProviderService
@@ -14,6 +13,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.colorata.st.CurrentScreen
 import com.colorata.st.activities.SecondaryActivity
 import com.colorata.st.ui.theme.Strings
+import com.colorata.st.ui.theme.SuperStore
 import java.lang.reflect.Method
 
 
@@ -77,6 +77,7 @@ fun Context.enableFlashlight(enabled: Boolean) {
     val cameraManager = getSystemService(ControlsProviderService.CAMERA_SERVICE) as CameraManager
     val cameraId = cameraManager.cameraIdList[0]
     cameraManager.setTorchMode(cameraId, enabled)
+    SuperStore(this).drop(Strings.flashlight, enabled)
 }
 
 @SuppressLint("WrongConstant")
