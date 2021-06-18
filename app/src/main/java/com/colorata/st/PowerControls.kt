@@ -29,7 +29,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.Locale
+import java.util.*
 import java.util.concurrent.Flow
 import java.util.function.Consumer
 
@@ -153,7 +153,10 @@ class PowerControls : ControlsProviderService() {
                                 Controls.BATTERY_INFO.id -> getBatteryPercentage().toFloat()
                                 else -> 50f
                             },
-                            intent = control.intent,
+                            intent = if (control.id == Controls.TIME.id && isPackageInstalled(
+                                    Strings.googleClockApp
+                                )
+                            ) getAppIntent(Strings.googleClockApp) else control.intent,
                             time = if (control.id == Controls.TIME.id) getTime() else null,
                             format = when (control.id) {
                                 Controls.BATTERY_INFO.id -> getBatteryFormat()
@@ -226,6 +229,9 @@ class PowerControls : ControlsProviderService() {
                                         Controls.BLUETOOTH.id -> getCurrentBluetoothIcon()
                                         Controls.WIFI.id -> getCurrentWifiIcon()
                                         Controls.FLASHLIGHT.id -> getCurrentFlashlightIcon()
+                                        Controls.LOCATION.id -> getCurrentLocationIcon()
+                                        Controls.AUTO_ROTATE.id -> getCurrentAutoRotationIcon()
+                                        Controls.DND.id -> getCurrentDNDIcon()
                                         else -> control.icon
                                     },
                                     enabled = when (control.id) {
@@ -238,6 +244,7 @@ class PowerControls : ControlsProviderService() {
                                         Controls.NIGHT_LIGHT.id -> isDarkThemeEnabled()
                                         Controls.FLIGHT_MODE.id -> isAirplaneEnabled()
                                         Controls.FLASHLIGHT.id -> isFlashlightEnabled()
+                                        Controls.MICROPHONE.id -> isMicrophoneEnabled()
                                         else -> false
                                     },
                                     intent = control.intent
@@ -250,7 +257,6 @@ class PowerControls : ControlsProviderService() {
 
             val title = SuperStore(this).catchString(Strings.linkTitle, "Google")
             val link = SuperStore(this).catchString(Strings.linkLink, "https://google.com")
-
             list.add(
                 buildToggleControl(
                     id = 0,
@@ -463,7 +469,7 @@ class PowerControls : ControlsProviderService() {
                                 title = it.title,
                                 subTitle = it.subTitle,
                                 enabled = toggleState2,
-                                icon = it.icon,
+                                icon = getCurrentAutoRotationIcon(),
                                 intent = it.intent
                             )
                         )
@@ -497,6 +503,26 @@ class PowerControls : ControlsProviderService() {
                                 time = getTime(),
                                 icon = it.icon,
                                 intent = it.intent
+                            )
+                        )
+                    }
+                }
+
+                Controls.MICROPHONE.id.toString() -> {
+                    consumer.accept(ControlAction.RESPONSE_OK)
+                    if (action is BooleanAction) {
+                        toggleState2 = action.newState
+                        enableMicrophone(toggleState2)
+                    }
+                    Controls.MICROPHONE.also {
+                        flow.onNext(
+                            buildToggleControl(
+                                id = it.id,
+                                title = it.title,
+                                subTitle = it.subTitle,
+                                icon = it.icon,
+                                intent = it.intent,
+                                enabled = toggleState2
                             )
                         )
                     }
@@ -590,7 +616,11 @@ class PowerControls : ControlsProviderService() {
                 if (time != null) (24 * 60).toFloat() else maxValue,
                 if (time != null) (time.first.toInt() * 60 + time.second.toInt()).toFloat() else state,
                 if (isWeather) 0.01f else step,
-                if (isWeather) "%1.0f " + "℃" else if (time != null) "${time.first}:${time.second}" else format
+                when {
+                    isWeather -> "%1.0f " + "℃"
+                    time != null -> getTimeFormat()
+                    else -> format
+                }
             )
         ),
         titleRes = title,

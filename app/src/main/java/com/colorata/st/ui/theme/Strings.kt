@@ -85,6 +85,8 @@ object Strings{
     const val currentDeveloper = "Developer: Colorata"
     const val end = "There is nothing further"
     const val isFirst = "is First"
+    const val darkTheme = "Dark Theme"
+    const val micro = "Microphone"
 
     const val powerMainSubTitle = "You will learn how to use Power Assistant"
 
@@ -124,4 +126,6 @@ object Strings{
 
     const val dotIcon = "•"
     const val percentFormat = "%1.0f%%"
+
+    const val googleClockApp = "com.google.android.deskclock"
 }

@@ -1,5 +1,6 @@
 package com.colorata.st.extensions
 
+import android.app.AlarmManager
 import android.app.NotificationManager
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
@@ -20,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.colorata.st.R
 import com.colorata.st.ui.theme.Strings
 import com.colorata.st.ui.theme.SuperStore
-import java.util.Calendar
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -227,3 +228,34 @@ fun Context.getCurrentMediaVolumeIcon(): Int =
 fun Context.getCurrentRingVolumeIcon(): Int =
     if (getRingVolume() == 0f) R.drawable.ic_outline_notifications_off_24
     else R.drawable.ic_outline_notifications_none_24
+
+fun Context.getTimeFormat(): String {
+    val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    if (manager.nextAlarmClock == null) {
+        return "${getTime().first}:${getTime().second} ${Strings.dotIcon} No Alarms"
+    }
+    val time = Date(manager.nextAlarmClock.triggerTime)
+    val calendar = Calendar.getInstance()
+    calendar.time = time
+    val hours = calendar.get(Calendar.HOUR_OF_DAY)
+    val minutes = calendar.get(Calendar.MINUTE)
+    val finalMinutes =
+        if (minutes == 0) "00" else if (minutes < 10L) "0${minutes}" else minutes.toString()
+    val finalHours = hours.toString()
+    return "${getTime().first}:${getTime().second} ${Strings.dotIcon} Alarm ${finalHours}:${finalMinutes}"
+}
+
+fun Context.getCurrentLocationIcon(): Int =
+    if (isLocationEnabled()) R.drawable.ic_outline_location_on_24
+    else R.drawable.ic_outline_location_off_24
+
+fun Context.getCurrentAutoRotationIcon(): Int =
+    if (isAutoRotationEnabled()) R.drawable.ic_outline_screen_rotation_24 else R.drawable.ic_outline_screen_lock_rotation_24
+
+fun Context.getCurrentDNDIcon(): Int =
+    if (isDNDEnabled()) R.drawable.ic_outline_do_disturb_on_24 else R.drawable.ic_outline_do_not_disturb_off_24
+
+fun Context.isMicrophoneEnabled(): Boolean {
+    val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    return !manager.isMicrophoneMute
+}

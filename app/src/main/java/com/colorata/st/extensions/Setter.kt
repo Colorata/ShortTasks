@@ -98,3 +98,20 @@ fun Context.enableAutoBrightness(enabled: Boolean) {
     val mode = if (enabled) 0 else 1
     Settings.System.putInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS_MODE, mode)
 }
+
+fun Context.getAppIntent(packageName: String): Intent {
+    val i = packageManager.getLaunchIntentForPackage(packageName)
+    i?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    i?.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+    return i ?: Intent().setClassName(
+        "com.android.settings",
+        "com.android.settings.TetherSettings"
+    )
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+}
+
+fun Context.enableMicrophone(enabled: Boolean) {
+    val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    manager.isMicrophoneMute = !enabled
+}

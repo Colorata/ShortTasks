@@ -173,8 +173,8 @@ enum class Controls(
     ),
     NIGHT_LIGHT(
         id = 1517,
-        title = Strings.nightLight,
-        icon = R.drawable.ic_outline_nightlight_24,
+        title = Strings.darkTheme,
+        icon = R.drawable.ic_outline_dark_mode_24,
         subTitle = Strings.hold,
         isRange = false,
         intent = Intent(Settings.ACTION_ZEN_MODE_PRIORITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -187,6 +187,15 @@ enum class Controls(
         subTitle = Strings.hold,
         isRange = false,
         intent = Intent(Settings.ACTION_AIRPLANE_MODE_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+    ),
+    MICROPHONE(
+        id = 1519,
+        title = Strings.micro,
+        icon = R.drawable.ic_outline_mic_none_24,
+        subTitle = Strings.tap,
+        isRange = false,
+        intent = Intent(Settings.ACTION_SECURITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
     ),
     TIME(
