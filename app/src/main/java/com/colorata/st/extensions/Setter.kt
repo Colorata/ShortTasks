@@ -93,3 +93,8 @@ fun Context.hidePowerMenu() {
     intent.putExtra("action", AccessibilityService.GLOBAL_ACTION_POWER_DIALOG)
     LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
 }
+
+fun Context.enableAutoBrightness(enabled: Boolean) {
+    val mode = if (enabled) 0 else 1
+    Settings.System.putInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS_MODE, mode)
+}

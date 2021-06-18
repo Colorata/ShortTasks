@@ -69,12 +69,6 @@ fun Context.isBatterySaverEnabled(): Boolean {
 }
 
 fun Context.getBrightness(): Int {
-    Settings.System.putInt(
-        contentResolver,
-        Settings.System.SCREEN_BRIGHTNESS_MODE,
-        Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL
-    )
-
     return Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS)
 }
 
@@ -222,3 +216,14 @@ fun Context.getCurrentBrightnessIcon(): Int =
     }
 
 fun Context.isFlashlightEnabled(): Boolean = SuperStore(this).catchBoolean(Strings.flashlight)
+
+fun Context.getCurrentBrightnessFormat(): String =
+    if (isAutoBrightnessEnabled()) "${Strings.percentFormat} ${Strings.dotIcon} Adaptive" else "${Strings.percentFormat} ${Strings.dotIcon} Manual"
+
+fun Context.getCurrentMediaVolumeIcon(): Int =
+    if (getMediaVolume() == 0f) R.drawable.ic_outline_music_off_24
+    else R.drawable.ic_outline_music_note_24
+
+fun Context.getCurrentRingVolumeIcon(): Int =
+    if (getRingVolume() == 0f) R.drawable.ic_outline_notifications_off_24
+    else R.drawable.ic_outline_notifications_none_24

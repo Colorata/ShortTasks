@@ -81,7 +81,7 @@ enum class Controls(
         id = 1507,
         title = Strings.location,
         icon = R.drawable.ic_outline_location_on_24,
-        subTitle = Strings.tap,
+        subTitle = Strings.hold,
         isRange = false,
         intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)

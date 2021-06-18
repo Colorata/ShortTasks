@@ -13,10 +13,7 @@ import android.service.controls.DeviceTypes
 import android.service.controls.actions.BooleanAction
 import android.service.controls.actions.ControlAction
 import android.service.controls.actions.FloatAction
-import android.service.controls.templates.ControlButton
-import android.service.controls.templates.ControlTemplate
-import android.service.controls.templates.RangeTemplate
-import android.service.controls.templates.ToggleTemplate
+import android.service.controls.templates.*
 import com.colorata.st.extensions.*
 import com.colorata.st.extensions.weather.WeatherResponse
 import com.colorata.st.extensions.weather.WeatherService
@@ -145,6 +142,8 @@ class PowerControls : ControlsProviderService() {
                             icon = when (control.id) {
                                 Controls.BATTERY_INFO.id -> getCurrentBatteryIcon()
                                 Controls.BRIGHTNESS.id -> getCurrentBrightnessIcon()
+                                Controls.MEDIA_VOLUME.id -> getCurrentMediaVolumeIcon()
+                                Controls.RING_VOLUME.id -> getCurrentRingVolumeIcon()
                                 else -> control.icon
                             },
                             state = when (control.id) {
@@ -156,7 +155,11 @@ class PowerControls : ControlsProviderService() {
                             },
                             intent = control.intent,
                             time = if (control.id == Controls.TIME.id) getTime() else null,
-                            format = if (control.id == Controls.BATTERY_INFO.id) getBatteryFormat() else Strings.percentFormat
+                            format = when (control.id) {
+                                Controls.BATTERY_INFO.id -> getBatteryFormat()
+                                Controls.BRIGHTNESS.id -> getCurrentBrightnessFormat()
+                                else -> Strings.percentFormat
+                            }
                         )
                     )
                 } else {
@@ -375,10 +378,12 @@ class PowerControls : ControlsProviderService() {
                     consumer.accept(ControlAction.RESPONSE_OK)
                     if (action is FloatAction) {
                         rangeState = action.newValue
+                        toggleState2 = true
                         changeMediaVolume(rangeState.toInt())
                     } else if (action is BooleanAction) {
-                        toggleState2 = action.newState
-                        changeMediaVolume(0)
+                        toggleState2 = getMediaVolume() == 0f
+                        rangeState = 50f
+                        changeMediaVolume(if (toggleState2) rangeState.toInt() else 0)
                     }
                     Controls.MEDIA_VOLUME.also {
                         flow.onNext(
@@ -386,12 +391,13 @@ class PowerControls : ControlsProviderService() {
                                 id = it.id,
                                 title = it.title,
                                 subTitle = it.subTitle,
-                                icon = it.icon,
-                                state = rangeState,
+                                icon = getCurrentMediaVolumeIcon(),
+                                state = if (toggleState2) rangeState else 0f,
                                 intent = it.intent
                             )
                         )
                     }
+                    toggleState2 = false
 
                 }
 
@@ -399,10 +405,12 @@ class PowerControls : ControlsProviderService() {
                     consumer.accept(ControlAction.RESPONSE_OK)
                     if (action is FloatAction) {
                         rangeState = action.newValue
+                        toggleState2 = true
                         changeRingVolume(rangeState.toInt())
                     } else if (action is BooleanAction) {
-                        toggleState2 = action.newState
-                        changeRingVolume(0)
+                        toggleState2 = getRingVolume() == 0f
+                        rangeState = 50f
+                        changeRingVolume(if (toggleState2) rangeState.toInt() else 0)
                     }
                     Controls.RING_VOLUME.also {
                         flow.onNext(
@@ -410,8 +418,8 @@ class PowerControls : ControlsProviderService() {
                                 id = it.id,
                                 title = it.title,
                                 subTitle = it.subTitle,
-                                icon = it.icon,
-                                state = rangeState,
+                                icon = getCurrentRingVolumeIcon(),
+                                state = if (toggleState2) rangeState else 0f,
                                 intent = it.intent
                             )
                         )
@@ -423,9 +431,11 @@ class PowerControls : ControlsProviderService() {
                     if (action is FloatAction) {
                         rangeState = action.newValue
                         changeBrightness(applicationContext, (rangeState).toInt())
+                        toggleState2 = true
                     } else if (action is BooleanAction) {
+                        rangeState = getBrightness().toFloat()
                         toggleState2 = action.newState
-                        changeBrightness(applicationContext, 0)
+                        enableAutoBrightness(toggleState2)
                     }
                     Controls.BRIGHTNESS.also {
                         flow.onNext(
@@ -435,7 +445,8 @@ class PowerControls : ControlsProviderService() {
                                 subTitle = it.subTitle,
                                 icon = getCurrentBrightnessIcon(),
                                 state = rangeState,
-                                intent = it.intent
+                                intent = it.intent,
+                                format = getCurrentBrightnessFormat()
                             )
                         )
                     }
@@ -469,8 +480,7 @@ class PowerControls : ControlsProviderService() {
                                 state = getBatteryPercentage().toFloat(),
                                 icon = getCurrentBatteryIcon(),
                                 intent = it.intent,
-                                format = "${Strings.percentFormat} ${Strings.dotIcon} Full In " +
-                                        "${getChargingTimeRemaining().first}:${getChargingTimeRemaining().second}"
+                                format = getBatteryFormat()
                             )
                         )
                     }
@@ -567,16 +577,21 @@ class PowerControls : ControlsProviderService() {
         isWeather: Boolean = false,
         time: Pair<String, String>? = null,
         format: String = "%1.0f%%",
-        intent: Intent = Intent()
+        intent: Intent = Intent(),
+        enabled: Boolean = true
     ) = buildControl(
         id = id,
-        template = RangeTemplate(
+        template = ToggleRangeTemplate(
             id.toString(),
-            minValue,
-            if (time != null) (24 * 60).toFloat() else maxValue,
-            if (time != null) (time.first.toInt() * 60 + time.second.toInt()).toFloat() else state,
-            if (isWeather) 0.01f else step,
-            if (isWeather) "%1.0f " + "℃" else if (time != null) "${time.first}:${time.second}" else format
+            ControlButton(enabled, id.toString()),
+            RangeTemplate(
+                id.toString(),
+                minValue,
+                if (time != null) (24 * 60).toFloat() else maxValue,
+                if (time != null) (time.first.toInt() * 60 + time.second.toInt()).toFloat() else state,
+                if (isWeather) 0.01f else step,
+                if (isWeather) "%1.0f " + "℃" else if (time != null) "${time.first}:${time.second}" else format
+            )
         ),
         titleRes = title,
         subTitle = subTitle,
