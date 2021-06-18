@@ -147,7 +147,7 @@ class PowerControls : ControlsProviderService() {
                                 else -> control.icon
                             },
                             state = when (control.id) {
-                                Controls.BRIGHTNESS.id -> (getBrightness()).toFloat()
+                                Controls.BRIGHTNESS.id -> (getBrightness() / 2.55).toFloat()
                                 Controls.RING_VOLUME.id -> getRingVolume()
                                 Controls.MEDIA_VOLUME.id -> getMediaVolume()
                                 Controls.BATTERY_INFO.id -> getBatteryPercentage().toFloat()
@@ -232,6 +232,8 @@ class PowerControls : ControlsProviderService() {
                                         Controls.LOCATION.id -> getCurrentLocationIcon()
                                         Controls.AUTO_ROTATE.id -> getCurrentAutoRotationIcon()
                                         Controls.DND.id -> getCurrentDNDIcon()
+                                        Controls.MICROPHONE.id -> getCurrentMicrophoneIcon()
+                                        Controls.FLIGHT_MODE.id -> getCurrentAirplaneIcon()
                                         else -> control.icon
                                     },
                                     enabled = when (control.id) {
@@ -520,7 +522,7 @@ class PowerControls : ControlsProviderService() {
                                 id = it.id,
                                 title = it.title,
                                 subTitle = it.subTitle,
-                                icon = it.icon,
+                                icon = getCurrentMicrophoneIcon(),
                                 intent = it.intent,
                                 enabled = toggleState2
                             )

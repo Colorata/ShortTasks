@@ -259,3 +259,11 @@ fun Context.isMicrophoneEnabled(): Boolean {
     val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
     return !manager.isMicrophoneMute
 }
+
+fun Context.getCurrentMicrophoneIcon(): Int =
+    if (isMicrophoneEnabled()) R.drawable.ic_outline_mic_none_24
+    else R.drawable.ic_outline_mic_off_24
+
+fun Context.getCurrentAirplaneIcon(): Int =
+    if (isAirplaneEnabled()) R.drawable.ic_outline_flight_24
+    else R.drawable.ic_outline_airplanemode_inactive_24
