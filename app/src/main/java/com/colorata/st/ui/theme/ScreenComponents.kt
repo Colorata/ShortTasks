@@ -25,7 +25,7 @@ object ScreenComponents{
         )
     }
 
-    object MainScreen {
+    object MainScreenGetStarted {
         val titles = mutableListOf(
             Strings.main,
             Strings.getStarted,
@@ -41,6 +41,23 @@ object ScreenComponents{
         val icons = mutableListOf(
             R.drawable.abc_vector_test,
             R.drawable.ic_outline_play_circle_outline_24,
+            R.drawable.ic_outline_power_settings_new_24
+        )
+    }
+
+    object MainScreen {
+        val titles = mutableListOf(
+            Strings.main,
+            Strings.powerAssistant
+        )
+
+        val subTitles = mutableListOf(
+            Strings.relatedPosts,
+            Strings.powerMainSubTitle
+        )
+
+        val icons = mutableListOf(
+            R.drawable.abc_vector_test,
             R.drawable.ic_outline_power_settings_new_24
         )
     }

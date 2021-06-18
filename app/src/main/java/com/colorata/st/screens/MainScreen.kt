@@ -33,16 +33,18 @@ import com.colorata.st.extensions.presets.TButtonDefault
 import com.colorata.st.ui.theme.SDimens
 import com.colorata.st.ui.theme.ScreenComponents
 import com.colorata.st.ui.theme.Strings
+import com.colorata.st.ui.theme.SuperStore
 
 
 @ExperimentalAnimationApi
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun MainScreen() {
+    val isNewUser = SuperStore(LocalContext.current).catchBoolean(Strings.isFirst)
     Screen(
-        titles = ScreenComponents.MainScreen.titles,
-        subTitles = ScreenComponents.MainScreen.subTitles,
-        icons = ScreenComponents.MainScreen.icons,
+        titles = if (isNewUser) ScreenComponents.MainScreenGetStarted.titles else ScreenComponents.MainScreen.titles,
+        subTitles = if (isNewUser) ScreenComponents.MainScreenGetStarted.subTitles else ScreenComponents.MainScreen.subTitles,
+        icons = if (isNewUser) ScreenComponents.MainScreenGetStarted.icons else ScreenComponents.MainScreen.icons,
         modifier = Modifier.padding(bottom = getBottomNavigationHeight()),
         hidden = listOf(
             { TButtonDefault() },
@@ -74,7 +76,7 @@ fun PowerMainScreenContent() {
 fun GetStartedCardContent() {
     val context = LocalContext.current
     val activity = LocalContext.current as Activity
-    var visibleLocation by remember { mutableStateOf(false) }
+    var visiblePhone by remember { mutableStateOf(false) }
     var visibleAccessibility by remember { mutableStateOf(false) }
     var visibleModifySettings by remember { mutableStateOf(false) }
     Column(modifier = Modifier.padding(SDimens.largePadding)) {
@@ -91,11 +93,11 @@ fun GetStartedCardContent() {
             ) {
                 visibleModifySettings = !visibleModifySettings
                 visibleAccessibility = false
-                visibleLocation = false
+                visiblePhone = false
             }
 
             SButton(text = Strings.other) {
-                visibleLocation = !visibleLocation
+                visiblePhone = !visiblePhone
                 visibleModifySettings = false
                 visibleAccessibility = false
             }
@@ -111,12 +113,12 @@ fun GetStartedCardContent() {
                 text = Strings.accessibility
             ) {
                 visibleAccessibility = !visibleAccessibility
-                visibleLocation = false
+                visiblePhone = false
                 visibleModifySettings = false
             }
         }
 
-        AnimatedVisibility(visible = visibleLocation) {
+        AnimatedVisibility(visible = visiblePhone) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -124,9 +126,9 @@ fun GetStartedCardContent() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 SText(
-                    text = if (context.checkCallingOrSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) ==
+                    text = if (context.checkCallingOrSelfPermission(Manifest.permission.READ_PHONE_STATE) ==
                         PackageManager.PERMISSION_DENIED
-                    ) Strings.whyLocation else Strings.alreadyGranted,
+                    ) Strings.whyPhone else Strings.alreadyGranted,
                     fontSize = SDimens.subTitle,
                     modifier = Modifier
                         .padding(end = SDimens.smallPadding)
@@ -139,13 +141,13 @@ fun GetStartedCardContent() {
                 ) {
                     ActivityCompat.requestPermissions(
                         activity,
-                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                        arrayOf(Manifest.permission.READ_PHONE_STATE),
                         0
                     )
-                    if (context.checkCallingOrSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) ==
+                    if (context.checkCallingOrSelfPermission(Manifest.permission.READ_PHONE_STATE) ==
                         PackageManager.PERMISSION_GRANTED
                     )
-                        visibleLocation = false
+                        visiblePhone = false
                 }
             }
         }

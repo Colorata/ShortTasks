@@ -64,7 +64,7 @@ object Strings{
     const val modifySettings = "Modify Settings"
     const val permissions = "Permissions"
     const val accessibility = "Accessibility"
-    const val whyLocation = "STasks uses location for switch Location with tiles"
+    const val whyPhone = "STasks uses phone to show you quality of network"
     const val whyAccessibility = "STasks uses accessibility for the best experience"
     const val whyModifySettings = "STasks modifies settings to control device by you"
     const val other = "Other"

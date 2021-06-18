@@ -1,8 +1,11 @@
 package com.colorata.st.activities
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -46,10 +49,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        if (SuperStore(this).catchBoolean(Strings.isFirst, true)) {
-            SuperStore(this).drop(Strings.isFirst, true)
-            enableFlashlight(false)
-        }
+        if (checkCallingOrSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_DENIED ||
+            Settings.System.canWrite(
+                this
+            )
+        ) SuperStore(this).drop(Strings.isFirst, false)
+        else SuperStore(this).drop(Strings.isFirst, true)
+        enableFlashlight(false)
         SuperStore(this).drop(Strings.nightMode, nightMode)
 
         setSystemColor()

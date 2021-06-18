@@ -34,7 +34,7 @@ enum class Controls(
     WIFI(
         id = 1502,
         title = Strings.wifi,
-        icon = R.drawable.ic_outline_network_wifi_24,
+        icon = R.drawable.ic_outline_signal_wifi_4_bar_24,
         subTitle = Strings.hold,
         isRange = false,
         intent = Intent(Settings.ACTION_WIFI_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

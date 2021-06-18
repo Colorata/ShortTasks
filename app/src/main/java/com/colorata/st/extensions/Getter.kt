@@ -1,5 +1,6 @@
 package com.colorata.st.extensions
 
+import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.NotificationManager
 import android.bluetooth.BluetoothAdapter
@@ -10,10 +11,12 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.location.LocationManager
 import android.media.AudioManager
+import android.net.TrafficStats
 import android.net.wifi.WifiManager
 import android.os.BatteryManager
 import android.os.PowerManager
 import android.provider.Settings
+import android.telephony.TelephonyManager
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
@@ -200,7 +203,7 @@ fun getCurrentBluetoothIcon(): Int =
     else R.drawable.ic_outline_bluetooth_disabled_24
 
 fun Context.getCurrentWifiIcon(): Int =
-    if (isWifiEnabled()) R.drawable.ic_outline_network_wifi_24
+    if (isWifiEnabled()) R.drawable.ic_outline_signal_wifi_4_bar_24
     else R.drawable.ic_outline_signal_wifi_off_24
 
 fun Context.getCurrentFlashlightIcon(): Int =
@@ -225,9 +228,15 @@ fun Context.getCurrentMediaVolumeIcon(): Int =
     if (getMediaVolume() == 0f) R.drawable.ic_outline_music_off_24
     else R.drawable.ic_outline_music_note_24
 
-fun Context.getCurrentRingVolumeIcon(): Int =
-    if (getRingVolume() == 0f) R.drawable.ic_outline_notifications_off_24
-    else R.drawable.ic_outline_notifications_none_24
+fun Context.getCurrentRingVolumeIcon(): Int {
+    val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    return when (manager.ringerMode) {
+        AudioManager.RINGER_MODE_NORMAL -> R.drawable.ic_outline_notifications_none_24
+        AudioManager.RINGER_MODE_SILENT -> R.drawable.ic_outline_notifications_off_24
+        AudioManager.RINGER_MODE_VIBRATE -> R.drawable.ic_outline_vibration_24
+        else -> R.drawable.ic_outline_notifications_none_24
+    }
+}
 
 fun Context.getTimeFormat(): String {
     val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -250,10 +259,12 @@ fun Context.getCurrentLocationIcon(): Int =
     else R.drawable.ic_outline_location_off_24
 
 fun Context.getCurrentAutoRotationIcon(): Int =
-    if (isAutoRotationEnabled()) R.drawable.ic_outline_screen_rotation_24 else R.drawable.ic_outline_screen_lock_rotation_24
+    if (isAutoRotationEnabled()) R.drawable.ic_outline_screen_rotation_24
+    else R.drawable.ic_outline_screen_lock_rotation_24
 
 fun Context.getCurrentDNDIcon(): Int =
-    if (isDNDEnabled()) R.drawable.ic_outline_do_disturb_on_24 else R.drawable.ic_outline_do_not_disturb_off_24
+    if (isDNDEnabled()) R.drawable.ic_outline_do_disturb_on_24
+    else R.drawable.ic_outline_do_not_disturb_off_24
 
 fun Context.isMicrophoneEnabled(): Boolean {
     val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -267,3 +278,66 @@ fun Context.getCurrentMicrophoneIcon(): Int =
 fun Context.getCurrentAirplaneIcon(): Int =
     if (isAirplaneEnabled()) R.drawable.ic_outline_flight_24
     else R.drawable.ic_outline_airplanemode_inactive_24
+
+fun Context.getMediaVolumeFormat(): String {
+    val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    return if (manager.isBluetoothScoOn) "${Strings.percentFormat} ${Strings.dotIcon} Bluetooth"
+    else if (!manager.isBluetoothScoOn && !manager.isSpeakerphoneOn) "${Strings.percentFormat} ${Strings.dotIcon} Wired"
+    else "${Strings.percentFormat} ${Strings.dotIcon} Phone"
+}
+
+fun Context.getRingVolumeFormat(): String {
+    val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    return when (manager.ringerMode) {
+        AudioManager.RINGER_MODE_NORMAL -> "${Strings.percentFormat} ${Strings.dotIcon} Ring"
+        AudioManager.RINGER_MODE_SILENT -> "${Strings.percentFormat} ${Strings.dotIcon} Mute"
+        AudioManager.RINGER_MODE_VIBRATE -> "${Strings.percentFormat} ${Strings.dotIcon} Vibrate"
+        else -> Strings.percentFormat
+    }
+}
+
+@SuppressLint("MissingPermission")
+fun Context.getMobileDataQuality(): String {
+    val manager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+    return when (manager.dataNetworkType) {
+        TelephonyManager.NETWORK_TYPE_GPRS,
+        TelephonyManager.NETWORK_TYPE_EDGE,
+        TelephonyManager.NETWORK_TYPE_CDMA,
+        TelephonyManager.NETWORK_TYPE_1xRTT,
+        TelephonyManager.NETWORK_TYPE_IDEN,
+        TelephonyManager.NETWORK_TYPE_GSM
+        -> "E"
+        TelephonyManager.NETWORK_TYPE_UMTS,
+        TelephonyManager.NETWORK_TYPE_EVDO_0,
+        TelephonyManager.NETWORK_TYPE_EVDO_A,
+        TelephonyManager.NETWORK_TYPE_HSDPA,
+        TelephonyManager.NETWORK_TYPE_HSUPA,
+        TelephonyManager.NETWORK_TYPE_HSPA,
+        TelephonyManager.NETWORK_TYPE_EVDO_B,
+        TelephonyManager.NETWORK_TYPE_EHRPD,
+        TelephonyManager.NETWORK_TYPE_HSPAP,
+        TelephonyManager.NETWORK_TYPE_TD_SCDMA
+        -> "3G"
+        TelephonyManager.NETWORK_TYPE_LTE
+        -> "LTE"
+        TelephonyManager.NETWORK_TYPE_NR
+        -> "5G"
+        else -> "Unknown"
+    }
+}
+
+fun Context.getWIFIQuality(): String {
+    val manager = getSystemService(Context.WIFI_SERVICE) as WifiManager
+    val rssi = manager.connectionInfo.rssi
+    return if (!isWifiEnabled()) "Off" else if (rssi > -50) "Excellent" else if (rssi in -50 downTo -60) "Good" else if (rssi in -60 downTo -70) "Fair" else "Weak"
+}
+
+fun Context.getMobileDataFormat(): String {
+    return "${getMobileDataQuality()} ${Strings.dotIcon} ${
+        TrafficStats.getMobileRxBytes().toData()
+    }"
+}
+
+fun Context.getWIFIFormat(): String {
+    return "${getWIFIQuality()} ${Strings.dotIcon} ${(TrafficStats.getTotalRxBytes() - TrafficStats.getMobileRxBytes()).toData()}"
+}

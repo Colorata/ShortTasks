@@ -62,7 +62,7 @@ fun SField(
                 cursorColor = foregroundColor(),
                 textColor = foregroundColor(),
             ),
-            modifier = Modifier.padding(horizontal = SDimens.smallPadding),
+            modifier = Modifier.padding(horizontal = SDimens.normalPadding),
             keyboardOptions = KeyboardOptions(imeAction = imeAction),
             keyboardActions = KeyboardActions(onDone = {
                 controller?.hide()

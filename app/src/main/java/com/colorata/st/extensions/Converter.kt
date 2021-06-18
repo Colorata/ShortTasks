@@ -1,6 +1,9 @@
 package com.colorata.st.extensions
 
 import android.content.res.Resources
+import java.text.CharacterIterator
+import java.text.StringCharacterIterator
+import java.util.*
 
 
 fun pxToDp(px: Int) = (px / Resources.getSystem().displayMetrics.density).toInt()
@@ -43,4 +46,17 @@ fun String.toHSV(): Triple<Float, Float, Float> {
     } else (dif / max) * 100
 
     return Triple(h, s, v)
+}
+
+fun Long.toData(): String {
+    var bytes = this
+    if (-1000 < bytes && bytes < 1000) {
+        return "$bytes B"
+    }
+    val ci: CharacterIterator = StringCharacterIterator("KMGTPE")
+    while (bytes <= -999950 || bytes >= 999950) {
+        bytes /= 1000
+        ci.next()
+    }
+    return String.format(Locale.getDefault(), "%.1f %cB", bytes / 1000.0, ci.current())
 }

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.drawable.Icon
+import android.media.AudioManager
 import android.net.Uri
 import android.service.controls.Control
 import android.service.controls.ControlsProviderService
@@ -161,6 +162,8 @@ class PowerControls : ControlsProviderService() {
                             format = when (control.id) {
                                 Controls.BATTERY_INFO.id -> getBatteryFormat()
                                 Controls.BRIGHTNESS.id -> getCurrentBrightnessFormat()
+                                Controls.MEDIA_VOLUME.id -> getMediaVolumeFormat()
+                                Controls.RING_VOLUME.id -> getRingVolumeFormat()
                                 else -> Strings.percentFormat
                             }
                         )
@@ -249,7 +252,12 @@ class PowerControls : ControlsProviderService() {
                                         Controls.MICROPHONE.id -> isMicrophoneEnabled()
                                         else -> false
                                     },
-                                    intent = control.intent
+                                    intent = control.intent,
+                                    stateText = when (control.id) {
+                                        Controls.MOBILE_DATA.id -> getMobileDataFormat()
+                                        Controls.WIFI.id -> getWIFIFormat()
+                                        else -> ""
+                                    }
                                 )
                             )
                         }
@@ -411,6 +419,7 @@ class PowerControls : ControlsProviderService() {
 
                 Controls.RING_VOLUME.id.toString() -> {
                     consumer.accept(ControlAction.RESPONSE_OK)
+
                     if (action is FloatAction) {
                         rangeState = action.newValue
                         toggleState2 = true
@@ -428,7 +437,8 @@ class PowerControls : ControlsProviderService() {
                                 subTitle = it.subTitle,
                                 icon = getCurrentRingVolumeIcon(),
                                 state = if (toggleState2) rangeState else 0f,
-                                intent = it.intent
+                                intent = it.intent,
+                                format = getRingVolumeFormat()
                             )
                         )
                     }
@@ -438,11 +448,12 @@ class PowerControls : ControlsProviderService() {
                     consumer.accept(ControlAction.RESPONSE_OK)
                     if (action is FloatAction) {
                         rangeState = action.newValue
+                        toggleState2 = true
                         changeBrightness(applicationContext, (rangeState).toInt())
                         toggleState2 = true
                     } else if (action is BooleanAction) {
-                        rangeState = getBrightness().toFloat()
-                        toggleState2 = action.newState
+                        rangeState = 50f
+                        toggleState2 = isAutoBrightnessEnabled() == true
                         enableAutoBrightness(toggleState2)
                     }
                     Controls.BRIGHTNESS.also {
@@ -542,7 +553,8 @@ class PowerControls : ControlsProviderService() {
         template: ControlTemplate,
         icon: Int? = null,
         appIcon: Bitmap? = null,
-        intent: Intent
+        intent: Intent,
+        stateText: String = ""
     ): Control {
 
         val pi = PendingIntent.getActivity(
@@ -567,6 +579,7 @@ class PowerControls : ControlsProviderService() {
                 } else Icon.createWithBitmap(appIcon)
             )
             .setCustomColor(ColorStateList.valueOf(backgroundIntControl()))
+            .setStatusText(if (type == DeviceTypes.TYPE_THERMOSTAT) "" else stateText)
             .build()
     }
 
@@ -576,7 +589,8 @@ class PowerControls : ControlsProviderService() {
         enabled: Boolean = false,
         icon: Int,
         subTitle: String = "",
-        intent: Intent = Intent()
+        intent: Intent = Intent(),
+        stateText: String = ""
     ) = buildControl(
         id = id,
         template = ToggleTemplate(
@@ -590,7 +604,8 @@ class PowerControls : ControlsProviderService() {
         subTitle = subTitle,
         type = DeviceTypes.TYPE_GENERIC_ON_OFF,
         icon = icon,
-        intent = intent
+        intent = intent,
+        stateText = stateText
     )
 
     private fun buildRangeControl(
