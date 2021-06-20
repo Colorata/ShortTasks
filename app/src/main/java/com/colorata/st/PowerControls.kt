@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.drawable.Icon
-import android.media.AudioManager
 import android.net.Uri
 import android.service.controls.Control
 import android.service.controls.ControlsProviderService
@@ -31,6 +30,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
+import java.util.concurrent.Executors
 import java.util.concurrent.Flow
 import java.util.function.Consumer
 
@@ -40,6 +40,7 @@ class PowerControls : ControlsProviderService() {
         mutableMapOf<String, ReplayProcessor<Control>>()
     private var toggleState2 = false
     private var rangeState = 50f
+    private var currentPlayerState = "Playing"
     private val controls: MutableList<Control>
         get() {
             val list = mutableListOf<Control>()
@@ -164,8 +165,10 @@ class PowerControls : ControlsProviderService() {
                                 Controls.BRIGHTNESS.id -> getCurrentBrightnessFormat()
                                 Controls.MEDIA_VOLUME.id -> getMediaVolumeFormat()
                                 Controls.RING_VOLUME.id -> getRingVolumeFormat()
+                                Controls.PLAYER.id -> getCurrentPlayerFormat()
                                 else -> Strings.percentFormat
-                            }
+                            },
+                            enabled = if (control.id == Controls.PLAYER.id) isMusicPlaying() else true
                         )
                     )
                 } else {
@@ -246,16 +249,18 @@ class PowerControls : ControlsProviderService() {
                                         Controls.LOCATION.id -> isLocationEnabled()
                                         Controls.AUTO_ROTATE.id -> isAutoRotationEnabled()
                                         Controls.DND.id -> isDNDEnabled()
-                                        Controls.NIGHT_LIGHT.id -> isDarkThemeEnabled()
+                                        Controls.DARK_THEME.id -> isDarkThemeEnabled()
                                         Controls.FLIGHT_MODE.id -> isAirplaneEnabled()
                                         Controls.FLASHLIGHT.id -> isFlashlightEnabled()
                                         Controls.MICROPHONE.id -> isMicrophoneEnabled()
+                                        Controls.HOTSPOT.id -> isHotSpotEnabled()
                                         else -> false
                                     },
                                     intent = control.intent,
                                     stateText = when (control.id) {
                                         Controls.MOBILE_DATA.id -> getMobileDataFormat()
                                         Controls.WIFI.id -> getWIFIFormat()
+                                        Controls.BLUETOOTH.id -> getBluetoothFormat()
                                         else -> ""
                                     }
                                 )
@@ -360,7 +365,7 @@ class PowerControls : ControlsProviderService() {
                                 title = it.title,
                                 subTitle = it.subTitle,
                                 enabled = toggleState2,
-                                icon = it.icon,
+                                icon = getCurrentFlashlightIcon(),
                                 intent = it.intent
                             )
                         )
@@ -379,7 +384,8 @@ class PowerControls : ControlsProviderService() {
                                 subTitle = it.subTitle,
                                 enabled = toggleState2,
                                 icon = if (toggleState2) R.drawable.ic_outline_bluetooth_24 else R.drawable.ic_outline_bluetooth_disabled_24,
-                                intent = it.intent
+                                intent = it.intent,
+                                stateText = getBluetoothFormat()
                             )
                         )
                     }
@@ -409,7 +415,8 @@ class PowerControls : ControlsProviderService() {
                                 subTitle = it.subTitle,
                                 icon = getCurrentMediaVolumeIcon(),
                                 state = if (toggleState2) rangeState else 0f,
-                                intent = it.intent
+                                intent = it.intent,
+                                format = getMediaVolumeFormat()
                             )
                         )
                     }
@@ -536,6 +543,39 @@ class PowerControls : ControlsProviderService() {
                                 icon = getCurrentMicrophoneIcon(),
                                 intent = it.intent,
                                 enabled = toggleState2
+                            )
+                        )
+                    }
+                }
+
+                Controls.PLAYER.id.toString() -> {
+                    consumer.accept(ControlAction.RESPONSE_OK)
+                    if (action is BooleanAction) {
+                        toggleState2 = !isMusicPlaying()
+                        enableMusic(toggleState2)
+                        currentPlayerState = if (toggleState2) "Playing" else "Paused"
+                    } else if (action is FloatAction) {
+                        rangeState = action.newValue
+                        toggleState2 = true
+                        if (rangeState < 25f) {
+                            previousSong(); currentPlayerState = "Previous"
+                        } else if (rangeState > 75f) {
+                            nextSong(); currentPlayerState = "Next"
+                        }
+
+                    }
+
+                    Controls.PLAYER.also {
+                        flow.onNext(
+                            buildRangeControl(
+                                id = it.id,
+                                title = it.title,
+                                subTitle = it.subTitle,
+                                icon = getCurrentPlayerIcon(currentPlayerState),
+                                intent = it.intent,
+                                enabled = true,
+                                state = if (toggleState2) 50f else 0f,
+                                format = currentPlayerState
                             )
                         )
                     }

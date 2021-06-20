@@ -168,16 +168,16 @@ enum class Controls(
         icon = R.drawable.ic_outline_do_disturb_on_24,
         subTitle = Strings.hold,
         isRange = false,
-        intent = Intent(Settings.ACTION_CONDITION_PROVIDER_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent = Intent(Settings.ACTION_ZEN_MODE_PRIORITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
     ),
-    NIGHT_LIGHT(
+    DARK_THEME(
         id = 1517,
         title = Strings.darkTheme,
         icon = R.drawable.ic_outline_dark_mode_24,
         subTitle = Strings.hold,
         isRange = false,
-        intent = Intent(Settings.ACTION_ZEN_MODE_PRIORITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent = Intent(Settings.ACTION_DISPLAY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
     ),
     FLIGHT_MODE(
@@ -205,6 +205,15 @@ enum class Controls(
         icon = R.drawable.ic_outline_access_time_24,
         isRange = true,
         intent = Intent(Settings.ACTION_DATE_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+    ),
+    PLAYER(
+        id = 1521,
+        title = Strings.player,
+        subTitle = Strings.slideOrTap,
+        icon = R.drawable.ic_outline_play_arrow_24,
+        isRange = true,
+        intent = Intent(Settings.ACTION_SOUND_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
     )
 }

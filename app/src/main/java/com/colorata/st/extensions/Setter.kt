@@ -2,19 +2,26 @@ package com.colorata.st.extensions
 
 import android.accessibilityservice.AccessibilityService
 import android.annotation.SuppressLint
+import android.app.Instrumentation
 import android.bluetooth.BluetoothAdapter
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.hardware.camera2.CameraManager
 import android.media.AudioManager
+import android.media.session.MediaSessionManager
 import android.provider.Settings
 import android.service.controls.ControlsProviderService
+import android.util.Log
+import android.view.KeyEvent
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.colorata.st.CurrentScreen
 import com.colorata.st.activities.SecondaryActivity
 import com.colorata.st.ui.theme.Strings
 import com.colorata.st.ui.theme.SuperStore
 import java.lang.reflect.Method
+import java.util.concurrent.Executors
 
 
 fun Context.goToSecondary(screen: CurrentScreen) {
@@ -114,4 +121,20 @@ fun Context.getAppIntent(packageName: String): Intent {
 fun Context.enableMicrophone(enabled: Boolean) {
     val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
     manager.isMicrophoneMute = !enabled
+}
+
+fun Context.enableMusic(enabled: Boolean) {
+    val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    manager.dispatchMediaKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, if (enabled) KeyEvent.KEYCODE_MEDIA_PLAY else KeyEvent.KEYCODE_MEDIA_PAUSE))
+}
+
+fun Context.previousSong() {
+    val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    manager.dispatchMediaKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PREVIOUS))
+    manager.dispatchMediaKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PREVIOUS))
+}
+
+fun Context.nextSong() {
+    val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    manager.dispatchMediaKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_NEXT))
 }

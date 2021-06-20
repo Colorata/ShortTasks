@@ -4,19 +4,27 @@ import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.NotificationManager
 import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothManager
+import android.bluetooth.BluetoothProfile.GATT
 import android.content.Context
+import android.content.Context.BLUETOOTH_SERVICE
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.location.LocationManager
 import android.media.AudioManager
+import android.media.MediaRouter
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.TrafficStats
 import android.net.wifi.WifiManager
 import android.os.BatteryManager
 import android.os.PowerManager
 import android.provider.Settings
 import android.telephony.TelephonyManager
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
@@ -24,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.colorata.st.R
 import com.colorata.st.ui.theme.Strings
 import com.colorata.st.ui.theme.SuperStore
+import java.lang.reflect.Method
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -65,7 +74,7 @@ fun Context.isLocationEnabled(): Boolean {
 }
 
 fun Context.isMobileDataEnabled(): Boolean =
-    Settings.Secure.getInt(contentResolver, "mobile_data", 1) == 1
+    Settings.Global.getInt(contentResolver, "mobile_data", 1) == 1
 
 fun Context.isBatterySaverEnabled(): Boolean {
     val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
@@ -105,7 +114,7 @@ fun Context.isDarkThemeEnabled(): Boolean {
 }
 
 fun Context.isAirplaneEnabled(): Boolean {
-    return Settings.System.getInt(
+    return Settings.Secure.getInt(
         contentResolver,
         Settings.Global.AIRPLANE_MODE_ON, 0
     ) != 0
@@ -280,10 +289,9 @@ fun Context.getCurrentAirplaneIcon(): Int =
     else R.drawable.ic_outline_airplanemode_inactive_24
 
 fun Context.getMediaVolumeFormat(): String {
-    val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-    return if (manager.isBluetoothScoOn) "${Strings.percentFormat} ${Strings.dotIcon} Bluetooth"
-    else if (!manager.isBluetoothScoOn && !manager.isSpeakerphoneOn) "${Strings.percentFormat} ${Strings.dotIcon} Wired"
-    else "${Strings.percentFormat} ${Strings.dotIcon} Phone"
+    val manager = getSystemService(Context.MEDIA_ROUTER_SERVICE) as MediaRouter
+    val output = manager.getSelectedRoute(MediaRouter.ROUTE_TYPE_LIVE_AUDIO).name
+    return "${Strings.percentFormat} ${Strings.dotIcon} $output"
 }
 
 fun Context.getRingVolumeFormat(): String {
@@ -329,7 +337,11 @@ fun Context.getMobileDataQuality(): String {
 fun Context.getWIFIQuality(): String {
     val manager = getSystemService(Context.WIFI_SERVICE) as WifiManager
     val rssi = manager.connectionInfo.rssi
-    return if (!isWifiEnabled()) "Off" else if (rssi > -50) "Excellent" else if (rssi in -50 downTo -60) "Good" else if (rssi in -60 downTo -70) "Fair" else "Weak"
+    return if (!isWifiEnabled()) "Off" else if (!isWifiConnected()) "Not Connected"
+    else if (rssi > -50) "Excellent"
+    else if (rssi in -50 downTo -60) "Good"
+    else if (rssi in -60 downTo -70) "Fair"
+    else "Weak"
 }
 
 fun Context.getMobileDataFormat(): String {
@@ -339,5 +351,56 @@ fun Context.getMobileDataFormat(): String {
 }
 
 fun Context.getWIFIFormat(): String {
+    isHotSpotEnabled()
     return "${getWIFIQuality()} ${Strings.dotIcon} ${(TrafficStats.getTotalRxBytes() - TrafficStats.getMobileRxBytes()).toData()}"
+}
+
+fun Context.getBluetoothFormat(): String {
+    val manager = getSystemService(BLUETOOTH_SERVICE) as BluetoothManager?
+    val final = manager!!.getConnectedDevices(GATT)
+
+    return if (final.size == 1) "${getBatteryLevel(final[0])}% ${Strings.dotIcon} ${final[0].name}" else if (final.size == 0) "No connections" else "${final.size} Connections"
+}
+
+fun getBatteryLevel(pairedDevice: BluetoothDevice?): Int {
+    return pairedDevice?.let { bluetoothDevice ->
+        (bluetoothDevice.javaClass.getMethod("getBatteryLevel"))
+            .invoke(pairedDevice) as Int
+    } ?: -1
+}
+
+fun Context.isWifiConnected() =
+    (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).run {
+        getNetworkCapabilities(activeNetwork)?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+            ?: false
+    }
+
+fun Context.isHotSpotEnabled(): Boolean {
+    val manager = getSystemService(Context.WIFI_SERVICE) as WifiManager
+    try {
+        val method: Method = manager.javaClass.getDeclaredMethod("isWifiApEnabled")
+        method.isAccessible = true
+        return method.invoke(manager) as Boolean
+    } catch (ignored: Throwable) { }
+    return false
+}
+
+fun Context.isMusicPlaying(): Boolean {
+    val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    return manager.isMusicActive
+}
+
+fun Context.getCurrentPlayerFormat(): String {
+    return if (isMusicPlaying()) {
+        "Playing"
+    } else "Paused"
+}
+
+fun Context.getCurrentPlayerIcon(event: String): Int {
+    return when (event) {
+        "Previous" -> R.drawable.ic_outline_skip_previous_24
+        "Next" -> R.drawable.ic_outline_skip_next_24
+        "Playing" -> R.drawable.ic_outline_play_arrow_24
+        else -> R.drawable.ic_outline_pause_24
+    }
 }
