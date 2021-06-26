@@ -7,6 +7,7 @@ import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.KeyEvent
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -43,6 +44,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        Log.d("isWifiEnabled", isWifiEnabled().toString())
+        Log.d("isData", isMobileDataEnabled().toString())
         when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_NO -> {
                 nightMode = false
@@ -58,7 +61,6 @@ class MainActivity : AppCompatActivity() {
             )
         ) SuperStore(this).drop(Strings.isFirst, false)
         else SuperStore(this).drop(Strings.isFirst, true)
-        enableFlashlight(false)
         SuperStore(this).drop(Strings.nightMode, nightMode)
 
         setSystemColor()

@@ -20,6 +20,7 @@ import com.colorata.st.CurrentScreen
 import com.colorata.st.activities.SecondaryActivity
 import com.colorata.st.ui.theme.Strings
 import com.colorata.st.ui.theme.SuperStore
+import java.lang.RuntimeException
 import java.lang.reflect.Method
 import java.util.concurrent.Executors
 
@@ -82,9 +83,13 @@ fun enableBluetooth(enabled: Boolean) {
 
 fun Context.enableFlashlight(enabled: Boolean) {
     val cameraManager = getSystemService(ControlsProviderService.CAMERA_SERVICE) as CameraManager
-    val cameraId = cameraManager.cameraIdList[0]
-    cameraManager.setTorchMode(cameraId, enabled)
-    SuperStore(this).drop(Strings.flashlight, enabled)
+    try {
+        val cameraId = cameraManager.cameraIdList[0]
+        cameraManager.setTorchMode(cameraId, enabled)
+        SuperStore(this).drop(Strings.flashlight, enabled)
+    } catch (e: RuntimeException) {
+        e.printStackTrace()
+    }
 }
 
 @SuppressLint("WrongConstant")
