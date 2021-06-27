@@ -17,13 +17,16 @@ import android.net.NetworkCapabilities
 import android.net.TrafficStats
 import android.net.wifi.WifiManager
 import android.os.BatteryManager
+import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
 import android.telephony.TelephonyManager
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import com.colorata.st.R
 import com.colorata.st.ui.theme.Strings
 import com.colorata.st.ui.theme.SuperStore
@@ -69,19 +72,12 @@ fun Context.isLocationEnabled(): Boolean {
 }
 
 fun Context.isMobileDataEnabled(): Boolean {
-    var mobileDataEnabled = false // Assume disabled
 
-    val cm = getSystemService(Context.CONNECTIVITY_SERVICE)
-    return try {
-        val cmClass = Class.forName(cm.javaClass.name)
-        val method = cmClass.getDeclaredMethod("getMobileDataEnabled")
-        method.isAccessible = true
-        mobileDataEnabled = method.invoke(cm) as Boolean
-        mobileDataEnabled
-    } catch (e: Exception) {
-        e.printStackTrace()
-        false
+    val tm = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager?
+    if (tm!!.simState == TelephonyManager.SIM_STATE_READY) {
+        return Settings.Global.getInt(contentResolver, "mobile_data", 1) == 1
     }
+    return false
 }
 
 
@@ -206,11 +202,11 @@ fun Context.getBatteryFormat(): String {
     }
     val status: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
     val isCharging: Boolean = status == BatteryManager.BATTERY_STATUS_CHARGING
-            || status == BatteryManager.BATTERY_STATUS_FULL
 
     return if (isCharging && getChargingTimeRemaining() == getTime()) "${Strings.percentFormat} ${Strings.dotIcon} Charging"
     else if (isCharging) "${Strings.percentFormat} ${Strings.dotIcon} Full in " +
             "${getChargingTimeRemaining().first}:${getChargingTimeRemaining().second}"
+    else if (!isCharging && SuperStore(this).catchBoolean(Strings.hasRoot)) "${Strings.percentFormat} ${Strings.dotIcon} ${getBatteryTimeRemaining()}"
     else if (!isCharging && getBatteryPercentage() > 20) "${Strings.percentFormat} ${Strings.dotIcon} Discharging"
     else if (!isCharging && getBatteryPercentage() <= 20) "${Strings.percentFormat} ${Strings.dotIcon} Low battery"
     else Strings.percentFormat
@@ -397,4 +393,31 @@ fun getCurrentPlayerIcon(event: String): Int {
         "Playing" -> R.drawable.ic_outline_play_arrow_24
         else -> R.drawable.ic_outline_pause_24
     }
+}
+
+fun isDeviceRooted(): Boolean =
+    execRoot("ls").second
+
+fun getBatteryTimeRemaining(): String{
+    var line = execRoot("dumpsys batterystats | grep -E \"Battery time remaining\"").first
+    if (line.length > 26) line = line.substring(26)
+    if (line.length < 7) return "Discharging"
+    val hours = if (line.indexOf("h") != -1) line.substring(0 until line.indexOf("h")).toInt() else 0
+    val minutes = line.substring(line.indexOf("h") + 2 until line.indexOf("m")).toInt()
+
+    val currentTime = getTime()
+    var estimatedHour = 0
+    val estimatedMinute: Int
+    if (currentTime.second.toInt() + minutes > 60) {
+        estimatedMinute = currentTime.second.toInt() + minutes - 60
+        estimatedHour = 1
+    } else {
+        estimatedMinute = currentTime.second.toInt() + minutes
+    }
+    estimatedHour +=
+        if (currentTime.first.toInt() + hours >= 24) currentTime.first.toInt() + hours - 24
+        else currentTime.first.toInt() + hours
+    val finalMinute =
+        if (estimatedMinute == 0) "00" else if (estimatedMinute < 10) "0$estimatedMinute" else estimatedMinute.toString()
+    return "Until $estimatedHour:$finalMinute"
 }

@@ -87,6 +87,8 @@ object Strings{
     const val isFirst = "is First"
     const val darkTheme = "Dark Theme"
     const val micro = "Microphone"
+    const val whyRoot = "Grant root to STasks for more features!"
+    const val hasRoot = "Has Root"
 
     const val powerMainSubTitle = "You will learn how to use Power Assistant"
 

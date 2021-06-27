@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.colorata.st.CurrentScreen
 import com.colorata.st.extensions.getBottomNavigationHeight
 import com.colorata.st.extensions.goToSecondary
+import com.colorata.st.extensions.isDeviceRooted
 import com.colorata.st.extensions.presets.SButton
 import com.colorata.st.extensions.presets.SMessage
 import com.colorata.st.extensions.presets.Screen
@@ -142,7 +143,9 @@ fun AboutContent() {
                 when (counter) {
                     10 -> {
                         isVisible = true
-                        text = Strings.egg1
+                        text = if (isDeviceRooted()) Strings.whyRoot else Strings.egg1
+                        if (isDeviceRooted())
+                            SuperStore(context).drop(Strings.hasRoot, true)
                     }
                     100 -> {
                         isVisible = true

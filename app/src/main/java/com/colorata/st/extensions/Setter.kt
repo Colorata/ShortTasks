@@ -20,6 +20,9 @@ import com.colorata.st.CurrentScreen
 import com.colorata.st.activities.SecondaryActivity
 import com.colorata.st.ui.theme.Strings
 import com.colorata.st.ui.theme.SuperStore
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStreamReader
 import java.lang.RuntimeException
 import java.lang.reflect.Method
 import java.util.concurrent.Executors
@@ -130,7 +133,12 @@ fun Context.enableMicrophone(enabled: Boolean) {
 
 fun Context.enableMusic(enabled: Boolean) {
     val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-    manager.dispatchMediaKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, if (enabled) KeyEvent.KEYCODE_MEDIA_PLAY else KeyEvent.KEYCODE_MEDIA_PAUSE))
+    manager.dispatchMediaKeyEvent(
+        KeyEvent(
+            KeyEvent.ACTION_DOWN,
+            if (enabled) KeyEvent.KEYCODE_MEDIA_PLAY else KeyEvent.KEYCODE_MEDIA_PAUSE
+        )
+    )
 }
 
 fun Context.previousSong() {
@@ -143,3 +151,31 @@ fun Context.nextSong() {
     val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
     manager.dispatchMediaKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_NEXT))
 }
+
+fun execRoot(command: String): Pair<String, Boolean> {
+    return try {
+        val process = Runtime.getRuntime().exec(
+            arrayOf(
+                "su",
+                "-c",
+                "cd / && $command"
+            )
+        )
+        val reader = BufferedReader(InputStreamReader(process.inputStream))
+        var line: String?
+        var final = ""
+        while (reader.readLine().also { line = it } != null) {
+            final = "$final$line\n"
+        }
+        return Pair(final, true)
+    } catch (e: IOException) {
+        Pair("", false)
+    }
+}
+
+fun enableRootWifi(enabled: Boolean) =
+    execRoot(if (enabled) "svc wifi enable" else "svc wifi disable")
+
+fun enableRootMobileData(enabled: Boolean) =
+    execRoot(if (enabled) "svc data enable" else "svc data disable")
+

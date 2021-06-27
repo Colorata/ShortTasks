@@ -14,6 +14,7 @@ import android.service.controls.actions.BooleanAction
 import android.service.controls.actions.ControlAction
 import android.service.controls.actions.FloatAction
 import android.service.controls.templates.*
+import android.util.Log
 import com.colorata.st.extensions.*
 import com.colorata.st.extensions.weather.WeatherResponse
 import com.colorata.st.extensions.weather.WeatherService
@@ -36,6 +37,7 @@ import java.util.function.Consumer
 
 
 class PowerControls : ControlsProviderService() {
+    private var isRooted = false
     private val controlFlows =
         mutableMapOf<String, ReplayProcessor<Control>>()
     private var toggleState2 = false
@@ -43,100 +45,97 @@ class PowerControls : ControlsProviderService() {
     private var currentPlayerState = "Playing"
     private val controls: MutableList<Control>
         get() {
+            isRooted = SuperStore(this).catchBoolean(Strings.hasRoot)
             val list = mutableListOf<Control>()
-            Executors.newSingleThreadExecutor().execute {
+            //isRooted = SuperStore(this).catchBoolean(Strings.hasRoot)
+            var minDegrees = SuperStore(this).catchInt(Strings.minDegrees, -50).toFloat()
+            var maxDegrees = SuperStore(this).catchInt(Strings.maxDegrees, 50).toFloat()
 
-                var minDegrees = SuperStore(this).catchInt(Strings.minDegrees, -50).toFloat()
-                var maxDegrees = SuperStore(this).catchInt(Strings.maxDegrees, 50).toFloat()
+            var currentRight = SuperStore(this).catchString("CurrentRightWeather")
+            var currentFeels = SuperStore(this).catchString("CurrentFeelsWeather")
+            var currentFloat = SuperStore(this).catchFloat("CurrentFloatWeather")
 
-                var currentRight = SuperStore(this).catchString("CurrentRightWeather")
-                var currentFeels = SuperStore(this).catchString("CurrentFeelsWeather")
-                var currentFloat = SuperStore(this).catchFloat("CurrentFloatWeather")
+            val city = SuperStore(this).catchString(Strings.city, "Moscow")
 
-                val city = SuperStore(this).catchString(Strings.city, "Moscow")
+            val retrofit = Retrofit.Builder()
+                .baseUrl(Strings.baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
 
-                val retrofit = Retrofit.Builder()
-                    .baseUrl(Strings.baseUrl)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
+            val service = retrofit.create(WeatherService::class.java)
+            val call = service.getCurrentWeatherData(city, "metric", Strings.appId)
 
-                val service = retrofit.create(WeatherService::class.java)
-                val call = service.getCurrentWeatherData(city, "metric", Strings.appId)
+            //CALLING
+            call.enqueue(object : Callback<WeatherResponse> {
 
-                //CALLING
-                call.enqueue(object : Callback<WeatherResponse> {
+                //Fun if SUCCESS
+                override fun onResponse(
+                    call: Call<WeatherResponse>,
+                    response: Response<WeatherResponse>
+                ) {
+                    if (response.code() == 200) {
+                        val weatherResponse = response.body()!!
 
-                    //Fun if SUCCESS
-                    override fun onResponse(
-                        call: Call<WeatherResponse>,
-                        response: Response<WeatherResponse>
-                    ) {
-                        if (response.code() == 200) {
-                            val weatherResponse = response.body()!!
+                        //Configuring TEXT
+                        currentRight = weatherResponse.name?.replace("’", "")!!
+                        currentFeels =
+                            "Feels: " + weatherResponse.main!!.feels.toInt() + " \u2103"
+                        currentFloat = weatherResponse.main!!.temp
 
-                            //Configuring TEXT
-                            currentRight = weatherResponse.name?.replace("’", "")!!
-                            currentFeels =
-                                "Feels: " + weatherResponse.main!!.feels.toInt() + " \u2103"
-                            currentFloat = weatherResponse.main!!.temp
-
-                            SuperStore(this@PowerControls).drop(
-                                mutableListOf(
-                                    Pair("CurrentRightWeather", currentRight as Any),
-                                    Pair("CurrentFeelsWeather", currentFeels as Any),
-                                    Pair("CurrentFloatWeather", currentFloat as Any)
-                                )
+                        SuperStore(this@PowerControls).drop(
+                            mutableListOf(
+                                Pair("CurrentRightWeather", currentRight as Any),
+                                Pair("CurrentFeelsWeather", currentFeels as Any),
+                                Pair("CurrentFloatWeather", currentFloat as Any)
                             )
+                        )
 
 
-                            list.add(
-                                buildRangeControl(
-                                    id = 1441,
-                                    title = currentRight,
-                                    icon = R.drawable.ic_outline_cloud_24,
-                                    state = currentFloat,
-                                    subTitle = currentFeels,
-                                    isWeather = true,
-                                    minValue = -50f,
-                                    maxValue = 50f
-                                )
+                        list.add(
+                            buildRangeControl(
+                                id = 1441,
+                                title = currentRight,
+                                icon = R.drawable.ic_outline_cloud_24,
+                                state = currentFloat,
+                                subTitle = currentFeels,
+                                isWeather = true,
+                                minValue = -50f,
+                                maxValue = 50f
                             )
-                        }
+                        )
                     }
-
-                    //Fun if FAIL
-                    @SuppressLint("SetTextI18n")
-                    override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
-                        currentRight = "Error"
-                        currentFeels = "Error"
-                    }
-                })
-
-                if (currentFloat < minDegrees) {
-                    minDegrees = currentFloat
-                    SuperStore(this).drop(Strings.minDegrees, minDegrees.toInt())
-                } else if (currentFloat > maxDegrees) {
-                    maxDegrees = currentFloat
-                    SuperStore(this).drop(Strings.maxDegrees, maxDegrees.toInt())
                 }
 
+                //Fun if FAIL
+                @SuppressLint("SetTextI18n")
+                override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
+                    currentRight = "Error"
+                    currentFeels = "Error"
+                }
+            })
 
-
-                list.add(
-                    buildRangeControl(
-                        id = 1441,
-                        title = currentRight,
-                        icon = R.drawable.ic_outline_cloud_24,
-                        state = currentFloat,
-                        subTitle = currentFeels,
-                        isWeather = true,
-                        minValue = minDegrees,
-                        maxValue = maxDegrees
-                    )
-                )
-
+            if (currentFloat < minDegrees) {
+                minDegrees = currentFloat
+                SuperStore(this).drop(Strings.minDegrees, minDegrees.toInt())
+            } else if (currentFloat > maxDegrees) {
+                maxDegrees = currentFloat
+                SuperStore(this).drop(Strings.maxDegrees, maxDegrees.toInt())
             }
+
             list.clear()
+
+            list.add(
+                buildRangeControl(
+                    id = 1441,
+                    title = currentRight,
+                    icon = R.drawable.ic_outline_cloud_24,
+                    state = currentFloat,
+                    subTitle = currentFeels,
+                    isWeather = true,
+                    minValue = minDegrees,
+                    maxValue = maxDegrees
+                )
+            )
 
             Controls.values().forEach { control ->
                 if (control.isRange) {
@@ -282,17 +281,6 @@ class PowerControls : ControlsProviderService() {
                     ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 )
             )
-            /*val apps = getApps()
-            getApps().forEach {
-                buildToggleControl(
-                    id = apps.indexOf(it),
-                    title = it.name,
-                    subTitle = Strings.tap,
-                    icon = R.drawable.ic_android_black_24dp,
-                    enabled = false
-                )
-            }
-*/
             return list
         }
 
@@ -567,6 +555,7 @@ class PowerControls : ControlsProviderService() {
                 }
 
                 Controls.HOTSPOT.id.toString() -> {
+                    consumer.accept(ControlAction.RESPONSE_OK)
                     Controls.HOTSPOT.also {
                         flow.onNext(
                             buildToggleControl(
@@ -582,15 +571,20 @@ class PowerControls : ControlsProviderService() {
                 }
 
                 Controls.WIFI.id.toString() -> {
+                    consumer.accept(ControlAction.RESPONSE_OK)
+                    if (action is BooleanAction) toggleState2 = action.newState
+                    if (isRooted) {
+                        enableRootWifi(toggleState2)
+                    }
                     Controls.WIFI.also {
                         flow.onNext(
                             buildToggleControl(
                                 id = it.id,
                                 title = it.title,
-                                subTitle = it.subTitle,
-                                icon = it.icon,
+                                subTitle = if (isRooted) "" else it.subTitle,
+                                icon = getCurrentWifiIcon(),
                                 intent = it.intent,
-                                enabled = isWifiEnabled(),
+                                enabled = if (isRooted) toggleState2 else isWifiEnabled(),
                                 stateText = getWIFIFormat()
                             )
                         )
@@ -598,6 +592,7 @@ class PowerControls : ControlsProviderService() {
                 }
 
                 Controls.LOCATION.id.toString() -> {
+                    consumer.accept(ControlAction.RESPONSE_OK)
                     Controls.LOCATION.also {
                         flow.onNext(
                             buildToggleControl(
@@ -613,15 +608,20 @@ class PowerControls : ControlsProviderService() {
                 }
 
                 Controls.MOBILE_DATA.id.toString() -> {
+                    consumer.accept(ControlAction.RESPONSE_OK)
+                    if (action is BooleanAction) toggleState2 = action.newState
+                    if (isRooted) {
+                        enableRootMobileData(toggleState2)
+                    }
                     Controls.MOBILE_DATA.also {
                         flow.onNext(
                             buildToggleControl(
                                 id = it.id,
                                 title = it.title,
-                                subTitle = it.subTitle,
+                                subTitle = if (isRooted) "" else it.subTitle,
                                 icon = it.icon,
                                 intent = it.intent,
-                                enabled = isLocationEnabled(),
+                                enabled = if (isRooted) toggleState2 else isMobileDataEnabled(),
                                 stateText = getMobileDataFormat()
                             )
                         )
@@ -629,6 +629,7 @@ class PowerControls : ControlsProviderService() {
                 }
 
                 Controls.DND.id.toString() -> {
+                    consumer.accept(ControlAction.RESPONSE_OK)
                     Controls.DND.also {
                         flow.onNext(
                             buildToggleControl(
@@ -644,6 +645,7 @@ class PowerControls : ControlsProviderService() {
                 }
 
                 Controls.DARK_THEME.id.toString() -> {
+                    consumer.accept(ControlAction.RESPONSE_OK)
                     Controls.DARK_THEME.also {
                         flow.onNext(
                             buildToggleControl(
@@ -659,6 +661,7 @@ class PowerControls : ControlsProviderService() {
                 }
 
                 Controls.FLIGHT_MODE.id.toString() -> {
+                    consumer.accept(ControlAction.RESPONSE_OK)
                     Controls.FLIGHT_MODE.also {
                         flow.onNext(
                             buildToggleControl(
