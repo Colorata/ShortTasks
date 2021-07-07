@@ -156,7 +156,7 @@ fun ThemePickerSecondary() {
                                             ),
                                             Pair(
                                                 Strings.controlColor,
-                                                currentTheme.secondaryHex.toIntColor()
+                                                currentTheme.controlHex.toIntColor()
                                             )
                                         )
                                     )

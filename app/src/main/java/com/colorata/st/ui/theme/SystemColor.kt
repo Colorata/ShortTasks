@@ -30,17 +30,72 @@ enum class SystemColor(
     val id: Int,
     val primaryHex: String,
     val secondaryHex: String,
+    val controlHex: String,
     val title: String
 ) {
-    BLACK(id = 8, primaryHex = "#DADCE0", secondaryHex = "#242527", title = Strings.autoDetect),
-    RED(id = 0, primaryHex = "#FFD6E9", secondaryHex = "#503D46", title = Strings.red),
-    ORANGE(id = 1, primaryHex = "#E3AF9A", secondaryHex = "#4D3830", title = Strings.orange),
-    YELLOW(id = 2, primaryHex = "#C8AC94", secondaryHex = "#34271C", title = Strings.yellow),
-    GREEN(id = 3, primaryHex = "#95D4C6", secondaryHex = "#2C4F47", title = Strings.green),
-    TURQUOISE(id = 4, primaryHex = "#B8F2FF", secondaryHex = "#2B4449", title = Strings.turquoise),
-    BLUE(id = 5, primaryHex = "#8AB4F8", secondaryHex = "#162A49", title = Strings.blue),
-    PURPLE(id = 6, primaryHex = "#C5BBFE", secondaryHex = "#3D3953", title = Strings.purple),
-    WHITE(id = 7, primaryHex = "#DADCE0", secondaryHex = "#242527", title = Strings.white)
+    BLACK(
+        id = 8,
+        primaryHex = "#DADCE0",
+        secondaryHex = "#242527",
+        controlHex = "#4FB5B6B9",
+        title = Strings.autoDetect
+    ),
+    RED(
+        id = 0,
+        primaryHex = "#FFD6E9",
+        secondaryHex = "#503D46",
+        controlHex = "#4FC39CAE",
+        title = Strings.red
+    ),
+    ORANGE(
+        id = 1,
+        primaryHex = "#E3AF9A",
+        secondaryHex = "#4D3830",
+        controlHex = "#4FC28E7A",
+        title = Strings.orange
+    ),
+    YELLOW(
+        id = 2,
+        primaryHex = "#C8AC94",
+        secondaryHex = "#34271C",
+        controlHex = "#4FC39771",
+        title = Strings.yellow
+    ),
+    GREEN(
+        id = 3,
+        primaryHex = "#95D4C6",
+        secondaryHex = "#2C4F47",
+        controlHex = "#4F67BCA9",
+        title = Strings.green
+    ),
+    TURQUOISE(
+        id = 4,
+        primaryHex = "#B8F2FF",
+        secondaryHex = "#2B4449",
+        controlHex = "#4F65A2AE",
+        title = Strings.turquoise
+    ),
+    BLUE(
+        id = 5,
+        primaryHex = "#8AB4F8",
+        secondaryHex = "#162A49",
+        controlHex = "#4F3568B7",
+        title = Strings.blue
+    ),
+    PURPLE(
+        id = 6,
+        primaryHex = "#C5BBFE",
+        secondaryHex = "#3D3953",
+        controlHex = "#4F948BC6",
+        title = Strings.purple
+    ),
+    WHITE(
+        id = 7,
+        primaryHex = "#DADCE0",
+        secondaryHex = "#242527",
+        controlHex = "#4FB5B6B9",
+        title = Strings.white
+    )
 }
 
 @Composable
@@ -98,7 +153,7 @@ fun Context.setSystemColor() {
                 ),
                 Pair(
                     Strings.controlColor,
-                    color.secondaryHex.toIntColor()
+                    color.controlHex.toIntColor()
                 )
             )
         )
