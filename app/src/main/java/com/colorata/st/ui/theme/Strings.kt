@@ -89,6 +89,10 @@ object Strings{
     const val micro = "Microphone"
     const val whyRoot = "Grant root to STasks for more features!"
     const val hasRoot = "Has Root"
+    const val whyDND = "STasks uses DND access to switch DND state"
+    const val normalMode = "Normal Mode"
+    const val on = "On"
+    const val off = "Off"
 
     const val powerMainSubTitle = "You will learn how to use Power Assistant"
 

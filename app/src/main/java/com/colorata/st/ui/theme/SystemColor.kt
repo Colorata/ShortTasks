@@ -157,6 +157,30 @@ fun Context.setSystemColor() {
                 )
             )
         )
+    } else {
+        val currentTheme = SystemColor.values().find { it.id == SuperStore(this).catchInt(Strings.systemColor) } ?: SystemColor.BLACK
+        SuperStore(this).drop(
+            mutableListOf(
+                Pair(
+                    Strings.systemColor,
+                    currentTheme.id
+                ),
+                Pair(
+                    Strings.primaryInt,
+                    if (!SuperStore(this).catchBoolean(Strings.nightMode)) currentTheme.secondaryHex.toIntColor()
+                    else currentTheme.primaryHex.toIntColor()
+                ),
+                Pair(
+                    Strings.secondaryInt,
+                    if (!SuperStore(this).catchBoolean(Strings.nightMode)) currentTheme.primaryHex.toIntColor()
+                    else currentTheme.secondaryHex.toIntColor()
+                ),
+                Pair(
+                    Strings.controlColor,
+                    currentTheme.controlHex.toIntColor()
+                )
+            )
+        )
     }
 
 }

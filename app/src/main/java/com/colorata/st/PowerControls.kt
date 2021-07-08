@@ -14,7 +14,6 @@ import android.service.controls.actions.BooleanAction
 import android.service.controls.actions.ControlAction
 import android.service.controls.actions.FloatAction
 import android.service.controls.templates.*
-import android.util.Log
 import com.colorata.st.extensions.*
 import com.colorata.st.extensions.weather.WeatherResponse
 import com.colorata.st.extensions.weather.WeatherService
@@ -31,7 +30,6 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
-import java.util.concurrent.Executors
 import java.util.concurrent.Flow
 import java.util.function.Consumer
 
@@ -155,6 +153,7 @@ class PowerControls : ControlsProviderService() {
                                 Controls.RING_VOLUME.id -> getRingVolume()
                                 Controls.MEDIA_VOLUME.id -> getMediaVolume()
                                 Controls.BATTERY_INFO.id -> getBatteryPercentage().toFloat()
+                                Controls.PLAYER.id -> if (isMusicPlaying()) 50f else 0f
                                 else -> 50f
                             },
                             intent = if (control.id == Controls.TIME.id && isPackageInstalled(
@@ -170,7 +169,7 @@ class PowerControls : ControlsProviderService() {
                                 Controls.PLAYER.id -> getCurrentPlayerFormat()
                                 else -> Strings.percentFormat
                             },
-                            enabled = if (control.id == Controls.PLAYER.id) isMusicPlaying() else true
+                            enabled = true
                         )
                     )
                 } else {
@@ -257,8 +256,10 @@ class PowerControls : ControlsProviderService() {
                                     stateText = when (control.id) {
                                         Controls.MOBILE_DATA.id -> getMobileDataFormat()
                                         Controls.WIFI.id -> getWIFIFormat()
+                                        Controls.DARK_THEME.id -> getDarkThemeFormat()
                                         else -> ""
-                                    }
+                                    },
+                                    isAction = control.isAction
                                 )
                             )
                         }
@@ -350,7 +351,8 @@ class PowerControls : ControlsProviderService() {
                                 title = it.title,
                                 enabled = isFlashlightEnabled(),
                                 icon = getCurrentFlashlightIcon(),
-                                intent = it.intent
+                                intent = it.intent,
+                                isAction = it.isAction
                             )
                         )
                     }
@@ -367,7 +369,8 @@ class PowerControls : ControlsProviderService() {
                                 title = it.title,
                                 enabled = toggleState2,
                                 icon = if (toggleState2) R.drawable.ic_outline_bluetooth_24 else R.drawable.ic_outline_bluetooth_disabled_24,
-                                intent = it.intent
+                                intent = it.intent,
+                                isAction = it.isAction
                             )
                         )
                     }
@@ -439,9 +442,9 @@ class PowerControls : ControlsProviderService() {
                         changeBrightness(applicationContext, (rangeState).toInt())
                         toggleState2 = true
                     } else if (action is BooleanAction) {
-                        rangeState = 50f
                         toggleState2 = isAutoBrightnessEnabled() == true
                         enableAutoBrightness(toggleState2)
+                        rangeState = (getBrightness() / 2.55).toFloat()
                     }
                     Controls.BRIGHTNESS.also {
                         flow.onNext(
@@ -468,22 +471,44 @@ class PowerControls : ControlsProviderService() {
                                 title = it.title,
                                 enabled = toggleState2,
                                 icon = getCurrentAutoRotationIcon(),
-                                intent = it.intent
+                                intent = it.intent,
+                                isAction = it.isAction
                             )
                         )
                     }
                 }
                 Controls.BATTERY_INFO.id.toString() -> {
                     consumer.accept(ControlAction.RESPONSE_OK)
+                    if (action is BooleanAction) {
+                        toggleState2 = !isBatterySaverEnabled()
+                        newThread {
+                            enableRootBatterySaver(toggleState2)
+                        }
+                    }
                     Controls.BATTERY_INFO.also {
                         flow.onNext(
                             buildRangeControl(
                                 id = it.id,
                                 title = it.title,
+                                subTitle = if (isRooted) "" else it.subTitle,
                                 state = getBatteryPercentage().toFloat(),
                                 icon = getCurrentBatteryIcon(),
                                 intent = it.intent,
                                 format = getBatteryFormat()
+                            )
+                        )
+                    }
+
+                    Controls.DARK_THEME.also {
+                        flow.onNext(
+                            buildToggleControl(
+                                id = it.id,
+                                title = it.title,
+                                subTitle = if (isRooted) "" else it.subTitle,
+                                icon = it.icon,
+                                intent = it.intent,
+                                enabled = isDarkThemeEnabled(),
+                                stateText = getDarkThemeFormat()
                             )
                         )
                     }
@@ -517,7 +542,8 @@ class PowerControls : ControlsProviderService() {
                                 title = it.title,
                                 icon = getCurrentMicrophoneIcon(),
                                 intent = it.intent,
-                                enabled = toggleState2
+                                enabled = toggleState2,
+                                isAction = it.isAction
                             )
                         )
                     }
@@ -564,7 +590,8 @@ class PowerControls : ControlsProviderService() {
                                 subTitle = it.subTitle,
                                 icon = it.icon,
                                 intent = it.intent,
-                                enabled = isHotSpotEnabled()
+                                enabled = isHotSpotEnabled(),
+                                isAction = it.isAction
                             )
                         )
                     }
@@ -585,7 +612,8 @@ class PowerControls : ControlsProviderService() {
                                 icon = getCurrentWifiIcon(),
                                 intent = it.intent,
                                 enabled = if (isRooted) toggleState2 else isWifiEnabled(),
-                                stateText = getWIFIFormat()
+                                stateText = getWIFIFormat(),
+                                isAction = it.isAction
                             )
                         )
                     }
@@ -593,15 +621,20 @@ class PowerControls : ControlsProviderService() {
 
                 Controls.LOCATION.id.toString() -> {
                     consumer.accept(ControlAction.RESPONSE_OK)
+                    if (action is BooleanAction && isRooted) {
+                        toggleState2 = action.newState
+                        enableRootLocation(toggleState2)
+                    }
                     Controls.LOCATION.also {
                         flow.onNext(
                             buildToggleControl(
                                 id = it.id,
                                 title = it.title,
-                                subTitle = it.subTitle,
+                                subTitle = if (isRooted) "" else it.subTitle,
                                 icon = getCurrentLocationIcon(),
                                 intent = it.intent,
-                                enabled = isLocationEnabled()
+                                enabled = if (isRooted) toggleState2 else isLocationEnabled(),
+                                isAction = it.isAction
                             )
                         )
                     }
@@ -622,7 +655,8 @@ class PowerControls : ControlsProviderService() {
                                 icon = it.icon,
                                 intent = it.intent,
                                 enabled = if (isRooted) toggleState2 else isMobileDataEnabled(),
-                                stateText = getMobileDataFormat()
+                                stateText = getMobileDataFormat(),
+                                isAction = it.isAction
                             )
                         )
                     }
@@ -630,15 +664,19 @@ class PowerControls : ControlsProviderService() {
 
                 Controls.DND.id.toString() -> {
                     consumer.accept(ControlAction.RESPONSE_OK)
+                    if (action is BooleanAction) {
+                        toggleState2 = action.newState
+                        enableDND(toggleState2)
+                    }
                     Controls.DND.also {
                         flow.onNext(
                             buildToggleControl(
                                 id = it.id,
                                 title = it.title,
-                                subTitle = it.subTitle,
                                 icon = getCurrentDNDIcon(),
                                 intent = it.intent,
-                                enabled = isDNDEnabled()
+                                enabled = toggleState2,
+                                isAction = it.isAction
                             )
                         )
                     }
@@ -646,15 +684,21 @@ class PowerControls : ControlsProviderService() {
 
                 Controls.DARK_THEME.id.toString() -> {
                     consumer.accept(ControlAction.RESPONSE_OK)
+                    if (action is BooleanAction && isRooted && !isBatterySaverEnabled()) {
+                        toggleState2 = action.newState
+                        enableRootDarkMode(toggleState2)
+                    }
                     Controls.DARK_THEME.also {
                         flow.onNext(
                             buildToggleControl(
                                 id = it.id,
                                 title = it.title,
-                                subTitle = it.subTitle,
+                                subTitle = if (isRooted) "" else it.subTitle,
                                 icon = it.icon,
                                 intent = it.intent,
-                                enabled = isDarkThemeEnabled()
+                                enabled = if (isRooted && !isBatterySaverEnabled()) toggleState2 else isDarkThemeEnabled(),
+                                stateText = getDarkThemeFormat(),
+                                isAction = it.isAction
                             )
                         )
                     }
@@ -670,7 +714,8 @@ class PowerControls : ControlsProviderService() {
                                 subTitle = it.subTitle,
                                 icon = getCurrentAirplaneIcon(),
                                 intent = it.intent,
-                                enabled = isAirplaneEnabled()
+                                enabled = isAirplaneEnabled(),
+                                isAction = it.isAction
                             )
                         )
                     }
@@ -725,24 +770,28 @@ class PowerControls : ControlsProviderService() {
         icon: Int,
         subTitle: String = "",
         intent: Intent = Intent(),
-        stateText: String = ""
-    ) = buildControl(
-        id = id,
-        template = ToggleTemplate(
-            id.toString(),
-            ControlButton(
-                enabled,
-                enabled.toString().uppercase(Locale.getDefault())
-            )
-        ),
-        titleRes = title,
-        subTitle = subTitle,
-        type = DeviceTypes.TYPE_GENERIC_ON_OFF,
-        icon = icon,
-        intent = intent,
-        stateText = stateText
-    )
+        stateText: String = "",
+        isAction: Boolean = true
+    ): Control {
+        val text = if (isAction) "" else if (enabled && stateText == "") Strings.on else if (!enabled && stateText == "") Strings.off else stateText
+        return buildControl(
+            id = id,
+            template = ToggleTemplate(
+                id.toString(),
+                ControlButton(
+                    enabled,
+                    enabled.toString().toUpperCase(Locale.getDefault())
+                )
+            ),
+            titleRes = title,
+            subTitle = subTitle,
+            type = DeviceTypes.TYPE_GENERIC_ON_OFF,
+            icon = icon,
+            intent = intent,
+            stateText = text
+        )
 
+    }
     private fun buildRangeControl(
         id: Int,
         title: String,
@@ -796,7 +845,7 @@ class PowerControls : ControlsProviderService() {
             id.toString(),
             ControlButton(
                 false,
-                false.toString().uppercase(Locale.getDefault())
+                false.toString().toUpperCase(Locale.getDefault())
             )
         ),
         type = DeviceTypes.TYPE_GENERIC_ON_OFF

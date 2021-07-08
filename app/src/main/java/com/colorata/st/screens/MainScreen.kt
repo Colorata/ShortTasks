@@ -2,6 +2,8 @@ package com.colorata.st.screens
 
 import android.Manifest
 import android.app.Activity
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -76,6 +78,7 @@ fun PowerMainScreenContent() {
 fun GetStartedCardContent() {
     val context = LocalContext.current
     val activity = LocalContext.current as Activity
+    var visibleDND by remember { mutableStateOf(false) }
     var visiblePhone by remember { mutableStateOf(false) }
     var visibleAccessibility by remember { mutableStateOf(false) }
     var visibleModifySettings by remember { mutableStateOf(false) }
@@ -92,12 +95,14 @@ fun GetStartedCardContent() {
                 ), text = Strings.modifySettings
             ) {
                 visibleModifySettings = !visibleModifySettings
+                visibleDND = false
                 visibleAccessibility = false
                 visiblePhone = false
             }
 
             SButton(text = Strings.other) {
                 visiblePhone = !visiblePhone
+                visibleDND = false
                 visibleModifySettings = false
                 visibleAccessibility = false
             }
@@ -109,10 +114,23 @@ fun GetStartedCardContent() {
             horizontalArrangement = Arrangement.End
         ) {
             SButton(
-                modifier = Modifier.padding(bottom = SDimens.smallPadding),
+                modifier = Modifier.padding(
+                    end = SDimens.smallPadding,
+                    bottom = SDimens.smallPadding
+                ),
                 text = Strings.accessibility
             ) {
                 visibleAccessibility = !visibleAccessibility
+                visibleDND = false
+                visiblePhone = false
+                visibleModifySettings = false
+            }
+            SButton(
+                modifier = Modifier.padding(bottom = SDimens.smallPadding),
+                text = Strings.dnd
+            ) {
+                visibleDND = !visibleDND
+                visibleAccessibility = false
                 visiblePhone = false
                 visibleModifySettings = false
             }
@@ -213,6 +231,36 @@ fun GetStartedCardContent() {
 
                     if (Settings.System.canWrite(context))
                         visibleModifySettings = false
+                }
+            }
+        }
+
+        AnimatedVisibility(visible = visibleDND) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                SText(
+                    text = if (!(context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).isNotificationPolicyAccessGranted) Strings.whyDND
+                    else Strings.alreadyGranted,
+                    fontSize = SDimens.subTitle,
+                    modifier = Modifier
+                        .padding(end = SDimens.smallPadding)
+                        .weight(2f)
+
+                )
+                SButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f), text = Strings.ok
+                ) {
+                    val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
+                    context.startActivity(intent)
+
+                    if ((context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).isNotificationPolicyAccessGranted)
+                        visibleDND = false
                 }
             }
         }

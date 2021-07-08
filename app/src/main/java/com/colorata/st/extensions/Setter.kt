@@ -3,6 +3,7 @@ package com.colorata.st.extensions
 import android.accessibilityservice.AccessibilityService
 import android.annotation.SuppressLint
 import android.app.Instrumentation
+import android.app.NotificationManager
 import android.bluetooth.BluetoothAdapter
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -173,9 +174,28 @@ fun execRoot(command: String): Pair<String, Boolean> {
     }
 }
 
+fun Context.enableDND(enabled: Boolean) {
+    val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    manager.setInterruptionFilter(if (enabled) NotificationManager.INTERRUPTION_FILTER_PRIORITY else NotificationManager.INTERRUPTION_FILTER_ALL)
+}
+
 fun enableRootWifi(enabled: Boolean) =
     execRoot(if (enabled) "svc wifi enable" else "svc wifi disable")
 
 fun enableRootMobileData(enabled: Boolean) =
     execRoot(if (enabled) "svc data enable" else "svc data disable")
 
+fun enableRootLocation(enabled: Boolean) =
+    execRoot(if (enabled) "settings put secure location_mode 3" else "settings put secure location_mode 0")
+
+fun enableRootDarkMode(enabled: Boolean) =
+    execRoot(if (enabled) "cmd uimode night yes" else "cmd uimode night no")
+
+fun enableRootBatterySaver(enabled: Boolean) =
+    execRoot(if (enabled) "settings put global low_power 1" else "settings put global low_power 0")
+
+fun newThread(content: () -> Unit) {
+    Executors.newSingleThreadExecutor().execute {
+        content()
+    }
+}

@@ -421,3 +421,6 @@ fun getBatteryTimeRemaining(): String{
         if (estimatedMinute == 0) "00" else if (estimatedMinute < 10) "0$estimatedMinute" else estimatedMinute.toString()
     return "Until $estimatedHour:$finalMinute"
 }
+
+fun Context.getDarkThemeFormat() =
+    if (isBatterySaverEnabled()) Strings.batSave else if (isDarkThemeEnabled()) Strings.enabled else Strings.disabled
