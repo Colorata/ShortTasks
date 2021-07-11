@@ -148,8 +148,8 @@ fun Context.setSystemColor() {
                 ),
                 Pair(
                     Strings.secondaryInt,
-                    if (!SuperStore(this).catchBoolean(Strings.nightMode)) color.primaryHex.toIntColor()
-                    else color.secondaryHex.toIntColor()
+                    if (!SuperStore(this).catchBoolean(Strings.nightMode)) SystemColor.WHITE.primaryHex.toIntColor()
+                    else SystemColor.WHITE.secondaryHex.toIntColor()
                 ),
                 Pair(
                     Strings.controlColor,
@@ -172,8 +172,8 @@ fun Context.setSystemColor() {
                 ),
                 Pair(
                     Strings.secondaryInt,
-                    if (!SuperStore(this).catchBoolean(Strings.nightMode)) currentTheme.primaryHex.toIntColor()
-                    else currentTheme.secondaryHex.toIntColor()
+                    if (!SuperStore(this).catchBoolean(Strings.nightMode)) SystemColor.WHITE.primaryHex.toIntColor()
+                    else SystemColor.WHITE.secondaryHex.toIntColor()
                 ),
                 Pair(
                     Strings.controlColor,

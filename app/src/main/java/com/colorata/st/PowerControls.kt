@@ -32,6 +32,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 import java.util.concurrent.Flow
 import java.util.function.Consumer
+import kotlin.math.max
 
 
 class PowerControls : ControlsProviderService() {
@@ -41,254 +42,258 @@ class PowerControls : ControlsProviderService() {
     private var toggleState2 = false
     private var rangeState = 50f
     private var currentPlayerState = "Playing"
-    private val controls: MutableList<Control>
-        get() {
-            isRooted = SuperStore(this).catchBoolean(Strings.hasRoot)
-            val list = mutableListOf<Control>()
-            //isRooted = SuperStore(this).catchBoolean(Strings.hasRoot)
-            var minDegrees = SuperStore(this).catchInt(Strings.minDegrees, -50).toFloat()
-            var maxDegrees = SuperStore(this).catchInt(Strings.maxDegrees, 50).toFloat()
 
-            var currentRight = SuperStore(this).catchString("CurrentRightWeather")
-            var currentFeels = SuperStore(this).catchString("CurrentFeelsWeather")
-            var currentFloat = SuperStore(this).catchFloat("CurrentFloatWeather")
+    private fun getControlsList(): MutableList<Control> {
+        isRooted = SuperStore(this).catchBoolean(Strings.hasRoot)
+        val list = mutableListOf<Control>()
+        //isRooted = SuperStore(this).catchBoolean(Strings.hasRoot)
+        var minDegrees = SuperStore(this).catchInt(Strings.minDegrees, -50).toFloat()
+        var maxDegrees = SuperStore(this).catchInt(Strings.maxDegrees, 50).toFloat()
 
-            val city = SuperStore(this).catchString(Strings.city, "Moscow")
+        var currentRight = SuperStore(this).catchString("CurrentRightWeather")
+        var currentFeels = SuperStore(this).catchString("CurrentFeelsWeather")
+        var currentFloat = SuperStore(this).catchFloat("CurrentFloatWeather")
 
-            val retrofit = Retrofit.Builder()
-                .baseUrl(Strings.baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
+        val city = SuperStore(this).catchString(Strings.city, "Moscow")
 
-            val service = retrofit.create(WeatherService::class.java)
-            val call = service.getCurrentWeatherData(city, "metric", Strings.appId)
+        val retrofit = Retrofit.Builder()
+            .baseUrl(Strings.baseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
 
-            //CALLING
-            call.enqueue(object : Callback<WeatherResponse> {
+        val service = retrofit.create(WeatherService::class.java)
+        val call = service.getCurrentWeatherData(city, "metric", Strings.appId)
 
-                //Fun if SUCCESS
-                override fun onResponse(
-                    call: Call<WeatherResponse>,
-                    response: Response<WeatherResponse>
-                ) {
-                    if (response.code() == 200) {
-                        val weatherResponse = response.body()!!
+        //CALLING
+        call.enqueue(object : Callback<WeatherResponse> {
 
-                        //Configuring TEXT
-                        currentRight = weatherResponse.name?.replace("’", "")!!
-                        currentFeels =
-                            "Feels: " + weatherResponse.main!!.feels.toInt() + " \u2103"
-                        currentFloat = weatherResponse.main!!.temp
+            //Fun if SUCCESS
+            override fun onResponse(
+                call: Call<WeatherResponse>,
+                response: Response<WeatherResponse>
+            ) {
+                if (response.code() == 200) {
+                    val weatherResponse = response.body()!!
 
-                        SuperStore(this@PowerControls).drop(
-                            mutableListOf(
-                                Pair("CurrentRightWeather", currentRight as Any),
-                                Pair("CurrentFeelsWeather", currentFeels as Any),
-                                Pair("CurrentFloatWeather", currentFloat as Any)
-                            )
-                        )
+                    //Configuring TEXT
+                    currentRight = weatherResponse.name?.replace("’", "")!!
+                    currentFeels =
+                        "Feels: " + weatherResponse.main!!.feels.toInt() + " \u2103"
+                    currentFloat = weatherResponse.main!!.temp
 
-
-                        list.add(
-                            buildRangeControl(
-                                id = 1441,
-                                title = currentRight,
-                                icon = R.drawable.ic_outline_cloud_24,
-                                state = currentFloat,
-                                subTitle = currentFeels,
-                                isWeather = true,
-                                minValue = -50f,
-                                maxValue = 50f
-                            )
-                        )
-                    }
-                }
-
-                //Fun if FAIL
-                @SuppressLint("SetTextI18n")
-                override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
-                    currentRight = "Error"
-                    currentFeels = "Error"
-                }
-            })
-
-            if (currentFloat < minDegrees) {
-                minDegrees = currentFloat
-                SuperStore(this).drop(Strings.minDegrees, minDegrees.toInt())
-            } else if (currentFloat > maxDegrees) {
-                maxDegrees = currentFloat
-                SuperStore(this).drop(Strings.maxDegrees, maxDegrees.toInt())
-            }
-
-            list.clear()
-
-            list.add(
-                buildRangeControl(
-                    id = 1441,
-                    title = currentRight,
-                    icon = R.drawable.ic_outline_cloud_24,
-                    state = currentFloat,
-                    subTitle = currentFeels,
-                    isWeather = true,
-                    minValue = minDegrees,
-                    maxValue = maxDegrees
-                )
-            )
-
-            Controls.values().forEach { control ->
-                if (control.isRange) {
-                    list.add(
-                        buildRangeControl(
-                            id = control.id,
-                            title = if (control.id == Controls.TIME.id) getDate() else control.title,
-                            icon = when (control.id) {
-                                Controls.BATTERY_INFO.id -> getCurrentBatteryIcon()
-                                Controls.BRIGHTNESS.id -> getCurrentBrightnessIcon()
-                                Controls.MEDIA_VOLUME.id -> getCurrentMediaVolumeIcon()
-                                Controls.RING_VOLUME.id -> getCurrentRingVolumeIcon()
-                                else -> control.icon
-                            },
-                            state = when (control.id) {
-                                Controls.BRIGHTNESS.id -> (getBrightness() / 2.55).toFloat()
-                                Controls.RING_VOLUME.id -> getRingVolume()
-                                Controls.MEDIA_VOLUME.id -> getMediaVolume()
-                                Controls.BATTERY_INFO.id -> getBatteryPercentage().toFloat()
-                                Controls.PLAYER.id -> if (isMusicPlaying()) 50f else 0f
-                                else -> 50f
-                            },
-                            intent = if (control.id == Controls.TIME.id && isPackageInstalled(
-                                    Strings.googleClockApp
-                                )
-                            ) getAppIntent(Strings.googleClockApp) else control.intent,
-                            time = if (control.id == Controls.TIME.id) getTime() else null,
-                            format = when (control.id) {
-                                Controls.BATTERY_INFO.id -> getBatteryFormat()
-                                Controls.BRIGHTNESS.id -> getCurrentBrightnessFormat()
-                                Controls.MEDIA_VOLUME.id -> getMediaVolumeFormat()
-                                Controls.RING_VOLUME.id -> getRingVolumeFormat()
-                                Controls.PLAYER.id -> getCurrentPlayerFormat()
-                                else -> Strings.percentFormat
-                            },
-                            enabled = true
+                    SuperStore(this@PowerControls).drop(
+                        mutableListOf(
+                            Pair("CurrentRightWeather", currentRight as Any),
+                            Pair("CurrentFeelsWeather", currentFeels as Any),
+                            Pair("CurrentFloatWeather", currentFloat as Any)
                         )
                     )
-                } else {
-                    when (control.id) {
-                        Controls.SEARCH.id -> {
-                            if (isPackageInstalled("com.google.android.googlequicksearchbox")) {
-                                list.add(
-                                    buildToggleControl(
-                                        id = control.id,
-                                        title = control.title,
-                                        icon = control.icon,
-                                        intent = control.intent
-                                    )
-                                )
-                            }
-                        }
-                        Controls.NEARBY_SHARING.id -> {
-                            if (isPackageInstalled("com.google.android.gms")) {
-                                list.add(
-                                    buildToggleControl(
-                                        id = control.id,
-                                        title = control.title,
-                                        icon = control.icon,
-                                        intent = control.intent
-                                    )
-                                )
-                            }
-                        }
-                        Controls.CALCULATOR.id -> {
-                            if (isPackageInstalled("com.google.android.calculator")) {
-                                list.add(
-                                    buildToggleControl(
-                                        id = control.id,
-                                        title = control.title,
-                                        icon = control.icon,
-                                        intent = control.intent
-                                    )
-                                )
-                            }
-                        }
-                        Controls.GOOGLE_TASKS.id -> {
-                            if (isPackageInstalled("com.google.android.apps.tasks")) {
-                                list.add(
-                                    buildToggleControl(
-                                        id = control.id,
-                                        title = control.title,
-                                        icon = control.icon,
-                                        intent = control.intent
-                                    )
-                                )
-                            }
-                        }
-                        else -> {
+
+
+                    list.add(
+                        buildRangeControl(
+                            id = 1441,
+                            title = currentRight,
+                            icon = R.drawable.ic_outline_cloud_24,
+                            state = currentFloat,
+                            subTitle = currentFeels,
+                            isWeather = true,
+                            minValue = -50f,
+                            maxValue = 50f
+                        )
+                    )
+                }
+            }
+
+            //Fun if FAIL
+            @SuppressLint("SetTextI18n")
+            override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
+                currentRight = "Error"
+                currentFeels = "Error"
+            }
+        })
+
+        if (currentFloat < minDegrees) {
+            minDegrees = currentFloat
+            SuperStore(this).drop(Strings.minDegrees, minDegrees.toInt())
+        } else if (currentFloat > maxDegrees) {
+            maxDegrees = currentFloat
+            SuperStore(this).drop(Strings.maxDegrees, maxDegrees.toInt())
+        }
+
+        list.clear()
+
+        list.add(
+            buildRangeControl(
+                id = 1441,
+                title = currentRight,
+                icon = R.drawable.ic_outline_cloud_24,
+                state = currentFloat,
+                subTitle = currentFeels,
+                isWeather = true,
+                minValue = minDegrees,
+                maxValue = maxDegrees
+            )
+        )
+
+        Controls.values().forEach { control ->
+            if (control.isRange) {
+                list.add(
+                    buildRangeControl(
+                        id = control.id,
+                        title = if (control.id == Controls.TIME.id) getDate() else control.title,
+                        icon = when (control.id) {
+                            Controls.BATTERY_INFO.id -> getCurrentBatteryIcon()
+                            Controls.BRIGHTNESS.id -> getCurrentBrightnessIcon()
+                            Controls.MEDIA_VOLUME.id -> getCurrentMediaVolumeIcon()
+                            Controls.RING_VOLUME.id -> getCurrentRingVolumeIcon()
+                            else -> control.icon
+                        },
+                        state = when (control.id) {
+                            Controls.BRIGHTNESS.id -> (getBrightness() / 2.55).toFloat()
+                            Controls.RING_VOLUME.id -> getRingVolume()
+                            Controls.MEDIA_VOLUME.id -> getMediaVolume()
+                            Controls.BATTERY_INFO.id -> getBatteryPercentage().toFloat()
+                            Controls.PLAYER.id -> if (isMusicPlaying()) 50f else 0f
+                            else -> 50f
+                        },
+                        intent = if (control.id == Controls.TIME.id && isPackageInstalled(
+                                Strings.googleClockApp
+                            )
+                        ) getAppIntent(Strings.googleClockApp) else control.intent,
+                        time = if (control.id == Controls.TIME.id) getTime() else null,
+                        format = when (control.id) {
+                            Controls.BATTERY_INFO.id -> getBatteryFormat()
+                            Controls.BRIGHTNESS.id -> getCurrentBrightnessFormat()
+                            Controls.MEDIA_VOLUME.id -> getMediaVolumeFormat()
+                            Controls.RING_VOLUME.id -> getRingVolumeFormat()
+                            Controls.PLAYER.id -> getCurrentPlayerFormat()
+                            else -> Strings.percentFormat
+                        },
+                        enabled = true
+                    )
+                )
+            } else {
+                when (control.id) {
+                    Controls.SEARCH.id -> {
+                        if (isPackageInstalled("com.google.android.googlequicksearchbox")) {
                             list.add(
                                 buildToggleControl(
                                     id = control.id,
                                     title = control.title,
-                                    icon = when (control.id) {
-                                        Controls.BLUETOOTH.id -> getCurrentBluetoothIcon()
-                                        Controls.WIFI.id -> getCurrentWifiIcon()
-                                        Controls.FLASHLIGHT.id -> getCurrentFlashlightIcon()
-                                        Controls.LOCATION.id -> getCurrentLocationIcon()
-                                        Controls.AUTO_ROTATE.id -> getCurrentAutoRotationIcon()
-                                        Controls.DND.id -> getCurrentDNDIcon()
-                                        Controls.MICROPHONE.id -> getCurrentMicrophoneIcon()
-                                        Controls.FLIGHT_MODE.id -> getCurrentAirplaneIcon()
-                                        else -> control.icon
-                                    },
-                                    enabled = when (control.id) {
-                                        Controls.WIFI.id -> isWifiEnabled()
-                                        Controls.BLUETOOTH.id -> isBluetoothEnabled()
-                                        Controls.MOBILE_DATA.id -> isMobileDataEnabled()
-                                        Controls.LOCATION.id -> isLocationEnabled()
-                                        Controls.AUTO_ROTATE.id -> isAutoRotationEnabled()
-                                        Controls.DND.id -> isDNDEnabled()
-                                        Controls.DARK_THEME.id -> isDarkThemeEnabled()
-                                        Controls.FLIGHT_MODE.id -> isAirplaneEnabled()
-                                        Controls.FLASHLIGHT.id -> isFlashlightEnabled()
-                                        Controls.MICROPHONE.id -> isMicrophoneEnabled()
-                                        Controls.HOTSPOT.id -> isHotSpotEnabled()
-                                        else -> false
-                                    },
-                                    intent = control.intent,
-                                    stateText = when (control.id) {
-                                        Controls.MOBILE_DATA.id -> getMobileDataFormat()
-                                        Controls.WIFI.id -> getWIFIFormat()
-                                        Controls.DARK_THEME.id -> getDarkThemeFormat()
-                                        else -> ""
-                                    },
-                                    isAction = control.isAction
+                                    icon = control.icon,
+                                    intent = control.intent
                                 )
                             )
                         }
                     }
+                    Controls.NEARBY_SHARING.id -> {
+                        if (isPackageInstalled("com.google.android.gms")) {
+                            list.add(
+                                buildToggleControl(
+                                    id = control.id,
+                                    title = control.title,
+                                    icon = control.icon,
+                                    intent = control.intent
+                                )
+                            )
+                        }
+                    }
+                    Controls.CALCULATOR.id -> {
+                        if (isPackageInstalled("com.google.android.calculator")) {
+                            list.add(
+                                buildToggleControl(
+                                    id = control.id,
+                                    title = control.title,
+                                    icon = control.icon,
+                                    intent = control.intent
+                                )
+                            )
+                        }
+                    }
+                    Controls.GOOGLE_TASKS.id -> {
+                        if (isPackageInstalled("com.google.android.apps.tasks")) {
+                            list.add(
+                                buildToggleControl(
+                                    id = control.id,
+                                    title = control.title,
+                                    icon = control.icon,
+                                    intent = control.intent
+                                )
+                            )
+                        }
+                    }
+                    else -> {
+                        list.add(
+                            buildToggleControl(
+                                id = control.id,
+                                title = control.title,
+                                icon = when (control.id) {
+                                    Controls.BLUETOOTH.id -> getCurrentBluetoothIcon()
+                                    Controls.WIFI.id -> getCurrentWifiIcon()
+                                    Controls.FLASHLIGHT.id -> getCurrentFlashlightIcon()
+                                    Controls.LOCATION.id -> getCurrentLocationIcon()
+                                    Controls.AUTO_ROTATE.id -> getCurrentAutoRotationIcon()
+                                    Controls.DND.id -> getCurrentDNDIcon()
+                                    Controls.MICROPHONE.id -> getCurrentMicrophoneIcon()
+                                    Controls.FLIGHT_MODE.id -> getCurrentAirplaneIcon()
+                                    else -> control.icon
+                                },
+                                enabled = when (control.id) {
+                                    Controls.WIFI.id -> isWifiEnabled()
+                                    Controls.BLUETOOTH.id -> isBluetoothEnabled()
+                                    Controls.MOBILE_DATA.id -> isMobileDataEnabled()
+                                    Controls.LOCATION.id -> isLocationEnabled()
+                                    Controls.AUTO_ROTATE.id -> isAutoRotationEnabled()
+                                    Controls.DND.id -> isDNDEnabled()
+                                    Controls.DARK_THEME.id -> isDarkThemeEnabled()
+                                    Controls.FLIGHT_MODE.id -> isAirplaneEnabled()
+                                    Controls.FLASHLIGHT.id -> isFlashlightEnabled()
+                                    Controls.MICROPHONE.id -> isMicrophoneEnabled()
+                                    Controls.HOTSPOT.id -> isHotSpotEnabled()
+                                    else -> false
+                                },
+                                intent = control.intent,
+                                stateText = when (control.id) {
+                                    Controls.MOBILE_DATA.id -> getMobileDataFormat()
+                                    Controls.WIFI.id -> getWIFIFormat()
+                                    Controls.DARK_THEME.id -> getDarkThemeFormat()
+                                    else -> ""
+                                },
+                                isAction = control.isAction
+                            )
+                        )
+                    }
                 }
             }
-
-            val title = SuperStore(this).catchString(Strings.linkTitle, "Google")
-            val link = SuperStore(this).catchString(Strings.linkLink, "https://google.com")
-            list.add(
-                buildToggleControl(
-                    id = 0,
-                    title = title,
-                    subTitle = Strings.link,
-                    icon = R.drawable.ic_outline_android_24,
-                    enabled = false,
-                    intent = Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse(link)
-                    ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                )
-            )
-            return list
         }
+
+        val title = SuperStore(this).catchString(Strings.linkTitle, "Google")
+        val link = SuperStore(this).catchString(Strings.linkLink, "https://google.com")
+        list.add(
+            buildToggleControl(
+                id = 0,
+                title = title,
+                subTitle = Strings.link,
+                icon = R.drawable.ic_outline_android_24,
+                enabled = false,
+                intent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(link)
+                ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            )
+        )
+        return list
+    }
+    /*private val controls: MutableList<Control>
+        get() {
+
+        }*/
 
     override fun createPublisherForAllAvailable(): Flow.Publisher<Control> =
         FlowAdapters.toFlowPublisher(
             Flowable.fromIterable(
-                controls
+                getControlsList()
             )
         )
 
@@ -297,7 +302,8 @@ class PowerControls : ControlsProviderService() {
 
         controlIds.forEach { controlFlows[it] = flow }
 
-        for (i in controls) {
+        val list = getControlsList()
+        for (i in list) {
             flow.onNext(i)
         }
 
@@ -326,7 +332,79 @@ class PowerControls : ControlsProviderService() {
                 }
                 1441.toString() -> {
                     consumer.accept(ControlAction.RESPONSE_OK)
-                    flow.onNext(controls[0])
+                    val control: Control
+                    var minDegrees = SuperStore(this).catchInt(Strings.minDegrees, -50).toFloat()
+                    var maxDegrees = SuperStore(this).catchInt(Strings.maxDegrees, 50).toFloat()
+
+                    var currentRight = SuperStore(this).catchString("CurrentRightWeather")
+                    var currentFeels = SuperStore(this).catchString("CurrentFeelsWeather")
+                    var currentFloat = SuperStore(this).catchFloat("CurrentFloatWeather")
+
+                    val city = SuperStore(this).catchString(Strings.city, "Moscow")
+
+                    val retrofit = Retrofit.Builder()
+                        .baseUrl(Strings.baseUrl)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build()
+
+                    val service = retrofit.create(WeatherService::class.java)
+                    val call = service.getCurrentWeatherData(city, "metric", Strings.appId)
+
+                    //CALLING
+                    call.enqueue(object : Callback<WeatherResponse> {
+
+                        //Fun if SUCCESS
+                        override fun onResponse(
+                            call: Call<WeatherResponse>,
+                            response: Response<WeatherResponse>
+                        ) {
+                            if (response.code() == 200) {
+                                val weatherResponse = response.body()!!
+
+                                //Configuring TEXT
+                                currentRight = weatherResponse.name?.replace("’", "")!!
+                                currentFeels =
+                                    "Feels: " + weatherResponse.main!!.feels.toInt() + " \u2103"
+                                currentFloat = weatherResponse.main!!.temp
+
+                                SuperStore(this@PowerControls).drop(
+                                    mutableListOf(
+                                        Pair("CurrentRightWeather", currentRight as Any),
+                                        Pair("CurrentFeelsWeather", currentFeels as Any),
+                                        Pair("CurrentFloatWeather", currentFloat as Any)
+                                    )
+                                )
+
+                            }
+                        }
+
+                        //Fun if FAIL
+                        @SuppressLint("SetTextI18n")
+                        override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
+                            currentRight = "Error"
+                            currentFeels = "Error"
+                        }
+                    })
+                    control =
+                        buildRangeControl(
+                            id = 1441,
+                            title = currentRight,
+                            icon = R.drawable.ic_outline_cloud_24,
+                            state = currentFloat,
+                            subTitle = currentFeels,
+                            isWeather = true,
+                            minValue = minDegrees,
+                            maxValue = maxDegrees
+                        )
+
+                    if (currentFloat < minDegrees) {
+                        minDegrees = currentFloat
+                        SuperStore(this).drop(Strings.minDegrees, minDegrees.toInt())
+                    } else if (currentFloat > maxDegrees) {
+                        maxDegrees = currentFloat
+                        SuperStore(this).drop(Strings.maxDegrees, maxDegrees.toInt())
+                    }
+                    flow.onNext(control)
                 }
 
                 Controls.SEARCH.id.toString() -> {
