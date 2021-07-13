@@ -47,7 +47,6 @@ fun RelatedCard(
     subTitle: String,
     scope: () -> Unit = { },
     icon: Int,
-
     hidden: @Composable () -> Unit
 ) {
 

@@ -1,6 +1,8 @@
 package com.colorata.st.extensions
 
+import android.animation.TimeInterpolator
 import android.content.res.Resources
+import androidx.compose.animation.core.Easing
 import java.text.CharacterIterator
 import java.text.StringCharacterIterator
 import java.util.*
@@ -59,4 +61,8 @@ fun Long.toData(): String {
         ci.next()
     }
     return String.format(Locale.getDefault(), "%.1f %cB", bytes / 1000.0, ci.current())
+}
+
+fun TimeInterpolator.toEasing() = Easing { x ->
+    getInterpolation(x)
 }

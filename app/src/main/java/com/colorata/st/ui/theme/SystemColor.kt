@@ -203,3 +203,11 @@ fun backgroundColor(): Color =
 @Composable
 fun foregroundColor(): Color =
     Color(LocalContext.current.foregroundInt())
+
+@Composable
+fun foregroundColorControl(): Color =
+        Color(LocalContext.current.backgroundIntControl())
+
+@Composable
+fun backgroundColorControl(): Color =
+    Color("#474747".toIntColor())

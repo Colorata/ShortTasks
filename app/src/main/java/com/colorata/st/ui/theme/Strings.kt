@@ -132,6 +132,7 @@ object Strings{
     const val autoDetect = "Personal Designer"
 
     const val dotIcon = "•"
+    const val degreeIcon = "℃"
     const val percentFormat = "%1.0f%%"
 
     const val googleClockApp = "com.google.android.deskclock"

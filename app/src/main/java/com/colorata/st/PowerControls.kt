@@ -32,7 +32,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 import java.util.concurrent.Flow
 import java.util.function.Consumer
-import kotlin.math.max
 
 
 class PowerControls : ControlsProviderService() {
@@ -46,7 +45,6 @@ class PowerControls : ControlsProviderService() {
     private fun getControlsList(): MutableList<Control> {
         isRooted = SuperStore(this).catchBoolean(Strings.hasRoot)
         val list = mutableListOf<Control>()
-        //isRooted = SuperStore(this).catchBoolean(Strings.hasRoot)
         var minDegrees = SuperStore(this).catchInt(Strings.minDegrees, -50).toFloat()
         var maxDegrees = SuperStore(this).catchInt(Strings.maxDegrees, 50).toFloat()
 
@@ -55,7 +53,6 @@ class PowerControls : ControlsProviderService() {
         var currentFloat = SuperStore(this).catchFloat("CurrentFloatWeather")
 
         val city = SuperStore(this).catchString(Strings.city, "Moscow")
-
         val retrofit = Retrofit.Builder()
             .baseUrl(Strings.baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
@@ -80,7 +77,7 @@ class PowerControls : ControlsProviderService() {
                     currentFeels =
                         "Feels: " + weatherResponse.main!!.feels.toInt() + " \u2103"
                     currentFloat = weatherResponse.main!!.temp
-
+                    println("desc: ${weatherResponse.weather[0].icon}")
                     SuperStore(this@PowerControls).drop(
                         mutableListOf(
                             Pair("CurrentRightWeather", currentRight as Any),
@@ -858,7 +855,7 @@ class PowerControls : ControlsProviderService() {
                 id.toString(),
                 ControlButton(
                     enabled,
-                    enabled.toString().toUpperCase(Locale.getDefault())
+                    enabled.toString().uppercase(Locale.getDefault())
                 )
             ),
             titleRes = title,
@@ -923,7 +920,7 @@ class PowerControls : ControlsProviderService() {
             id.toString(),
             ControlButton(
                 false,
-                false.toString().toUpperCase(Locale.getDefault())
+                false.toString().uppercase(Locale.getDefault())
             )
         ),
         type = DeviceTypes.TYPE_GENERIC_ON_OFF

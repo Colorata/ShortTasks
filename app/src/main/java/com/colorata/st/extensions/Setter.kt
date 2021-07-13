@@ -2,19 +2,14 @@ package com.colorata.st.extensions
 
 import android.accessibilityservice.AccessibilityService
 import android.annotation.SuppressLint
-import android.app.Instrumentation
 import android.app.NotificationManager
 import android.bluetooth.BluetoothAdapter
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.hardware.camera2.CameraManager
 import android.media.AudioManager
-import android.media.session.MediaSessionManager
 import android.provider.Settings
 import android.service.controls.ControlsProviderService
-import android.util.Log
 import android.view.KeyEvent
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.colorata.st.CurrentScreen
@@ -24,9 +19,7 @@ import com.colorata.st.ui.theme.SuperStore
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
-import java.lang.RuntimeException
 import java.lang.reflect.Method
-import java.util.concurrent.Executors
 
 
 fun Context.goToSecondary(screen: CurrentScreen) {
@@ -195,7 +188,13 @@ fun enableRootBatterySaver(enabled: Boolean) =
     execRoot(if (enabled) "settings put global low_power 1" else "settings put global low_power 0")
 
 fun newThread(content: () -> Unit) {
-    Executors.newSingleThreadExecutor().execute {
-        content()
+    val thread = Thread {
+        try {
+            content()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
+
+    thread.start()
 }

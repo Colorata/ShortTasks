@@ -17,22 +17,33 @@ import android.net.NetworkCapabilities
 import android.net.TrafficStats
 import android.net.wifi.WifiManager
 import android.os.BatteryManager
-import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
 import android.telephony.TelephonyManager
-import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import com.colorata.st.R
+import com.colorata.st.extensions.weather.WeatherResponse
+import com.colorata.st.extensions.weather.WeatherService
 import com.colorata.st.ui.theme.Strings
 import com.colorata.st.ui.theme.SuperStore
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.reflect.Method
 import java.util.*
 import java.util.concurrent.TimeUnit
+import android.graphics.BitmapFactory
+
+import android.graphics.Bitmap
+import android.util.Log
+import androidx.compose.ui.graphics.asImageBitmap
+import java.net.URL
 
 
 @Composable
@@ -212,6 +223,9 @@ fun Context.getBatteryFormat(): String {
     else Strings.percentFormat
 }
 
+fun Context.getNextBatteryFormat() =
+    getBatteryFormat().substring(getBatteryFormat().indexOf(Strings.dotIcon) + 2)
+
 fun getCurrentBluetoothIcon(): Int =
     if (isBluetoothEnabled()) R.drawable.ic_outline_bluetooth_24
     else R.drawable.ic_outline_bluetooth_disabled_24
@@ -371,7 +385,8 @@ fun Context.isHotSpotEnabled(): Boolean {
         val method: Method = manager.javaClass.getDeclaredMethod("isWifiApEnabled")
         method.isAccessible = true
         return method.invoke(manager) as Boolean
-    } catch (ignored: Throwable) { }
+    } catch (ignored: Throwable) {
+    }
     return false
 }
 
@@ -398,11 +413,12 @@ fun getCurrentPlayerIcon(event: String): Int {
 fun isDeviceRooted(): Boolean =
     execRoot("ls").second
 
-fun getBatteryTimeRemaining(): String{
+fun getBatteryTimeRemaining(): String {
     var line = execRoot("dumpsys batterystats | grep -E \"Battery time remaining\"").first
     if (line.length > 26) line = line.substring(26)
     if (line.length < 7) return "Discharging"
-    val hours = if (line.indexOf("h") != -1) line.substring(0 until line.indexOf("h")).toInt() else 0
+    val hours =
+        if (line.indexOf("h") != -1) line.substring(0 until line.indexOf("h")).toInt() else 0
     val minutes = line.substring(line.indexOf("h") + 2 until line.indexOf("m")).toInt()
 
     val currentTime = getTime()
@@ -424,3 +440,31 @@ fun getBatteryTimeRemaining(): String{
 
 fun Context.getDarkThemeFormat() =
     if (isBatterySaverEnabled()) Strings.batSave else if (isDarkThemeEnabled()) Strings.enabled else Strings.disabled
+
+
+fun getCurrentWeatherImage(weather: String?): ImageBitmap? {
+    val urlString = when (weather) {
+        "01d" -> "https://www.gstatic.com/images/icons/material/apps/weather/2x/sunny_light_color_96dp.png"
+        "01n" -> "https://www.gstatic.com/images/icons/material/apps/weather/2x/clear_night_light_color_96dp.png"
+        "02d" -> "https://www.gstatic.com/images/icons/material/apps/weather/2x/partly_cloudy_light_color_96dp.png"
+        "02n" -> "https://www.gstatic.com/images/icons/material/apps/weather/2x/partly_cloudy_night_light_color_96dp.png"
+        "03d" -> "https://www.gstatic.com/images/icons/material/apps/weather/2x/cloudy_light_color_96dp.png"
+        "03n" -> "https://www.gstatic.com/images/icons/material/apps/weather/2x/cloudy_light_color_96dp.png"
+        "04d" -> "https://www.gstatic.com/images/icons/material/apps/weather/2x/cloudy_light_color_96dp.png"
+        "04n" -> "https://www.gstatic.com/images/icons/material/apps/weather/2x/cloudy_light_color_96dp.png"
+        "09d" -> "https://www.gstatic.com/images/icons/material/apps/weather/2x/showers_rain_light_color_96dp.png"
+        "09n" -> "https://www.gstatic.com/images/icons/material/apps/weather/2x/showers_rain_light_color_96dp.png"
+        "10d" -> "https://www.gstatic.com/images/icons/material/apps/weather/2x/showers_rain_light_color_96dp.png"
+        "10n" -> "https://www.gstatic.com/images/icons/material/apps/weather/2x/showers_rain_light_color_96dp.png"
+        "11d" -> "https://www.gstatic.com/images/icons/material/apps/weather/2x/strong_tstorms_light_color_96dp.png"
+        "11n" -> "https://www.gstatic.com/images/icons/material/apps/weather/2x/strong_tstorms_light_color_96dp.png"
+        "13d" -> "https://www.gstatic.com/images/icons/material/apps/weather/2x/snow_showers_snow_light_color_96dp.png"
+        "13n" -> "https://www.gstatic.com/images/icons/material/apps/weather/2x/snow_showers_snow_light_color_96dp.png"
+        "50d" -> "https://www.gstatic.com/images/icons/material/apps/weather/2x/haze_fog_dust_smoke_light_color_96dp.png"
+        "50n" -> "https://www.gstatic.com/images/icons/material/apps/weather/2x/haze_fog_dust_smoke_light_color_96dp.png"
+        else -> null
+    } ?: return null
+    val url = URL(urlString)
+    val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+    return bmp.asImageBitmap()
+}

@@ -9,9 +9,9 @@ class WeatherResponse {
     /*@SerializedName("coord")
     var coord: Coord? = null
     @SerializedName("sys")
-    var sys: Sys? = null
+    var sys: Sys? = null*/
     @SerializedName("weather")
-    var weather = ArrayList<Weather>()*/
+    var weather = ArrayList<Weather>()
     @SerializedName("main")
     var main: Main? = null
     /*@SerializedName("wind")
@@ -30,7 +30,7 @@ class WeatherResponse {
     var cod: Float = 0.toFloat()*/
 }
 
-/*class Weather {
+class Weather {
     @SerializedName("id")
     var id: Int = 0
     @SerializedName("main")
@@ -39,7 +39,7 @@ class WeatherResponse {
     var description: String? = null
     @SerializedName("icon")
     var icon: String? = null
-}*/
+}
 
 /*class Clouds {
     @SerializedName("all")

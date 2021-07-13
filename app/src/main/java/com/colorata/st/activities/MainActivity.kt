@@ -19,16 +19,17 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import com.colorata.st.extensions.getBatteryTimeRemaining
+import com.colorata.st.extensions.presets.controls.CRange
+import com.colorata.st.extensions.presets.controls.CToggle
+import com.colorata.st.extensions.presets.controls.StatusCard
 import com.colorata.st.screens.Navigation
-import com.colorata.st.ui.theme.Strings
-import com.colorata.st.ui.theme.SuperStore
-import com.colorata.st.ui.theme.backgroundColor
-import com.colorata.st.ui.theme.backgroundInt
-import com.colorata.st.ui.theme.setSystemColor
+import com.colorata.st.ui.theme.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -36,6 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     private var nightMode = true
 
+    @ExperimentalMaterialApi
     @ExperimentalComposeUiApi
     @ExperimentalAnimationApi
     @ExperimentalFoundationApi

@@ -8,6 +8,7 @@ object SDimens{
     val screenTitle = 60.sp
     val cardTitle = 24.sp
     val buttonText = 14.sp
+    val statusCardText = 15.sp
 
     val roundedCorner = 30.dp
     val borderWidth = 2.dp
