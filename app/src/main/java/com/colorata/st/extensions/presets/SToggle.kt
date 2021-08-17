@@ -67,7 +67,7 @@ fun SToggle(
             Row(
                 modifier = Modifier
                     .onGloballyPositioned {
-                        height = pxToDp(it.size.height)
+                        height = pxToDp(it.size.height).toInt()
                     }, verticalAlignment = Alignment.CenterVertically
             ) {
                 SText(

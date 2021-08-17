@@ -72,6 +72,9 @@ fun CRange(
         animationSpec = FloatTweenSpec(150, 0, AnticipateOvershootInterpolator().toEasing())
     )
     var booleanState by remember { mutableStateOf(true) }
+    LaunchedEffect(key1 = true) {
+        booleanState = false
+    }
     val transition = updateTransition(targetState = booleanState, label = "")
     var rangeState by remember { mutableStateOf(state) }
     val range by transition.animateFloat(label = "") {
@@ -80,9 +83,9 @@ fun CRange(
     }
     Card(
         modifier = modifier
-            .padding(30.dp)
-            .width(if (isTripled) width.dp else ((2 * width) / 3).dp)
-            .requiredHeight(105.dp)
+            .padding(vertical = 5.dp, horizontal = 10.dp)
+            .width((if (isTripled) width.dp else ((2 * width) / 3).dp) - 20.dp)
+            .height(105.dp)
             .scale(scale.value)
             .onGloballyPositioned {
                 controlWidth = pxToDp(it.size.width).toFloat()

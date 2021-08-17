@@ -69,9 +69,9 @@ fun CToggle(
         )
     Card(
         modifier = modifier
-            .padding(30.dp)
-            .width(if (isTripled) width.dp else if (isDoubled) ((2 * width) / 3).dp else  (width / 3).dp)
-            .requiredHeight(105.dp)
+            .padding(vertical = 5.dp, horizontal = 10.dp)
+            .width((if (isTripled) width.dp else if (isDoubled) ((2 * width) / 3).dp else  (width / 3).dp) - 20.dp)
+            .height(105.dp)
             .scale(scale.value)
             .pointerInput(Unit) {
                 detectTapGestures(onPress = {

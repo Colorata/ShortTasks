@@ -3,23 +3,14 @@ package com.colorata.st.screens
 import android.Manifest
 import android.app.Activity
 import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -48,11 +39,14 @@ fun MainScreen() {
         subTitles = if (isNewUser) ScreenComponents.MainScreenGetStarted.subTitles else ScreenComponents.MainScreen.subTitles,
         icons = if (isNewUser) ScreenComponents.MainScreenGetStarted.icons else ScreenComponents.MainScreen.icons,
         modifier = Modifier.padding(bottom = getBottomNavigationHeight()),
-        hidden = listOf(
+        hidden = if (isNewUser) listOf(
             { TButtonDefault() },
             { GetStartedCardContent() },
             { PowerMainScreenContent() })
+        else listOf({ TButtonDefault() },
+            { PowerMainScreenContent() })
     )
+
 }
 
 
@@ -243,7 +237,7 @@ fun GetStartedCardContent() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 SText(
-                    text = if (!(context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).isNotificationPolicyAccessGranted) Strings.whyDND
+                    text = if (!context.getSystemService(NotificationManager::class.java).isNotificationPolicyAccessGranted) Strings.whyDND
                     else Strings.alreadyGranted,
                     fontSize = SDimens.subTitle,
                     modifier = Modifier
@@ -259,7 +253,7 @@ fun GetStartedCardContent() {
                     val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
                     context.startActivity(intent)
 
-                    if ((context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).isNotificationPolicyAccessGranted)
+                    if (context.getSystemService(NotificationManager::class.java).isNotificationPolicyAccessGranted)
                         visibleDND = false
                 }
             }

@@ -22,9 +22,10 @@ import java.io.InputStreamReader
 import java.lang.reflect.Method
 
 
-fun Context.goToSecondary(screen: CurrentScreen) {
+fun Context.goToSecondary(screen: CurrentScreen, fromActivity: Boolean = true) {
     val intent = Intent(this, SecondaryActivity::class.java)
     intent.putExtra(Strings.screen, screen)
+    if (!fromActivity) intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     startActivity(intent)
 }
 
@@ -44,7 +45,7 @@ fun changeBrightness(
 
 fun Context.changeMediaVolume(percents: Int) {
 
-    val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager?
+    val audioManager = getSystemService(AudioManager::class.java)
     val max = audioManager!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
     val value = (max / 100) * percents
     audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, value.toInt(), 0)
@@ -52,12 +53,12 @@ fun Context.changeMediaVolume(percents: Int) {
 
 fun Context.changeRingVolume(percents: Int) {
 
-    val audioManagerRing = getSystemService(Context.AUDIO_SERVICE) as AudioManager?
+    val audioManagerRing = getSystemService(AudioManager::class.java)
     val maxRing = audioManagerRing!!.getStreamMaxVolume(AudioManager.STREAM_RING).toFloat()
     val valueRing = (maxRing / 100) * percents
     audioManagerRing.setStreamVolume(AudioManager.STREAM_RING, valueRing.toInt(), 0)
 
-    val audioManagerNotification = getSystemService(Context.AUDIO_SERVICE) as AudioManager?
+    val audioManagerNotification = getSystemService(AudioManager::class.java)
     val maxNotification =
         audioManagerNotification!!.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION).toFloat()
     val valueNotification = (maxNotification / 100) * percents
@@ -79,7 +80,7 @@ fun enableBluetooth(enabled: Boolean) {
 }
 
 fun Context.enableFlashlight(enabled: Boolean) {
-    val cameraManager = getSystemService(ControlsProviderService.CAMERA_SERVICE) as CameraManager
+    val cameraManager = getSystemService(CameraManager::class.java)
     try {
         val cameraId = cameraManager.cameraIdList[0]
         cameraManager.setTorchMode(cameraId, enabled)
@@ -121,12 +122,12 @@ fun Context.getAppIntent(packageName: String): Intent {
 }
 
 fun Context.enableMicrophone(enabled: Boolean) {
-    val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    val manager = getSystemService(AudioManager::class.java)
     manager.isMicrophoneMute = !enabled
 }
 
 fun Context.enableMusic(enabled: Boolean) {
-    val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    val manager = getSystemService(AudioManager::class.java)
     manager.dispatchMediaKeyEvent(
         KeyEvent(
             KeyEvent.ACTION_DOWN,
@@ -136,13 +137,13 @@ fun Context.enableMusic(enabled: Boolean) {
 }
 
 fun Context.previousSong() {
-    val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    val manager = getSystemService(AudioManager::class.java)
     manager.dispatchMediaKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PREVIOUS))
     manager.dispatchMediaKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PREVIOUS))
 }
 
 fun Context.nextSong() {
-    val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    val manager = getSystemService(AudioManager::class.java)
     manager.dispatchMediaKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_NEXT))
 }
 
@@ -168,7 +169,7 @@ fun execRoot(command: String): Pair<String, Boolean> {
 }
 
 fun Context.enableDND(enabled: Boolean) {
-    val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    val manager = getSystemService(NotificationManager::class.java)
     manager.setInterruptionFilter(if (enabled) NotificationManager.INTERRUPTION_FILTER_PRIORITY else NotificationManager.INTERRUPTION_FILTER_ALL)
 }
 

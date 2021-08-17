@@ -154,11 +154,18 @@ fun Context.setSystemColor() {
                 Pair(
                     Strings.controlColor,
                     color.controlHex.toIntColor()
+                ),
+                Pair(
+                    Strings.trueBackground,
+                    if (!SuperStore(this).catchBoolean(Strings.nightMode)) color.primaryHex.toIntColor()
+                    else color.secondaryHex.toIntColor()
                 )
             )
         )
     } else {
-        val currentTheme = SystemColor.values().find { it.id == SuperStore(this).catchInt(Strings.systemColor) } ?: SystemColor.BLACK
+        val currentTheme =
+            SystemColor.values().find { it.id == SuperStore(this).catchInt(Strings.systemColor) }
+                ?: SystemColor.BLACK
         SuperStore(this).drop(
             mutableListOf(
                 Pair(
@@ -178,6 +185,11 @@ fun Context.setSystemColor() {
                 Pair(
                     Strings.controlColor,
                     currentTheme.controlHex.toIntColor()
+                ),
+                Pair(
+                    Strings.trueBackground,
+                    if (!SuperStore(this).catchBoolean(Strings.nightMode)) currentTheme.primaryHex.toIntColor()
+                    else currentTheme.secondaryHex.toIntColor()
                 )
             )
         )
@@ -195,6 +207,12 @@ fun Context.foregroundInt(): Int =
 fun Context.backgroundIntControl(): Int =
     SuperStore(this).catchInt(Strings.controlColor)
 
+fun Context.trueBackgroundInt(): Int =
+    if (SuperStore(this).catchInt(Strings.trueBackground) == SystemColor.BLACK.primaryHex.toIntColor())
+        SystemColor.BLACK.secondaryHex.toIntColor()
+    else SuperStore(this).catchInt(Strings.trueBackground)
+
+
 @Composable
 fun backgroundColor(): Color =
     Color(LocalContext.current.backgroundInt())
@@ -206,8 +224,12 @@ fun foregroundColor(): Color =
 
 @Composable
 fun foregroundColorControl(): Color =
-        Color(LocalContext.current.backgroundIntControl())
+    Color(LocalContext.current.backgroundIntControl())
 
 @Composable
 fun backgroundColorControl(): Color =
     Color("#474747".toIntColor())
+
+@Composable
+fun trueBackgroundColor(): Color =
+    Color(LocalContext.current.trueBackgroundInt())

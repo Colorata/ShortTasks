@@ -91,8 +91,11 @@ object Strings{
     const val hasRoot = "Has Root"
     const val whyDND = "STasks uses DND access to switch DND state"
     const val normalMode = "Normal Mode"
+    const val overlay = "Overlay"
+    const val whyOverlay = "STasks uses overlay to show you settings"
     const val on = "On"
     const val off = "Off"
+    const val trueBackground = "True Background"
 
     const val powerMainSubTitle = "You will learn how to use Power Assistant"
 
@@ -133,6 +136,7 @@ object Strings{
 
     const val dotIcon = "•"
     const val degreeIcon = "℃"
+    const val rawDegreeIcon = "\u00B0"
     const val percentFormat = "%1.0f%%"
 
     const val googleClockApp = "com.google.android.deskclock"

@@ -3,12 +3,16 @@ package com.colorata.st.extensions
 import android.animation.TimeInterpolator
 import android.content.res.Resources
 import androidx.compose.animation.core.Easing
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import java.text.CharacterIterator
 import java.text.StringCharacterIterator
 import java.util.*
 
 
-fun pxToDp(px: Int) = (px / Resources.getSystem().displayMetrics.density).toInt()
+fun pxToDp(px: Int) = (px / Resources.getSystem().displayMetrics.density)
 
 fun Int.toHex(): String {
     return String.format("#%06X", (0xFFFFFF and this))
@@ -66,3 +70,6 @@ fun Long.toData(): String {
 fun TimeInterpolator.toEasing() = Easing { x ->
     getInterpolation(x)
 }
+
+@Composable
+fun Dp.toPx(): Float = with(LocalDensity.current) { this@toPx.toPx() }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.NotificationManager
 import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -66,17 +67,17 @@ fun getNavBarHeight(): Dp {
 }
 
 fun Context.isWifiEnabled(): Boolean {
-    val wifiManager = getSystemService(Context.WIFI_SERVICE) as WifiManager
+    val wifiManager = getSystemService(WifiManager::class.java)
     return wifiManager.isWifiEnabled
 }
 
-fun isBluetoothEnabled(): Boolean {
-    val adapter = BluetoothAdapter.getDefaultAdapter()
-    return adapter.isEnabled
+fun Context.isBluetoothEnabled(): Boolean {
+    val adapter = getSystemService(BluetoothManager::class.java)
+    return adapter.adapter.isEnabled
 }
 
 fun Context.isLocationEnabled(): Boolean {
-    val lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    val lm = getSystemService(LocationManager::class.java)
     return lm.isProviderEnabled(LocationManager.GPS_PROVIDER) || lm.isProviderEnabled(
         LocationManager.NETWORK_PROVIDER
     )
@@ -84,7 +85,7 @@ fun Context.isLocationEnabled(): Boolean {
 
 fun Context.isMobileDataEnabled(): Boolean {
 
-    val tm = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager?
+    val tm = getSystemService(TelephonyManager::class.java)
     if (tm!!.simState == TelephonyManager.SIM_STATE_READY) {
         return Settings.Global.getInt(contentResolver, "mobile_data", 1) == 1
     }
@@ -93,7 +94,7 @@ fun Context.isMobileDataEnabled(): Boolean {
 
 
 fun Context.isBatterySaverEnabled(): Boolean {
-    val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+    val powerManager = getSystemService(PowerManager::class.java)
     return powerManager.isPowerSaveMode
 }
 
@@ -102,13 +103,13 @@ fun Context.getBrightness(): Int {
 }
 
 fun Context.getMediaVolume(): Float {
-    val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager?
+    val audioManager = getSystemService(AudioManager::class.java)
     val max = audioManager!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
     return audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) / (max / 100)
 }
 
 fun Context.getRingVolume(): Float {
-    val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager?
+    val audioManager = getSystemService(AudioManager::class.java)
     val max = audioManager!!.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION).toFloat()
     return audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION) / (max / 100)
 }
@@ -120,7 +121,7 @@ fun Context.isAutoRotationEnabled(): Boolean {
 
 fun Context.isDNDEnabled(): Boolean {
     val notificationManager =
-        getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        getSystemService(NotificationManager::class.java)
     return notificationManager.currentInterruptionFilter == NotificationManager.INTERRUPTION_FILTER_PRIORITY
 }
 
@@ -150,8 +151,7 @@ fun Context.isPackageInstalled(name: String): Boolean {
 }
 
 fun Context.getBatteryPercentage(): Int {
-    val manager = getSystemService(Context.BATTERY_SERVICE) as BatteryManager
-
+    val manager = getSystemService(BatteryManager::class.java)
     return manager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
 }
 
@@ -170,7 +170,7 @@ fun getDate(): String {
 }
 
 fun Context.getChargingTimeRemaining(): Pair<String, String> {
-    val manager = getSystemService(Context.BATTERY_SERVICE) as BatteryManager
+    val manager = getSystemService(BatteryManager::class.java)
     val duration = manager.computeChargeTimeRemaining()
     val hoursRemaining = TimeUnit.MILLISECONDS.toHours(duration)
     val minutesRemaining = TimeUnit.MILLISECONDS.toMinutes(duration) - hoursRemaining * 60
@@ -226,7 +226,7 @@ fun Context.getBatteryFormat(): String {
 fun Context.getNextBatteryFormat() =
     getBatteryFormat().substring(getBatteryFormat().indexOf(Strings.dotIcon) + 2)
 
-fun getCurrentBluetoothIcon(): Int =
+fun Context.getCurrentBluetoothIcon(): Int =
     if (isBluetoothEnabled()) R.drawable.ic_outline_bluetooth_24
     else R.drawable.ic_outline_bluetooth_disabled_24
 
@@ -257,7 +257,7 @@ fun Context.getCurrentMediaVolumeIcon(): Int =
     else R.drawable.ic_outline_music_note_24
 
 fun Context.getCurrentRingVolumeIcon(): Int {
-    val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    val manager = getSystemService(AudioManager::class.java)
     return when (manager.ringerMode) {
         AudioManager.RINGER_MODE_NORMAL -> R.drawable.ic_outline_notifications_none_24
         AudioManager.RINGER_MODE_SILENT -> R.drawable.ic_outline_notifications_off_24
@@ -267,7 +267,7 @@ fun Context.getCurrentRingVolumeIcon(): Int {
 }
 
 fun Context.getTimeFormat(): String {
-    val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val manager = getSystemService(AlarmManager::class.java)
     if (manager.nextAlarmClock == null) {
         return "${getTime().first}:${getTime().second} ${Strings.dotIcon} No Alarms"
     }
@@ -295,7 +295,7 @@ fun Context.getCurrentDNDIcon(): Int =
     else R.drawable.ic_outline_do_not_disturb_off_24
 
 fun Context.isMicrophoneEnabled(): Boolean {
-    val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    val manager = getSystemService(AudioManager::class.java)
     return !manager.isMicrophoneMute
 }
 
@@ -308,13 +308,13 @@ fun Context.getCurrentAirplaneIcon(): Int =
     else R.drawable.ic_outline_airplanemode_inactive_24
 
 fun Context.getMediaVolumeFormat(): String {
-    val manager = getSystemService(Context.MEDIA_ROUTER_SERVICE) as MediaRouter
+    val manager = getSystemService(MediaRouter::class.java)
     val output = manager.getSelectedRoute(MediaRouter.ROUTE_TYPE_LIVE_AUDIO).name
     return "${Strings.percentFormat} ${Strings.dotIcon} $output"
 }
 
 fun Context.getRingVolumeFormat(): String {
-    val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    val manager = getSystemService(AudioManager::class.java)
     return when (manager.ringerMode) {
         AudioManager.RINGER_MODE_NORMAL -> "${Strings.percentFormat} ${Strings.dotIcon} Ring"
         AudioManager.RINGER_MODE_SILENT -> "${Strings.percentFormat} ${Strings.dotIcon} Mute"
@@ -325,7 +325,7 @@ fun Context.getRingVolumeFormat(): String {
 
 @SuppressLint("MissingPermission")
 fun Context.getMobileDataQuality(): String {
-    val manager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+    val manager = getSystemService(TelephonyManager::class.java)
     return when (manager.dataNetworkType) {
         TelephonyManager.NETWORK_TYPE_GPRS,
         TelephonyManager.NETWORK_TYPE_EDGE,
@@ -354,7 +354,7 @@ fun Context.getMobileDataQuality(): String {
 }
 
 fun Context.getWIFIQuality(): String {
-    val manager = getSystemService(Context.WIFI_SERVICE) as WifiManager
+    val manager = getSystemService(WifiManager::class.java)
     val rssi = manager.connectionInfo.rssi
     return if (!isWifiEnabled()) "Off" else if (!isWifiConnected()) "Not Connected"
     else if (rssi > -50) "Excellent"
@@ -374,13 +374,13 @@ fun Context.getWIFIFormat(): String {
 }
 
 fun Context.isWifiConnected() =
-    (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).run {
+    getSystemService(ConnectivityManager::class.java).run {
         getNetworkCapabilities(activeNetwork)?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
             ?: false
     }
 
 fun Context.isHotSpotEnabled(): Boolean {
-    val manager = getSystemService(Context.WIFI_SERVICE) as WifiManager
+    val manager = getSystemService(WifiManager::class.java)
     try {
         val method: Method = manager.javaClass.getDeclaredMethod("isWifiApEnabled")
         method.isAccessible = true
@@ -391,7 +391,7 @@ fun Context.isHotSpotEnabled(): Boolean {
 }
 
 fun Context.isMusicPlaying(): Boolean {
-    val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    val manager = getSystemService(AudioManager::class.java)
     return manager.isMusicActive
 }
 

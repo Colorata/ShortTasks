@@ -49,7 +49,7 @@ fun BottomNav(navController: NavController) {
             .onGloballyPositioned {
                 SuperStore(context).drop(
                     Strings.bottomSize,
-                    pxToDp(it.size.component2()) + height.value.toInt()
+                    pxToDp(it.size.component2()).toInt() + height.value.toInt()
                 )
             }
     ) {

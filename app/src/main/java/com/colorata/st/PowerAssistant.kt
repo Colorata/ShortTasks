@@ -153,7 +153,7 @@ class PowerAssistant : ControlsProviderService() {
                 Strings.flashlight -> {
 
                     //Changing FLASHLIGHT STATE
-                    val cameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
+                    val cameraManager = getSystemService(CameraManager::class.java)
                     flashlightOn = !flashlightOn
                     val cameraId = cameraManager.cameraIdList[0]
                     cameraManager.setTorchMode(cameraId, flashlightOn)

@@ -51,7 +51,7 @@ fun RelatedCard(
 ) {
 
     var show by remember {
-        mutableStateOf(false)
+        mutableStateOf(true)
     }
 
 

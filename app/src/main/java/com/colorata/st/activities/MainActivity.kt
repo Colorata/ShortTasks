@@ -1,37 +1,24 @@
 package com.colorata.st.activities
 
 import android.Manifest
-import android.app.NotificationManager
-import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
-import android.media.MediaRouter2
-import android.net.wifi.WifiNetworkSpecifier
 import android.os.Bundle
 import android.provider.Settings
-import android.service.notification.NotificationListenerService
-import android.service.notification.StatusBarNotification
-import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import com.colorata.st.extensions.getBatteryTimeRemaining
-import com.colorata.st.extensions.presets.controls.CRange
-import com.colorata.st.extensions.presets.controls.CToggle
-import com.colorata.st.extensions.presets.controls.StatusCard
 import com.colorata.st.screens.Navigation
 import com.colorata.st.ui.theme.*
-import java.io.BufferedReader
-import java.io.InputStreamReader
 
 class MainActivity : AppCompatActivity() {
 
@@ -72,6 +59,5 @@ class MainActivity : AppCompatActivity() {
         window.navigationBarColor = backgroundInt()
         window.statusBarColor = Color.TRANSPARENT
         window.setDecorFitsSystemWindows(false)
-
     }
 }

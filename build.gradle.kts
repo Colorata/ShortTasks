@@ -3,11 +3,13 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url = uri("https://www.jitpack.io")
+        }
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:7.1.0-alpha03")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10")
-
+        classpath("com.android.tools.build:gradle:7.1.0-alpha08")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21")
     }
 }
 
